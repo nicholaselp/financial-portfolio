@@ -10,4 +10,15 @@ operations:
         content:
           application/json:
             schema:
-              $ref: 'expense-schema.yaml#/components/schemas/ExpenseEntity'
+              $ref: 'expense-schema.yaml#/components/schemas/Expense'
+      responses:
+        200:
+          description: Successfully create a new expense
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-schema.yaml#/components/schemas/ExpenseEntity'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'
