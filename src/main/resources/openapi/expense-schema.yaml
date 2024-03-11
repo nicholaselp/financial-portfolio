@@ -1,0 +1,14 @@
+components:
+  schemas:
+    ExpenseEntity:
+      type: object
+      properties:
+        meta:
+          $ref: 'common.yaml#/components/schemas/Metadata'
+        expense:
+          $ref: '#/components/schemas/Expense'
+    Expense:
+      type: object
+      properties:
+        amount:
+          type: string

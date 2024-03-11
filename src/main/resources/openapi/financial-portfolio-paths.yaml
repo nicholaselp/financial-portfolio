@@ -1,0 +1,13 @@
+operations:
+  expenses-operations:
+    post:
+      tags:
+        - financial-portfolio
+      summary: Create an expense
+      operationId: create-expense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'expense-schema.yaml#/components/schemas/ExpenseEntity'

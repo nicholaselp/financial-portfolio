@@ -1,0 +1,9 @@
+openapi: 3.0.3
+info:
+  title: Financial Portfolio
+  description: Financial Portfolio
+  version: 1.0.0
+paths:
+  /v1/expenses:
+    $ref: 'financial-portfolio-paths.yaml#/operations/expenses-operations'
+  

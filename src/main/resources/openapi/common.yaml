@@ -1,0 +1,12 @@
+components:
+  schemas:
+    Metadata:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        expenseType:
+          type: string #change this to enum
