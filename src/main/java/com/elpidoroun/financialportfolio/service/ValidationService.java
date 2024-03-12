@@ -3,21 +3,21 @@ package com.elpidoroun.financialportfolio.service;
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
 import com.elpidoroun.financialportfolio.validation.EntityValidator;
-import com.elpidoroun.financialportfolio.validation.ErrorType;
 import com.elpidoroun.financialportfolio.validation.ValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.elpidoroun.financialportfolio.validation.ErrorType.SYSTEM;
 import static java.util.Objects.requireNonNull;
 
+@Service
 public class ValidationService<EntityT> {
     private static final Logger logger = LoggerFactory.getLogger(ValidationService.class);
 

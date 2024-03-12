@@ -16,7 +16,6 @@ import java.util.function.Function;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public class MainController {
 

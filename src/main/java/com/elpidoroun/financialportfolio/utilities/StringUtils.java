@@ -2,8 +2,8 @@ package com.elpidoroun.financialportfolio.utilities;
 
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 
-import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class StringUtils {
 
