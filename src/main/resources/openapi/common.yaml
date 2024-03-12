@@ -18,5 +18,5 @@ errors:
   internal-error:
     description: Unexpected internal server error
   not-found:
-    description: Cryptocurrency not found
+    description: Not found
     content: { }
