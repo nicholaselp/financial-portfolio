@@ -18,3 +18,8 @@
 ## Debugging the application
 - If you know the endpoint you want to debug you can find it at in one of the ApiDelegate interfaces generated after building the application. You can find them here (target/generated/src/main/java/com.financialportfolio.generated.api)
 - And then see where the API definition is overriden
+
+## Database
+- This project uses liquibase to generate tables.
+- Currently on application startup and liquibase kicks in and creates the table with the changeSet
+- on application termination all tables related to liquibase insertions are deleted and new ones are created without data during startup

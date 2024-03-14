@@ -7,8 +7,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.Optional;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
+
 @Entity
-@Table(name = "expense")
+@Table(name = "expenses")
 public class Expense {
 
     @Id
@@ -17,13 +24,140 @@ public class Expense {
     private Long id;
 
     @Column
-    private String expenseName;
+    private String expense;
 
-    public Expense(){}
+    @Column(name = "payment_type")
+    private PaymentType paymentType;
 
-    public void setId(Long id) { this.id = id; }
-    public Long getId() { return id; }
+    @Column(name = "monthly_amount")
+    private BigDecimal monthlyAmount;
 
-    public void setExpenseName(String expenseName){ this.expenseName = expenseName; }
-    public String getExpenseName(){ return expenseName; }
+    @Column(name = "yearly_amount")
+    private BigDecimal yearlyAmount;
+
+    @Column(name = "currency")
+    private Currency currency;
+
+    @Column(name = "note")
+    private String note;
+
+    @Column(name = "created_at")
+    private OffsetDateTime createdAt;
+
+    private Expense(){} //used for hibernate. Do not delete
+
+    private Expense(String expense, PaymentType paymentType, BigDecimal monthlyAmount, BigDecimal yearlyAmount, Currency currency, String note){
+        this.expense = requireNonNull(expense, "expense is missing");
+        this.paymentType = requireNonNull(paymentType, "paymentType is missing");
+        if(isNull(monthlyAmount) && isNull(yearlyAmount)){
+            //throw exception
+        }
+        this.monthlyAmount = monthlyAmount;
+        this.yearlyAmount = yearlyAmount;
+        this.currency = requireNonNull(currency, "Currency is missing");
+        this.note = note;
+        this.createdAt = OffsetDateTime.now();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getExpense() {
+        return expense;
+    }
+
+    public void setExpense(String expense) {
+        this.expense = expense;
+    }
+
+    public PaymentType getpaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public Optional<BigDecimal> getMonthlyAmount() {
+        return Optional.ofNullable(monthlyAmount);
+    }
+
+    public void setMonthlyAmount(BigDecimal monthlyAmount) {
+        this.monthlyAmount = monthlyAmount;
+    }
+
+    public Optional<BigDecimal> getYearlyAmount() {
+        return Optional.ofNullable(yearlyAmount);
+    }
+
+    public void setYearlyAmount(BigDecimal yearlyAmount) {
+        this.yearlyAmount = yearlyAmount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public Optional<String> getNote() {
+        return Optional.ofNullable(note);
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public OffsetDateTime getCreatedAt(){ return createdAt; }
+
+    public static Builder builder(String expense){ return new Builder(expense); }
+
+    public static class Builder {
+        private final String expense;
+        private PaymentType paymentType;
+        private BigDecimal monthlyAmount;
+        private BigDecimal yearlyAmount;
+        private Currency currency;
+        private String note;
+
+        private Builder(String expense){ this.expense = expense; }
+
+        public Builder withpaymentType(PaymentType paymentType){
+            this.paymentType = paymentType;
+            return this;
+        }
+
+        public Builder withMonthlyAmount(BigDecimal monthlyAmount){
+            this.monthlyAmount = monthlyAmount;
+            return this;
+        }
+
+        public Builder withYearlyAmount(BigDecimal yearlyAmount){
+            this.yearlyAmount = yearlyAmount;
+            return this;
+        }
+
+        public Builder withCurrency(Currency currency){
+            this.currency = currency;
+            return this;
+        }
+
+        public Builder withNote(String note){
+            this.note = note;
+            return this;
+        }
+
+        public Expense build(){
+            return new Expense(expense, paymentType, monthlyAmount, yearlyAmount, currency, note);
+        }
+
+
+    }
 }

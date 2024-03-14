@@ -4,12 +4,11 @@ components:
       type: object
       properties:
         id:
-          type: string
+          type: integer
+          format: int64
         createdAt:
           type: string
           format: date-time
-        expenseType:
-          type: string #change this to enum
 
 errors:
   invalid-input:

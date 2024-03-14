@@ -1,12 +1,11 @@
 operations:
-  expenses-operations:
+  expense-operations:
     post:
       tags:
         - financial-portfolio
       summary: Create an expense
       operationId: create-expense
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -22,3 +21,61 @@ operations:
           $ref: 'common.yaml#/errors/invalid-input'
         500:
           $ref: 'common.yaml#/errors/internal-error'
+  expense-operations-by-id:
+    get:
+      tags:
+        - financial-portfolio
+      summary: Get expense by ID
+      operationId: get-expense-by-id
+      parameters:
+        - name: id
+          description: id of expense
+          in: path
+          schema:
+            type: string
+      responses:
+        200:
+          description: Succesfully return Expense by ID
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-schema.yaml#/components/schemas/ExpenseEntity'
+    delete:
+      tags:
+        - financial-portfolio
+      summary: Delete expense by ID
+      operationId: delete-expense-by-id
+      parameters:
+        - name: id
+          description: ID of the expense to delete
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Expense deleted successfully
+    put:
+      tags:
+        - financial-portfolio
+      summary: Update expense by ID
+      operationId: update-expense-by-id
+      parameters:
+        - name: id
+          description: ID of the expense to update
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'expense-schema.yaml#/components/schemas/Expense'
+      responses:
+        200:
+          description: Successfully updated the expense
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-schema.yaml#/components/schemas/ExpenseEntity'

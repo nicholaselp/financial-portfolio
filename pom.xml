@@ -86,6 +86,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>4.24.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -146,14 +151,14 @@
 							<generatorName>spring</generatorName>
 							<inputSpec>${project.basedir}/src/main/resources/openapi/financial-portfolio-api.yaml</inputSpec>
 							<output>${project.build.directory}/generated</output>
-							<apiPackage>com.financialportfolio.generated.api</apiPackage>
-							<invokerPackage>com.financialportfolio.generated.api</invokerPackage>
-							<modelPackage>com.financialportfolio.generated.dto</modelPackage>
+							<apiPackage>com.elpidoroun.financialportfolio.generated.api</apiPackage>
+							<invokerPackage>com.elpidoroun.financialportfolio.generated.api</invokerPackage>
+							<modelPackage>com.elpidoroun.financialportfolio.generated.dto</modelPackage>
 							<templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory>
 							<modelNameSuffix>Dto</modelNameSuffix>
 							<generateModelTests>true</generateModelTests>
 							<configOptions>
-								<dateLibrary>joda</dateLibrary>
+								<dateLibrary>java8</dateLibrary>
 								<interfaceOnly>false</interfaceOnly>
 								<skipDefaultInterface>false</skipDefaultInterface>
 								<useApiIgnore>false</useApiIgnore>

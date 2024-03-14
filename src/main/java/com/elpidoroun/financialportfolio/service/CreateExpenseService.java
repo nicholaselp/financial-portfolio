@@ -12,11 +12,11 @@ public class CreateExpenseService {
 
     private static final Logger logger = LoggerFactory.getLogger(CreateExpenseService.class);
 
-//    private final ExpenseRepository expenseRepository;
+    private final ExpenseRepositoryOperations expenseRepositoryOperations;
     private final ValidationService<Expense> validationService;
 
-    public CreateExpenseService(ValidationService<Expense> validationService){
-//        this.expenseRepository = requireNonNull(expenseRepository, "ExpenseRepository is missing");
+    public CreateExpenseService(ValidationService<Expense> validationService, ExpenseRepositoryOperations expenseRepositoryOperations){
+        this.expenseRepositoryOperations = requireNonNull(expenseRepositoryOperations, "ExpenseRepositoryOperations is missing");
         this.validationService = requireNonNull(validationService, "ValidationService is missing");
     }
 
@@ -30,8 +30,7 @@ public class CreateExpenseService {
 //            var error = result.getError();
 //            throw new ValidationException(String.join("", result.getError()).orElse("error message");
         }
-//        Expense expenseResult = expenseRepository.save(expense);
 
-        return null;
+        return expenseRepositoryOperations.save(expense);
     }
 }

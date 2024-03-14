@@ -1,15 +1,15 @@
 package com.elpidoroun.financialportfolio.controller.command;
 
 import com.elpidoroun.financialportfolio.controller.converters.ExpenseConverter;
+import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.service.CreateExpenseService;
-import com.financialportfolio.generated.dto.ExpenseDto;
-import com.financialportfolio.generated.dto.ExpenseEntityDto;
+import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
 import org.springframework.stereotype.Component;
 
 import static java.util.Objects.requireNonNull;
 
 @Component
-public class CreateExpenseCommand implements Command<CreateExpenseRequest, ExpenseEntityDto> {
+public class CreateExpenseCommand implements Command<CreateExpenseCommand.CreateExpenseRequest, ExpenseEntityDto> {
 
     private final CreateExpenseService createExpenseService;
     private final ExpenseConverter expenseConverter;
@@ -19,14 +19,20 @@ public class CreateExpenseCommand implements Command<CreateExpenseRequest, Expen
     }
     @Override
     public ExpenseEntityDto execute(CreateExpenseRequest request) {
-        return buildResponse(
-                expenseConverter.convertToDto(
-                    createExpenseService.createExpense(
-                        expenseConverter.convertToDomain(request.getExpenseDto()))));
+        return expenseConverter.convertToEntityDto(
+                createExpenseService.createExpense(
+                    expenseConverter.convertToDomain(request.getExpenseDto())));
     }
 
-    public ExpenseEntityDto buildResponse(ExpenseDto expenseDto){
-        return new ExpenseEntityDto();
+    public static CreateExpenseRequest request(ExpenseDto expenseDto){ return new CreateExpenseRequest(expenseDto); }
+    protected static class CreateExpenseRequest extends AbstractRequest {
+
+        private final ExpenseDto expenseDto;
+        private CreateExpenseRequest(ExpenseDto expenseDto){
+            this.expenseDto = expenseDto;
+        }
+        public ExpenseDto getExpenseDto(){ return expenseDto; }
+
     }
 
 }
