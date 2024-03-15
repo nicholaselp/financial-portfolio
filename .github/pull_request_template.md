@@ -1,4 +1,4 @@
-⚠️ Before merging make sure the below checklist is completed ⚠️
+<span style="color:#F6D422;font-weight:bold">⚠️ Before merging make sure the below checklist is completed</span>
 
 - [ ] Build passed successfully
 - [ ] Application starts successfully
