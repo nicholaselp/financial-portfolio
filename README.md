@@ -5,6 +5,8 @@
 - Java 17
 - Maven wrapper build tool
 - OpenAPI to generate API specification and Dtos
+- Hibernate
+- Liquibase
 
 ## Building the project
 ./gradlew clean install

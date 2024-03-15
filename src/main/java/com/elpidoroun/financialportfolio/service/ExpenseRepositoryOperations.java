@@ -1,7 +1,11 @@
 package com.elpidoroun.financialportfolio.service;
 
+import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
+import com.elpidoroun.financialportfolio.exceptions.ExpenseNotFoundException;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,6 +14,8 @@ import static java.util.Objects.requireNonNull;
 
 @Service
 public class ExpenseRepositoryOperations {
+
+    private static final Logger logger = LoggerFactory.getLogger(ExpenseRepositoryOperations.class);
 
     private final ExpenseRepository expenseRepository;
     public ExpenseRepositoryOperations(ExpenseRepository expenseRepository){
@@ -20,24 +26,29 @@ public class ExpenseRepositoryOperations {
         try{
             return expenseRepository.save(expense);
         } catch (Exception exception){
-            //logger?
-            throw new RuntimeException("Exception while saving");
+            logger.error(exception.getMessage());
+            throw new DatabaseOperationException("Exception while saving expense");
         }
     }
 
     //any exception handling??
-    public Optional<Expense> getById(String id){
-        return expenseRepository.findById(Integer.valueOf(id));
+    public Expense getById(String id){
+        return expenseRepository.findById(Integer.valueOf(id))
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense with ID: " + id + " not found"));
     }
-
-    //any exception handling??
-    public void deleteById(String id){ expenseRepository.deleteById(Integer.valueOf(id)); }
+    public void deleteById(String id){
+        try {
+            expenseRepository.deleteById(Integer.valueOf(id));
+        } catch (Exception exception){
+            throw new DatabaseOperationException("Exception occured while deleting an Expense");
+        }
+    }
 
     public Expense updateById(String id, Expense expense){
         if(expenseRepository.existsById(Integer.valueOf(id))){
             return expenseRepository.save(expense);
         } else {
-            throw new RuntimeException("not found..");
+            throw new ExpenseNotFoundException("Expense with ID: " + id + " not found");
         }
 
     }

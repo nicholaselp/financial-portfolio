@@ -1,6 +1,7 @@
 package com.elpidoroun.financialportfolio.controller.converters;
 
 
+import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.model.Currency;
 import com.elpidoroun.financialportfolio.generated.dto.CurrencyDto;
 
@@ -10,7 +11,7 @@ public class CurrencyConverter {
         return switch (currency) {
             case EURO -> CurrencyDto.EURO;
             case USD -> CurrencyDto.USD;
-            default -> throw new RuntimeException("asd");
+            default -> throw new IllegalArgumentException("Currency: " + currency + " not supported.");
         };
     }
 
@@ -18,7 +19,7 @@ public class CurrencyConverter {
         return switch (currencyDto) {
             case EURO -> Currency.EURO;
             case USD -> Currency.USD;
-            default -> throw new RuntimeException("asd");
+            default -> throw new IllegalArgumentException("CurrencyDto " + currencyDto + " not supported");
         };
     }
 

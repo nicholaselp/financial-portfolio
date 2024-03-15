@@ -2,5 +2,10 @@ package com.elpidoroun.financialportfolio.exceptions;
 
 public class ValidationException extends RuntimeException{
 
-    public ValidationException(String message){ super(message); }
+    private final String errorType;
+
+    public ValidationException(String message){
+        super(message);
+        this.errorType = "Validation error occured";
+    }
 }

@@ -6,6 +6,13 @@ import com.elpidoroun.financialportfolio.service.CreateExpenseService;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static com.elpidoroun.financialportfolio.model.Operations.CREATE_EXPENSE;
+import static com.elpidoroun.financialportfolio.model.Operations.GET_EXPENSE_BY_ID;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 @Component
@@ -23,6 +30,22 @@ public class CreateExpenseCommand implements Command<CreateExpenseCommand.Create
                 createExpenseService.createExpense(
                     expenseConverter.convertToDomain(request.getExpenseDto())));
     }
+
+    @Override
+    public boolean isRequestIncomplete(CreateExpenseRequest request) {
+        return isNull(request) || isNull(request.getExpenseDto());
+    }
+
+    @Override
+    public String missingParams(CreateExpenseRequest request) {
+        return Stream.of(
+                isNull(request) ? "Request is empty" : null,
+                isNull(request.getExpenseDto()) ? "CreateExpenseDto is missing" : null
+        ).toString();
+    }
+
+    @Override
+    public String getOperation() { return CREATE_EXPENSE.getValue(); }
 
     public static CreateExpenseRequest request(ExpenseDto expenseDto){ return new CreateExpenseRequest(expenseDto); }
     protected static class CreateExpenseRequest extends AbstractRequest {

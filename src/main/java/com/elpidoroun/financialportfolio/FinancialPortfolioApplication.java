@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PreDestroy;
@@ -16,13 +18,19 @@ import javax.annotation.PreDestroy;
 })
 public class FinancialPortfolioApplication {
 
-	private static final Logger logger = LoggerFactory.getLogger(CreateExpenseService.class);
+	private static final Logger logger = LoggerFactory.getLogger(FinancialPortfolioApplication.class);
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	public static void main(String[] args) {
 		SpringApplication.run(FinancialPortfolioApplication.class, args);
+		logger.info("\n\n***************************************************\n" +
+				"***                                             ***\n" +
+				"***   🚀 APPLICATION STARTED SUCCESSFULLY 🚀   ***\n" +
+				"***                                             ***\n" +
+				"***************************************************\n\n");
+
 	}
 
 	@PreDestroy
