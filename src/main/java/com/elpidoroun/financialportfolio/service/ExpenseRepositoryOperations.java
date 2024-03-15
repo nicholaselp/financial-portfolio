@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 import static java.util.Objects.requireNonNull;
 
 @Service
@@ -31,25 +29,27 @@ public class ExpenseRepositoryOperations {
         }
     }
 
-    //any exception handling??
     public Expense getById(String id){
-        return expenseRepository.findById(Integer.valueOf(id))
+        return expenseRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new ExpenseNotFoundException("Expense with ID: " + id + " not found"));
     }
     public void deleteById(String id){
+        if(!expenseRepository.existsById(Long.valueOf(id))){
+            throw new ExpenseNotFoundException("Expense with ID: " + id + " not found. Nothing will be deleted");
+        }
+
         try {
-            expenseRepository.deleteById(Integer.valueOf(id));
+            expenseRepository.deleteById(Long.valueOf(id));
         } catch (Exception exception){
             throw new DatabaseOperationException("Exception occured while deleting an Expense");
         }
     }
 
-    public Expense updateById(String id, Expense expense){
-        if(expenseRepository.existsById(Integer.valueOf(id))){
+    public Expense update(Expense expense){
+        if(expenseRepository.existsById(expense.getId())){
             return expenseRepository.save(expense);
         } else {
-            throw new ExpenseNotFoundException("Expense with ID: " + id + " not found");
+            throw new ExpenseNotFoundException("Expense with ID: " + expense.getId() + " not found");
         }
-
     }
 }

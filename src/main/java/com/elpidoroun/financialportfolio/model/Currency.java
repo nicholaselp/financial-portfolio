@@ -10,7 +10,7 @@ public enum Currency implements EnumStringValue {
     USD("USD");
     private final String currency;
 
-    private Currency(String currency){
+    Currency(String currency){
         this.currency = requireNonNull(currency, "Currency is missing");
     }
 

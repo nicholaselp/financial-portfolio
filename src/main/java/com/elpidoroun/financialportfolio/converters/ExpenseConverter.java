@@ -1,4 +1,4 @@
-package com.elpidoroun.financialportfolio.controller.converters;
+package com.elpidoroun.financialportfolio.converters;
 
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
 import com.elpidoroun.financialportfolio.generated.dto.MetadataDto;

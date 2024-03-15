@@ -6,10 +6,10 @@ import static java.util.Objects.requireNonNull;
 
 public enum PaymentType implements EnumStringValue {
 
-    MONTHLY("MONTHLY"),
-    YEARLY("YEARLY");
+    MONTHLY("monthly"),
+    YEARLY("yearly");
     private final String paymentType;
-    private PaymentType(String paymentType){
+    PaymentType(String paymentType){
         this.paymentType = requireNonNull(paymentType, "paymentType is missing");
     }
 

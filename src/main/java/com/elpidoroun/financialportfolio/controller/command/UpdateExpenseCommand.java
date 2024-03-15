@@ -1,33 +1,38 @@
 package com.elpidoroun.financialportfolio.controller.command;
 
-import com.elpidoroun.financialportfolio.controller.converters.ExpenseConverter;
+import com.elpidoroun.financialportfolio.converters.ExpenseConverter;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
-import com.elpidoroun.financialportfolio.service.ExpenseRepositoryOperations;
+import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.service.expense.UpdateExpenseService;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.elpidoroun.financialportfolio.model.Operations.GET_EXPENSE_BY_ID;
 import static com.elpidoroun.financialportfolio.model.Operations.UPDATE_EXPENSE;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
 
+@AllArgsConstructor
 @Component
 public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.UpdateExpenseRequest, ExpenseEntityDto> {
 
-    private final ExpenseRepositoryOperations expenseRepositoryOperations;
-    private final ExpenseConverter expenseConverter;
-    public UpdateExpenseCommand(ExpenseRepositoryOperations expenseRepositoryOperations,
-                                ExpenseConverter expenseConverter){
-        this.expenseRepositoryOperations = requireNonNull(expenseRepositoryOperations, "ExpenseRepositoryOperations is missing");
-        this.expenseConverter = requireNonNull(expenseConverter, "ExpenseConverter is missing");
-    }
+    @NonNull private final UpdateExpenseService updateExpenseService;
+    @NonNull private final ExpenseConverter expenseConverter;
 
     @Override
     public ExpenseEntityDto execute(UpdateExpenseRequest request) {
-        return expenseConverter.convertToEntityDto(expenseRepositoryOperations.updateById(request.getExpenseId(), expenseConverter.convertToDomain(request.getExpenseDto())));
+        return expenseConverter.convertToEntityDto(
+                updateExpenseService.execute(
+                        prepareExpenseForUpdate(
+                                request.getExpenseId(), expenseConverter.convertToDomain(request.getExpenseDto()))
+                ));
+    }
+
+    private Expense prepareExpenseForUpdate(String id, Expense expense){
+        expense.setId(Long.valueOf(id));
+        return expense;
     }
 
     @Override

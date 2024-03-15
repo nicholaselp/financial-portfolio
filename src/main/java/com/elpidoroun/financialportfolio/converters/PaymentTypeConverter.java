@@ -1,4 +1,4 @@
-package com.elpidoroun.financialportfolio.controller.converters;
+package com.elpidoroun.financialportfolio.converters;
 
 import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.model.PaymentType;

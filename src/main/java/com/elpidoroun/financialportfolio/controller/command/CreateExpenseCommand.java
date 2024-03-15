@@ -1,18 +1,15 @@
 package com.elpidoroun.financialportfolio.controller.command;
 
-import com.elpidoroun.financialportfolio.controller.converters.ExpenseConverter;
+import com.elpidoroun.financialportfolio.converters.ExpenseConverter;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
-import com.elpidoroun.financialportfolio.service.CreateExpenseService;
+import com.elpidoroun.financialportfolio.service.expense.CreateExpenseService;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.model.Operations.CREATE_EXPENSE;
-import static com.elpidoroun.financialportfolio.model.Operations.GET_EXPENSE_BY_ID;
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 @Component

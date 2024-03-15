@@ -22,7 +22,6 @@ import static java.util.Objects.requireNonNull;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public class MainController {
 
@@ -48,8 +47,6 @@ public class MainController {
 
             MDC.put("operation", command.getOperation());
 
-            logger.info("somethingggggg");
-
             if(command.isRequestIncomplete(request)){
                 return ResponseEntity.status(BAD_REQUEST)
                         .body(new ErrorResponse(command.missingParams(request), INCOMPLETE_REQUEST));
@@ -57,7 +54,7 @@ public class MainController {
 
             return responseBuilder.apply(command.execute(request));
         } catch (Exception exception){
-            logger.error(exception.getMessage());
+            logger.error(exception.getMessage(), exception);
 
             return ResponseEntity.status(httpStatusByException(exception))
                     .body(new ErrorResponse(exception.getMessage(), getErrorType(exception)));

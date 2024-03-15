@@ -1,5 +1,6 @@
 package com.elpidoroun.financialportfolio.model;
 
+import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
@@ -50,7 +52,7 @@ public class Expense {
         this.expense = requireNonNull(expense, "expense is missing");
         this.paymentType = requireNonNull(paymentType, "paymentType is missing");
         if(isNull(monthlyAmount) && isNull(yearlyAmount)){
-            //throw exception
+            throw new ValidationException("Monthly and yearly amount are null");
         }
         this.monthlyAmount = monthlyAmount;
         this.yearlyAmount = yearlyAmount;
@@ -118,6 +120,19 @@ public class Expense {
     public OffsetDateTime getCreatedAt(){ return createdAt; }
 
     public static Builder builder(String expense){ return new Builder(expense); }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Expense expense1 = (Expense) o;
+        return Objects.equals(id, expense1.id) && Objects.equals(expense, expense1.expense) && paymentType == expense1.paymentType && Objects.equals(monthlyAmount, expense1.monthlyAmount) && Objects.equals(yearlyAmount, expense1.yearlyAmount) && currency == expense1.currency && Objects.equals(note, expense1.note) && Objects.equals(createdAt, expense1.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, expense, paymentType, monthlyAmount, yearlyAmount, currency, note, createdAt);
+    }
 
     public static class Builder {
         private final String expense;

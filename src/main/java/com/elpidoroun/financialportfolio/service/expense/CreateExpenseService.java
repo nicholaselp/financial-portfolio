@@ -1,6 +1,8 @@
-package com.elpidoroun.financialportfolio.service;
+package com.elpidoroun.financialportfolio.service.expense;
 
 import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.service.ExpenseRepositoryOperations;
+import com.elpidoroun.financialportfolio.service.ValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
