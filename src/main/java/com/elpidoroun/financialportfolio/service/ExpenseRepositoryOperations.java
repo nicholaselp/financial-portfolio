@@ -4,21 +4,19 @@ import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
 import com.elpidoroun.financialportfolio.exceptions.ExpenseNotFoundException;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import static java.util.Objects.requireNonNull;
-
+@AllArgsConstructor
 @Service
 public class ExpenseRepositoryOperations {
 
     private static final Logger logger = LoggerFactory.getLogger(ExpenseRepositoryOperations.class);
 
-    private final ExpenseRepository expenseRepository;
-    public ExpenseRepositoryOperations(ExpenseRepository expenseRepository){
-        this.expenseRepository = requireNonNull(expenseRepository, "expenseRepository is missing");
-    }
+    @NonNull private final ExpenseRepository expenseRepository;
 
     public Expense save(Expense expense){
         try{

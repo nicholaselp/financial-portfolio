@@ -1,22 +1,21 @@
 package com.elpidoroun.financialportfolio.controller.command;
 
 import com.elpidoroun.financialportfolio.service.ExpenseRepositoryOperations;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.model.Operations.DELETE_EXPENSE_BY_ID;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
 
+@AllArgsConstructor
 @Component
 public class DeleteExpenseCommand implements Command<DeleteExpenseCommand.DeleteExpenseRequest, Void> {
 
-    private final ExpenseRepositoryOperations expenseRepositoryOperations;
+    @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
 
-    public DeleteExpenseCommand(ExpenseRepositoryOperations expenseRepositoryOperations){
-        this.expenseRepositoryOperations = requireNonNull(expenseRepositoryOperations, "ExpenseRepositoryOperations is missing");
-    }
     @Override
     public Void execute(DeleteExpenseRequest request) {
         expenseRepositoryOperations.deleteById(request.getExpenseId());

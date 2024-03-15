@@ -24,15 +24,7 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
     @Override
     public ExpenseEntityDto execute(UpdateExpenseRequest request) {
         return expenseConverter.convertToEntityDto(
-                updateExpenseService.execute(
-                        prepareExpenseForUpdate(
-                                request.getExpenseId(), expenseConverter.convertToDomain(request.getExpenseDto()))
-                ));
-    }
-
-    private Expense prepareExpenseForUpdate(String id, Expense expense){
-        expense.setId(Long.valueOf(id));
-        return expense;
+                updateExpenseService.execute(Expense.createExpenseWithId(Long.valueOf(request.getExpenseId()), expenseConverter.convertToDomain(request.getExpenseDto())).build()));
     }
 
     @Override

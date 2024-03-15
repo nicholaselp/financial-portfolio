@@ -32,8 +32,9 @@ public class ExpenseConverter {
     }
 
     public Expense convertToDomain(ExpenseDto expenseDto){
-        return Expense.builder(expenseDto.getExpense())
-                .withpaymentType(PaymentTypeConverter.toDomain(expenseDto.getPaymentType()))
+        return Expense.builder()
+                .withExpense(expenseDto.getExpense())
+                .withPaymentType(PaymentTypeConverter.toDomain(expenseDto.getPaymentType()))
                 .withCurrency(CurrencyConverter.toDomain(expenseDto.getCurrency()))
                 .withMonthlyAmount(expenseDto.getMonthlyAmount())
                 .withYearlyAmount(expenseDto.getYearlyAmount())

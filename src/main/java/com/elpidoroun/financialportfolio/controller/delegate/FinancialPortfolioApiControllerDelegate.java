@@ -8,26 +8,21 @@ import com.elpidoroun.financialportfolio.controller.command.UpdateExpenseCommand
 import com.elpidoroun.financialportfolio.generated.api.FinancialPortfolioApiDelegate;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import static java.util.Objects.requireNonNull;
 
 
+@AllArgsConstructor
 @RestController
 public class FinancialPortfolioApiControllerDelegate extends MainController implements FinancialPortfolioApiDelegate {
 
-    private CreateExpenseCommand createExpenseCommand;
-    private GetExpenseByIdCommand getExpenseByIdCommand;
-    private UpdateExpenseCommand updateExpenseCommand;
-    private DeleteExpenseCommand deleteExpenseCommand;
-    public FinancialPortfolioApiControllerDelegate(CreateExpenseCommand createExpenseCommand, GetExpenseByIdCommand getExpenseByIdCommand,
-                                                   DeleteExpenseCommand deleteExpenseCommand, UpdateExpenseCommand updateExpenseCommand){
-        this.createExpenseCommand = requireNonNull(createExpenseCommand, "CreateExpenseCommand is missing");
-        this.getExpenseByIdCommand = requireNonNull(getExpenseByIdCommand, "getExpenseByIdCommand is missing");
-        this.updateExpenseCommand = requireNonNull(updateExpenseCommand, "updateExpenseCommand is missing");
-        this.deleteExpenseCommand = requireNonNull(deleteExpenseCommand, "DeleteExpenseCommand is missing");
-    }
+    @NonNull private CreateExpenseCommand createExpenseCommand;
+    @NonNull private GetExpenseByIdCommand getExpenseByIdCommand;
+    @NonNull private UpdateExpenseCommand updateExpenseCommand;
+    @NonNull private DeleteExpenseCommand deleteExpenseCommand;
 
     @Override
     public ResponseEntity<ExpenseEntityDto> createExpense(ExpenseDto expenseDto){

@@ -48,7 +48,8 @@ public class Expense {
 
     private Expense(){} //used for hibernate. Do not delete
 
-    private Expense(String expense, PaymentType paymentType, BigDecimal monthlyAmount, BigDecimal yearlyAmount, Currency currency, String note){
+    private Expense(Long id, String expense, PaymentType paymentType, BigDecimal monthlyAmount, BigDecimal yearlyAmount, Currency currency, String note){
+        this.id = id;
         this.expense = requireNonNull(expense, "expense is missing");
         this.paymentType = requireNonNull(paymentType, "paymentType is missing");
         if(isNull(monthlyAmount) && isNull(yearlyAmount)){
@@ -65,61 +66,43 @@ public class Expense {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getExpense() {
         return expense;
-    }
-
-    public void setExpense(String expense) {
-        this.expense = expense;
     }
 
     public PaymentType getpaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(PaymentType paymentType) {
-        this.paymentType = paymentType;
-    }
-
     public Optional<BigDecimal> getMonthlyAmount() {
         return Optional.ofNullable(monthlyAmount);
-    }
-
-    public void setMonthlyAmount(BigDecimal monthlyAmount) {
-        this.monthlyAmount = monthlyAmount;
     }
 
     public Optional<BigDecimal> getYearlyAmount() {
         return Optional.ofNullable(yearlyAmount);
     }
 
-    public void setYearlyAmount(BigDecimal yearlyAmount) {
-        this.yearlyAmount = yearlyAmount;
-    }
-
     public Currency getCurrency() {
         return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     public Optional<String> getNote() {
         return Optional.ofNullable(note);
     }
 
-    public void setNote(String note) {
-        this.note = note;
-    }
-
     public OffsetDateTime getCreatedAt(){ return createdAt; }
 
-    public static Builder builder(String expense){ return new Builder(expense); }
+    public static Builder builder(){ return new Builder(); }
+
+    public static Builder createExpenseWithId(Long id, Expense expense){
+        return new Builder(id)
+                .withExpense(expense.getExpense())
+                .withPaymentType(expense.getpaymentType())
+                .withNote(expense.getNote().orElse(null))
+                .withYearlyAmount(expense.getYearlyAmount().orElse(null))
+                .withMonthlyAmount(expense.getMonthlyAmount().orElse(null))
+                .withCurrency(expense.getCurrency());
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -135,16 +118,23 @@ public class Expense {
     }
 
     public static class Builder {
-        private final String expense;
+        private Long id;
+        private String expense;
         private PaymentType paymentType;
         private BigDecimal monthlyAmount;
         private BigDecimal yearlyAmount;
         private Currency currency;
         private String note;
 
-        private Builder(String expense){ this.expense = expense; }
+        private Builder(){}
+        private Builder(Long id){ this.id = id; }
 
-        public Builder withpaymentType(PaymentType paymentType){
+        public Builder withExpense(String expense){
+            this.expense = expense;
+            return this;
+        }
+
+        public Builder withPaymentType(PaymentType paymentType){
             this.paymentType = paymentType;
             return this;
         }
@@ -170,7 +160,7 @@ public class Expense {
         }
 
         public Expense build(){
-            return new Expense(expense, paymentType, monthlyAmount, yearlyAmount, currency, note);
+            return new Expense(id, expense, paymentType, monthlyAmount, yearlyAmount, currency, note);
         }
 
 

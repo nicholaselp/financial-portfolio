@@ -4,23 +4,22 @@ import com.elpidoroun.financialportfolio.converters.ExpenseConverter;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.service.expense.CreateExpenseService;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.model.Operations.CREATE_EXPENSE;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
 
+@AllArgsConstructor
 @Component
 public class CreateExpenseCommand implements Command<CreateExpenseCommand.CreateExpenseRequest, ExpenseEntityDto> {
 
-    private final CreateExpenseService createExpenseService;
-    private final ExpenseConverter expenseConverter;
-    public CreateExpenseCommand(CreateExpenseService createExpenseService, ExpenseConverter expenseConverter){
-        this.createExpenseService = requireNonNull(createExpenseService, "CreateExpenseService is missing");
-        this.expenseConverter = requireNonNull(expenseConverter, "ExpenseConverter is missing");
-    }
+    @NonNull private final CreateExpenseService createExpenseService;
+    @NonNull private final ExpenseConverter expenseConverter;
+
     @Override
     public ExpenseEntityDto execute(CreateExpenseRequest request) {
         return expenseConverter.convertToEntityDto(
