@@ -1,32 +1,57 @@
 package com.elpidoroun.financialportfolio.controller.command;
 
-import com.elpidoroun.financialportfolio.controller.converters.ExpenseConverter;
-import com.elpidoroun.financialportfolio.service.CreateExpenseService;
-import com.financialportfolio.generated.dto.ExpenseDto;
-import com.financialportfolio.generated.dto.ExpenseEntityDto;
+import com.elpidoroun.financialportfolio.converters.ExpenseConverter;
+import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
+import com.elpidoroun.financialportfolio.service.expense.CreateExpenseService;
+import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
+import static com.elpidoroun.financialportfolio.model.Operations.CREATE_EXPENSE;
+import static java.util.Objects.isNull;
+
+@AllArgsConstructor
 @Component
-public class CreateExpenseCommand implements Command<CreateExpenseRequest, ExpenseEntityDto> {
+public class CreateExpenseCommand implements Command<CreateExpenseCommand.CreateExpenseRequest, ExpenseEntityDto> {
 
-    private final CreateExpenseService createExpenseService;
-    private final ExpenseConverter expenseConverter;
-    public CreateExpenseCommand(CreateExpenseService createExpenseService, ExpenseConverter expenseConverter){
-        this.createExpenseService = requireNonNull(createExpenseService, "CreateExpenseService is missing");
-        this.expenseConverter = requireNonNull(expenseConverter, "ExpenseConverter is missing");
-    }
+    @NonNull private final CreateExpenseService createExpenseService;
+    @NonNull private final ExpenseConverter expenseConverter;
+
     @Override
     public ExpenseEntityDto execute(CreateExpenseRequest request) {
-        return buildResponse(
-                expenseConverter.convertToDto(
-                    createExpenseService.createExpense(
-                        expenseConverter.convertToDomain(request.getExpenseDto()))));
+        return expenseConverter.convertToEntityDto(
+                createExpenseService.createExpense(
+                    expenseConverter.convertToDomain(request.getExpenseDto())));
     }
 
-    public ExpenseEntityDto buildResponse(ExpenseDto expenseDto){
-        return new ExpenseEntityDto();
+    @Override
+    public boolean isRequestIncomplete(CreateExpenseRequest request) {
+        return isNull(request) || isNull(request.getExpenseDto());
+    }
+
+    @Override
+    public String missingParams(CreateExpenseRequest request) {
+        return Stream.of(
+                isNull(request) ? "Request is empty" : null,
+                isNull(request.getExpenseDto()) ? "CreateExpenseDto is missing" : null
+        ).toString();
+    }
+
+    @Override
+    public String getOperation() { return CREATE_EXPENSE.getValue(); }
+
+    public static CreateExpenseRequest request(ExpenseDto expenseDto){ return new CreateExpenseRequest(expenseDto); }
+    protected static class CreateExpenseRequest extends AbstractRequest {
+
+        private final ExpenseDto expenseDto;
+        private CreateExpenseRequest(ExpenseDto expenseDto){
+            this.expenseDto = expenseDto;
+        }
+        public ExpenseDto getExpenseDto(){ return expenseDto; }
+
     }
 
 }

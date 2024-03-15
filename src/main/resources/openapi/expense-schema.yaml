@@ -10,5 +10,25 @@ components:
     Expense:
       type: object
       properties:
-        amount:
+        expense:
           type: string
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        monthlyAmount:
+          type: number
+        currency:
+          $ref: '#/components/schemas/Currency'
+        yearlyAmount:
+          type: number
+        note:
+          type: string
+    PaymentType:
+      type: string
+      enum:
+        - monthly
+        - yearly
+    Currency:
+      type: string
+      enum:
+        - euro
+        - usd
