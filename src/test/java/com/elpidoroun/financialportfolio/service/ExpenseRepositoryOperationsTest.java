@@ -2,9 +2,7 @@ package com.elpidoroun.financialportfolio.service;
 
 import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
 import com.elpidoroun.financialportfolio.exceptions.ExpenseNotFoundException;
-import com.elpidoroun.financialportfolio.model.Currency;
 import com.elpidoroun.financialportfolio.model.Expense;
-import com.elpidoroun.financialportfolio.model.PaymentType;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
+import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -126,15 +123,5 @@ public class ExpenseRepositoryOperationsTest {
                 .hasMessageContaining("Expense with ID: null not found");
         verify(expenseRepository, times(1)).existsById(any());
         verify(expenseRepository, never()).save(any());
-    }
-
-    private Expense createExpense() {
-        return Expense.builder()
-                .withExpense("Rent")
-                .withPaymentType(PaymentType.MONTHLY)
-                .withCurrency(Currency.EURO)
-                .withMonthlyAmount(BigDecimal.valueOf(100L))
-                .withCreatedAt(OffsetDateTime.now())
-                .build();
     }
 }

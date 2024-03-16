@@ -105,6 +105,10 @@ public class Expense {
                 .withCreatedAt(expense.getCreatedAt());
     }
 
+    public static Builder cloneExpense(Expense expense){
+        return createExpenseWithId(expense.getId(), expense);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

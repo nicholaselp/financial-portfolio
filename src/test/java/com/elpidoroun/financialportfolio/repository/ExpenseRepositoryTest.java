@@ -1,16 +1,13 @@
 package com.elpidoroun.financialportfolio.repository;
 
-import com.elpidoroun.financialportfolio.model.Currency;
 import com.elpidoroun.financialportfolio.model.Expense;
-import com.elpidoroun.financialportfolio.model.PaymentType;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
+import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -72,15 +69,6 @@ public class ExpenseRepositoryTest {
             assertThat(updatedExpense.getExpense()).isEqualTo("updated rent");
         });
 
-    }
-
-    public Expense createExpense(){
-        return Expense.builder()
-                .withExpense("rent")
-                .withPaymentType(PaymentType.MONTHLY)
-                .withCurrency(Currency.EURO)
-                .withYearlyAmount(BigDecimal.valueOf(100L))
-                .build();
     }
 
     private void assertEqualsExpenses(Expense expense, Expense savedExpense) {
