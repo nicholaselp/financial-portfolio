@@ -48,7 +48,7 @@ public class Expense {
 
     private Expense(){} //used for hibernate. Do not delete
 
-    private Expense(Long id, String expense, PaymentType paymentType, BigDecimal monthlyAmount, BigDecimal yearlyAmount, Currency currency, String note){
+    private Expense(Long id, String expense, PaymentType paymentType, BigDecimal monthlyAmount, BigDecimal yearlyAmount, Currency currency, String note, OffsetDateTime createdAt){
         this.id = id;
         this.expense = requireNonNull(expense, "expense is missing");
         this.paymentType = requireNonNull(paymentType, "paymentType is missing");
@@ -59,7 +59,7 @@ public class Expense {
         this.yearlyAmount = yearlyAmount;
         this.currency = requireNonNull(currency, "Currency is missing");
         this.note = note;
-        this.createdAt = OffsetDateTime.now();
+        this.createdAt = isNull(createdAt) ? OffsetDateTime.now() : createdAt;
     }
 
     public Long getId() {
@@ -101,7 +101,8 @@ public class Expense {
                 .withNote(expense.getNote().orElse(null))
                 .withYearlyAmount(expense.getYearlyAmount().orElse(null))
                 .withMonthlyAmount(expense.getMonthlyAmount().orElse(null))
-                .withCurrency(expense.getCurrency());
+                .withCurrency(expense.getCurrency())
+                .withCreatedAt(expense.getCreatedAt());
     }
 
     @Override
@@ -125,6 +126,7 @@ public class Expense {
         private BigDecimal yearlyAmount;
         private Currency currency;
         private String note;
+        private OffsetDateTime createdAt;
 
         private Builder(){}
         private Builder(Long id){ this.id = id; }
@@ -159,10 +161,13 @@ public class Expense {
             return this;
         }
 
-        public Expense build(){
-            return new Expense(id, expense, paymentType, monthlyAmount, yearlyAmount, currency, note);
+        public Builder withCreatedAt(OffsetDateTime offsetDateTime){
+            this.createdAt = createdAt;
+            return this;
         }
 
-
+        public Expense build(){
+            return new Expense(id, expense, paymentType, monthlyAmount, yearlyAmount, currency, note, createdAt);
+        }
     }
 }

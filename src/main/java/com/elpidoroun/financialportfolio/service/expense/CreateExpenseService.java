@@ -16,18 +16,9 @@ public class CreateExpenseService {
     private static final Logger logger = LoggerFactory.getLogger(CreateExpenseService.class);
 
     @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
-    @NonNull private final ValidationService<Expense> validationService;
 
     public Expense createExpense(Expense expense){
         logger.info("Saving expense");
-
-        //add validator here
-        var result = validationService.validate(expense);
-
-        if(result.isFail()){
-//            var error = result.getError();
-//            throw new ValidationException(String.join("", result.getError()).orElse("error message");
-        }
 
         return expenseRepositoryOperations.save(expense);
     }

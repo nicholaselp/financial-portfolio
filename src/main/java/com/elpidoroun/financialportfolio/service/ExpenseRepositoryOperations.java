@@ -23,7 +23,7 @@ public class ExpenseRepositoryOperations {
             return expenseRepository.save(expense);
         } catch (Exception exception){
             logger.error(exception.getMessage());
-            throw new DatabaseOperationException("Exception while saving expense");
+            throw new DatabaseOperationException("Exception occurred while saving expense");
         }
     }
 
@@ -39,7 +39,7 @@ public class ExpenseRepositoryOperations {
         try {
             expenseRepository.deleteById(Long.valueOf(id));
         } catch (Exception exception){
-            throw new DatabaseOperationException("Exception occured while deleting an Expense");
+            throw new DatabaseOperationException("Exception occurred while deleting an Expense");
         }
     }
 
