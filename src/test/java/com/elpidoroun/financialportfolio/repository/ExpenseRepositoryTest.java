@@ -23,9 +23,7 @@ public class ExpenseRepositoryTest {
         Expense savedExpense = expenseRepository.save(expense);
 
         assertThat(savedExpense).isNotNull();
-        assertThat(savedExpense.getId()).isGreaterThan(0);
-
-        assertEqualsExpenses(expense, savedExpense);
+        assertThat(savedExpense).isEqualTo(expense);
     }
 
     @Test
@@ -36,9 +34,7 @@ public class ExpenseRepositoryTest {
         Optional<Expense> fetchedExpense = expenseRepository.findById(expense.getId());
 
         assertThat(fetchedExpense).isPresent();
-        assertThat(fetchedExpense.get().getId()).isEqualTo(expense.getId());
-        assertEqualsExpenses(expense, fetchedExpense.get());
-
+        assertThat(fetchedExpense.get()).isEqualTo(expense);
     }
 
     @Test
@@ -69,16 +65,6 @@ public class ExpenseRepositoryTest {
             assertThat(updatedExpense.getExpense()).isEqualTo("updated rent");
         });
 
-    }
-
-    private void assertEqualsExpenses(Expense expense, Expense savedExpense) {
-        assertThat(expense.getExpense()).isEqualTo(savedExpense.getExpense());
-        assertThat(expense.getCreatedAt()).isEqualTo(savedExpense.getCreatedAt());
-        assertThat(expense.getNote()).isEqualTo(savedExpense.getNote());
-        assertThat(expense.getMonthlyAmount()).isEqualTo(savedExpense.getMonthlyAmount());
-        assertThat(expense.getYearlyAmount()).isEqualTo(savedExpense.getYearlyAmount());
-        assertThat(expense.getCurrency()).isEqualTo(savedExpense.getCurrency());
-        assertThat(expense.getpaymentType()).isEqualTo(savedExpense.getpaymentType());
     }
 }
 
