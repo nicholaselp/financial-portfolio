@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class ExpenseRepositoryOperations {
@@ -49,5 +51,10 @@ public class ExpenseRepositoryOperations {
         } else {
             throw new ExpenseNotFoundException("Expense with ID: " + expense.getId() + " not found");
         }
+    }
+
+    public Optional<Expense> findByName(String expense) {
+        return expenseRepository.findByExpense(expense)
+                .stream().findFirst();
     }
 }

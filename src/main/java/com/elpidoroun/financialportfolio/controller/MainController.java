@@ -14,6 +14,7 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -63,7 +64,9 @@ public class MainController {
 
     private String getErrorType(Exception exception) {
         try {
-            return (String) exception.getClass().getField("errorType").get(exception);
+            Field errorTypeField = exception.getClass().getDeclaredField("errorType");
+            errorTypeField.setAccessible(true);
+            return (String) errorTypeField.get(exception);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             return "Unknown error type";
         }
