@@ -6,6 +6,6 @@ public class ValidationException extends RuntimeException{
 
     public ValidationException(String message){
         super(message);
-        this.errorType = "Validation error occured";
+        this.errorType = "Validation error occurred";
     }
 }

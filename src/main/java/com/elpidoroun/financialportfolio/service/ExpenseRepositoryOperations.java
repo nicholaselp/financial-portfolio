@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class ExpenseRepositoryOperations {
@@ -23,7 +25,7 @@ public class ExpenseRepositoryOperations {
             return expenseRepository.save(expense);
         } catch (Exception exception){
             logger.error(exception.getMessage());
-            throw new DatabaseOperationException("Exception while saving expense");
+            throw new DatabaseOperationException("Exception occurred while saving expense");
         }
     }
 
@@ -39,7 +41,7 @@ public class ExpenseRepositoryOperations {
         try {
             expenseRepository.deleteById(Long.valueOf(id));
         } catch (Exception exception){
-            throw new DatabaseOperationException("Exception occured while deleting an Expense");
+            throw new DatabaseOperationException("Exception occurred while deleting an Expense");
         }
     }
 
@@ -49,5 +51,10 @@ public class ExpenseRepositoryOperations {
         } else {
             throw new ExpenseNotFoundException("Expense with ID: " + expense.getId() + " not found");
         }
+    }
+
+    public Optional<Expense> findByName(String expense) {
+        return expenseRepository.findByExpense(expense)
+                .stream().findFirst();
     }
 }

@@ -5,7 +5,6 @@ import com.elpidoroun.financialportfolio.utilities.Result;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import javax.validation.Validation;
 import javax.validation.ValidationException;
 
 public interface EntityValidator<EntityT> {
@@ -19,9 +18,9 @@ public interface EntityValidator<EntityT> {
      * @throws ValidationException
      **/
 
-    Result<Nothing, ValidationError> validate(@Nullable EntityT original, @NonNull EntityT entity) throws ValidationException;
+    Result<Nothing, String> validate(@Nullable EntityT original, @NonNull EntityT entity) throws ValidationException;
 
-    default Result<Nothing, ValidationError> validate(@NonNull EntityT entity) throws ValidationException {
+    default Result<Nothing, String> validate(@NonNull EntityT entity) throws ValidationException {
         return validate(null, entity);
     }
 

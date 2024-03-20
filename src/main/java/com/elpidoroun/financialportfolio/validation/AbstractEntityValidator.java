@@ -1,6 +1,5 @@
 package com.elpidoroun.financialportfolio.validation;
 
-import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import javax.validation.ValidationException;
-import javax.validation.constraints.Null;
 
 import static java.util.Objects.requireNonNull;
 
@@ -19,7 +17,7 @@ public abstract class AbstractEntityValidator<EntityT> implements EntityValidato
 
     protected AbstractEntityValidator(int priority){ this.priority = priority; }
     @Override
-    public Result<Nothing, ValidationError> validate(EntityT original, EntityT entity) throws ValidationException {
+    public Result<Nothing, String> validate(EntityT original, EntityT entity) throws ValidationException {
         requireNonNull(entity, "entity to validate is missing");
 
         if(entityToValidate(original, entity)){
@@ -36,5 +34,5 @@ public abstract class AbstractEntityValidator<EntityT> implements EntityValidato
     public String name() { return getClass().getSimpleName(); }
 
     protected abstract boolean entityToValidate(@Nullable EntityT original, @NonNull EntityT entity);
-    protected abstract Result<Nothing, ValidationError> doValidate(@Nullable EntityT original, @NonNull EntityT entityT);
+    protected abstract Result<Nothing, String> doValidate(@Nullable EntityT original, @NonNull EntityT entityT);
 }

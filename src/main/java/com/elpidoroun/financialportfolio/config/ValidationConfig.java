@@ -1,9 +1,11 @@
 package com.elpidoroun.financialportfolio.config;
 
 import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.service.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.ValidationService;
 import com.elpidoroun.financialportfolio.validation.EntityValidator;
-import com.elpidoroun.financialportfolio.validation.expense.BasicExpenseValidator;
+import com.elpidoroun.financialportfolio.validation.expense.UniquenessValidator;
+import lombok.NonNull;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
@@ -11,13 +13,15 @@ import java.util.List;
 
 public class ValidationConfig {
 
+    @NonNull ExpenseRepositoryOperations expenseRepositoryOperations;
+
     @Bean
     public ValidationService<Expense> expenseValidationService(){
-        List<EntityValidator<Expense>> validators = new ArrayList<>();
+        List<EntityValidator<Expense>> expenseValidators = new ArrayList<>();
 
-        validators.add(new BasicExpenseValidator());
+        expenseValidators.add(new UniquenessValidator(expenseRepositoryOperations));
 
-        return new ValidationService<>(validators);
+        return new ValidationService<>(expenseValidators);
     }
 
 }

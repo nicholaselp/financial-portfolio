@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.model.Operations.UPDATE_EXPENSE;
@@ -34,10 +36,16 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
 
     @Override
     public String missingParams(UpdateExpenseRequest request) {
+        if(isNull(request)){
+            return "Request is empty";
+        }
+
         return Stream.of(
-                isNull(request) ? "Request is empty" : null,
-                isNull(request.getExpenseDto()) ? "CreateExpenseDto is missing" : null
-        ).toString();
+                isNull(request.getExpenseId()) ? "ExpenseId is missing" : null,
+                       isNull(request.getExpenseDto()) ? "ExpenseDto is missing" : null
+                )
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(",'"));
     }
 
     @Override
@@ -52,7 +60,7 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
         private final String expenseId;
         private final ExpenseDto expenseDto;
 
-        private UpdateExpenseRequest(String expenseId, ExpenseDto expenseDto){
+        UpdateExpenseRequest(String expenseId, ExpenseDto expenseDto){
             this.expenseId = expenseId;
             this.expenseDto = expenseDto;
         }
