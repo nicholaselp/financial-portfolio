@@ -23,7 +23,7 @@ public class CreateExpenseService {
     @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
     @NonNull private final ValidationService<Expense> validationService;
 
-    public Expense createExpense(Expense expense){
+    public Expense execute(Expense expense){
         logger.info("Saving expense");
 
         var validate = validationService.validate(expense);

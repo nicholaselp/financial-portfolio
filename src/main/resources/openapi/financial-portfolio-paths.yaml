@@ -40,6 +40,12 @@ operations:
             application/json:
               schema:
                 $ref: 'expense-schema.yaml#/components/schemas/ExpenseEntity'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        404:
+          $ref: 'common.yaml#/errors/not-found'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'
     delete:
       tags:
         - financial-portfolio
@@ -55,6 +61,10 @@ operations:
       responses:
         204:
           description: Expense deleted successfully
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'
     put:
       tags:
         - financial-portfolio
@@ -79,3 +89,9 @@ operations:
             application/json:
               schema:
                 $ref: 'expense-schema.yaml#/components/schemas/ExpenseEntity'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        404:
+          $ref: 'common.yaml#/errors/not-found'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'

@@ -76,8 +76,8 @@ public class MainController {
         return Optional.ofNullable(exceptionStatuses.get(exception.getClass())).orElse(INTERNAL_SERVER_ERROR);
     }
 
-    private record ErrorResponse(String message, String errorType) {
-            private ErrorResponse(String message, String errorType) {
+    public record ErrorResponse(String message, String errorType) {
+            public ErrorResponse(String message, String errorType) {
                 this.message = requireNonNull(message, "Message is missing");
                 this.errorType = requireNonNull(errorType, "ErrorType is missing");
             }

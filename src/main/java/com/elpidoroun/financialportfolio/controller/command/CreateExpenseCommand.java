@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.model.Operations.CREATE_EXPENSE;
@@ -23,7 +25,7 @@ public class CreateExpenseCommand implements Command<CreateExpenseCommand.Create
     @Override
     public ExpenseEntityDto execute(CreateExpenseRequest request) {
         return expenseConverter.convertToEntityDto(
-                createExpenseService.createExpense(
+                createExpenseService.execute(
                     expenseConverter.convertToDomain(request.getExpenseDto())));
     }
 
@@ -34,10 +36,13 @@ public class CreateExpenseCommand implements Command<CreateExpenseCommand.Create
 
     @Override
     public String missingParams(CreateExpenseRequest request) {
-        return Stream.of(
-                isNull(request) ? "Request is empty" : null,
-                isNull(request.getExpenseDto()) ? "CreateExpenseDto is missing" : null
-        ).toString();
+        if(isNull(request)){
+            return "Request is empty";
+        }
+
+        return Stream.of(isNull(request.getExpenseDto())? "CreateExpenseDto is missing" : null)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(",'"));
     }
 
     @Override
@@ -47,7 +52,7 @@ public class CreateExpenseCommand implements Command<CreateExpenseCommand.Create
     protected static class CreateExpenseRequest extends AbstractRequest {
 
         private final ExpenseDto expenseDto;
-        private CreateExpenseRequest(ExpenseDto expenseDto){
+        CreateExpenseRequest(ExpenseDto expenseDto){
             this.expenseDto = expenseDto;
         }
         public ExpenseDto getExpenseDto(){ return expenseDto; }

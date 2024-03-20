@@ -6,6 +6,8 @@ import com.elpidoroun.financialportfolio.service.expense.GetExpenseService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.model.Operations.GET_EXPENSE_BY_ID;
@@ -30,10 +32,13 @@ public class GetExpenseByIdCommand implements Command<GetExpenseByIdCommand.GetE
 
     @Override
     public String missingParams(GetExpenseByIdRequest request) {
-        return Stream.of(
-                isNull(request) ? "Request is empty" : null,
-                isNull(request.getExpenseId()) ? "Expense ID is missing" : null
-        ).toString();
+        if(isNull(request)){
+            return "Request is empty";
+        }
+
+        return Stream.of(isNull(request.getExpenseId())? "ExpenseId is missing" : null)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(",'"));
     }
 
     @Override
@@ -43,11 +48,10 @@ public class GetExpenseByIdCommand implements Command<GetExpenseByIdCommand.GetE
 
     protected static class GetExpenseByIdRequest extends AbstractRequest {
         private final String expenseId;
-        private GetExpenseByIdRequest(String expenseId){
+        GetExpenseByIdRequest(String expenseId){
             this.expenseId = expenseId;
         }
 
         public String getExpenseId(){ return expenseId; }
-
     }
 }
