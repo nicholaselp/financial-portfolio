@@ -25,7 +25,7 @@ public class FinancialPortfolioApiControllerDelegate extends MainController impl
     @NonNull private DeleteExpenseCommand deleteExpenseCommand;
 
     @Override
-    public ResponseEntity<ExpenseEntityDto> createExpense(ExpenseDto expenseDto){
+    public ResponseEntity<ExpenseEntityDto> createExpense(ExpenseDto expenseDto) {
         return (ResponseEntity<ExpenseEntityDto>) execute(createExpenseCommand, CreateExpenseCommand.request(expenseDto));
     }
 
