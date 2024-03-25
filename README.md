@@ -7,7 +7,7 @@
 - OpenAPI to generate API specification and Dtos
 - Hibernate
 - Liquibase
-- Jenkins
+- Jenkin
 
 ## Building the project
 ./gradlew clean install
