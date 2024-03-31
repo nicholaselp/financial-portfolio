@@ -16,7 +16,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"expense\": \"string\",\r\n  \"paymentType\": \"monthly\",\r\n  \"monthlyAmount\": 10.0,\r\n  \"currency\": \"euro\",\r\n  \"yearlyAmount\": 10,\r\n  \"note\": \"string\"\r\n}",
+					"raw": "{\r\n  \"expense\": \"an expense\",\r\n  \"paymentType\": \"monthly\",\r\n  \"monthlyAmount\": 10.0,\r\n  \"currency\": \"euro\",\r\n  \"yearlyAmount\": 10,\r\n  \"note\": \"string\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -38,7 +38,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n        \"expense\": \"string\",\r\n        \"paymentType\": \"monthly\",\r\n        \"monthlyAmount\": 10.0,\r\n        \"currency\": \"euro\",\r\n        \"yearlyAmount\": 222222,\r\n        \"note\": \"string\"\r\n    }",
+					"raw": "{\r\n        \"expense\": \"stringasd\",\r\n        \"paymentType\": \"monthly\",\r\n        \"monthlyAmount\": 10.0,\r\n        \"currency\": \"euro\",\r\n        \"yearlyAmount\": 1111111111111,\r\n        \"note\": \"string\"\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
