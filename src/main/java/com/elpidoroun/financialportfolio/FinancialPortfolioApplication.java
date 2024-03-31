@@ -2,12 +2,8 @@ package com.elpidoroun.financialportfolio;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import javax.annotation.PreDestroy;
 
 @SpringBootApplication(scanBasePackages = {
 		"com.elpidoroun.financialportfolio",
@@ -16,9 +12,6 @@ import javax.annotation.PreDestroy;
 public class FinancialPortfolioApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(FinancialPortfolioApplication.class);
-
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
 
 	public static void main(String[] args) {
 		SpringApplication.run(FinancialPortfolioApplication.class, args);
@@ -30,12 +23,13 @@ public class FinancialPortfolioApplication {
 
 	}
 
-	@PreDestroy
-	public void onExit(){
-		final String DROP_TABLES = "DROP TABLE IF EXISTS public.expenses CASCADE; DROP TABLE IF EXISTS public.databasechangelog CASCADE; DROP TABLE IF EXISTS public.databasechangeloglock CASCADE";
-		logger.warn("DROPPING ALL TABLES IN DATABASE...");
-		jdbcTemplate.execute(DROP_TABLES);
-
-	}
+	/** If you want to drop all tables during shutdown of application (Must Autowire JdbcTemplate) **/
+//	@PreDestroy
+//	public void onExit(){
+//		final String DROP_TABLES = "DROP TABLE IF EXISTS public.expenses CASCADE; DROP TABLE IF EXISTS public.databasechangelog CASCADE; DROP TABLE IF EXISTS public.databasechangeloglock CASCADE";
+//		logger.warn("DROPPING ALL TABLES IN DATABASE...");
+//		jdbcTemplate.execute(DROP_TABLES);
+//
+//	}
 
 }
