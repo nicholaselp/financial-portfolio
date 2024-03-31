@@ -74,6 +74,19 @@
 				"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
 			},
 			"response": []
+		},
+		{
+			"name": "test request",
+			"id": "19817418-991d-4c10-a9fd-c2728ee04318",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/financial-portfolio/v1/expenses"
+			},
+			"response": []
 		}
 	]
 }
