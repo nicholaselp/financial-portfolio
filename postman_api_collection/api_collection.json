@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "7ccf7813-745b-4dde-9be3-9e7dcf38e329",
+		"name": "Financial Portfolio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Expense",
+			"id": "9e21efdd-4696-4f95-996b-cd40654e5e77",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"expense\": \"string\",\r\n  \"paymentType\": \"monthly\",\r\n  \"monthlyAmount\": 10.0,\r\n  \"currency\": \"euro\",\r\n  \"yearlyAmount\": 10,\r\n  \"note\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/financial-portfolio/v1/expenses"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Expense by ID",
+			"id": "e2603983-25a8-4ec5-9dc8-828e7ef0ad35",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"expense\": \"string\",\r\n        \"paymentType\": \"monthly\",\r\n        \"monthlyAmount\": 10.0,\r\n        \"currency\": \"euro\",\r\n        \"yearlyAmount\": 222222,\r\n        \"note\": \"string\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Expense by ID",
+			"id": "d2e98022-a072-4c5a-81f9-77acdff4a7df",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete By ID",
+			"id": "a128424c-d9c5-4a2d-acb6-447dcfe4875b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+			},
+			"response": []
+		}
+	]
+}
