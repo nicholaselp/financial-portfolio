@@ -91,8 +91,18 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"categoryName\": \"string2\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category"
 					},
 					"response": []
 				},
@@ -103,8 +113,18 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 3,\r\n  \"categoryName\": \"strinaaaaasdassdffsdsdffsdsdffsdsdfddasg\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/7"
 					},
 					"response": []
 				},
@@ -116,7 +136,8 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/3"
 					},
 					"response": []
 				},
@@ -127,8 +148,9 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
 					},
 					"response": []
 				}
