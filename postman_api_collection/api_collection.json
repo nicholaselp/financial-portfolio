@@ -6,6 +6,16 @@
 	},
 	"item": [
 		{
+			"name": "Expense APIs",
+			"item": [],
+			"id": "af441c77-0fe5-415f-9289-4995d2843843"
+		},
+		{
+			"name": "Expense Category APIs",
+			"item": [],
+			"id": "08d0615a-aebb-47e0-bd33-b2b794e4f46e"
+		},
+		{
 			"name": "Create Expense",
 			"id": "9e21efdd-4696-4f95-996b-cd40654e5e77",
 			"protocolProfileBehavior": {
