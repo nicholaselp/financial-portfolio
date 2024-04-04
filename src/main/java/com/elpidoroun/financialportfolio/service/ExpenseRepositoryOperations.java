@@ -54,7 +54,7 @@ public class ExpenseRepositoryOperations {
     }
 
     public Optional<Expense> findByName(String expense) {
-        return expenseRepository.findByExpense(expense)
+        return expenseRepository.findByExpenseName(expense)
                 .stream().findFirst();
     }
 }

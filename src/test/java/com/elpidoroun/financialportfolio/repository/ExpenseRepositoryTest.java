@@ -54,7 +54,7 @@ public class ExpenseRepositoryTest {
         Expense savedExpense = expenseRepository.save(expense);
 
         var expenseToUpdate = Expense.createExpenseWithId(savedExpense.getId(), savedExpense)
-                .withExpense("updated rent")
+                .withExpenseName("updated rent")
                 .build();
 
         assertThat(expenseToUpdate.getId()).isNotNull();
@@ -62,7 +62,7 @@ public class ExpenseRepositoryTest {
         expenseRepository.save(expenseToUpdate);
 
         assertThat(expenseRepository.findById(expenseToUpdate.getId())).isPresent().hasValueSatisfying(updatedExpense -> {
-            assertThat(updatedExpense.getExpense()).isEqualTo("updated rent");
+            assertThat(updatedExpense.getExpenseName()).isEqualTo("updated rent");
         });
 
     }

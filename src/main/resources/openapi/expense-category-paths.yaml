@@ -1,0 +1,97 @@
+operations:
+  expense-category-operations:
+    post:
+      tags:
+        - financial-portfolio
+      summary: Create an expense category
+      operationId: create-expense-category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
+      responses:
+        200:
+          description: Successfully create a new expense category
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategoryResponse'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'
+  expense-category-operations-by-id:
+    get:
+      tags:
+        - financial-portfolio
+      summary: Get expense category by ID
+      operationId: get-expense-category-by-id
+      parameters:
+        - name: id
+          description: id of expense
+          in: path
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully return Expense by ID
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategoryResponse'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        404:
+          $ref: 'common.yaml#/errors/not-found'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'
+    delete:
+      tags:
+        - financial-portfolio
+      summary: Delete expense category by ID
+      operationId: delete-expense-category-by-id
+      parameters:
+        - name: id
+          description: ID of the expense category to delete
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Expense category deleted successfully
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'
+    put:
+      tags:
+        - financial-portfolio
+      summary: Update expense category by ID
+      operationId: update-expense-category-by-id
+      parameters:
+        - name: id
+          description: ID of the expense category to update
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
+      responses:
+        200:
+          description: Successfully updated the expense category
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategoryResponse'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        404:
+          $ref: 'common.yaml#/errors/not-found'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'

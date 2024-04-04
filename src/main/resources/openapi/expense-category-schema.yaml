@@ -1,0 +1,32 @@
+components:
+  schemas:
+    ExpenseCategory:
+      type: object
+      properties:
+        id:
+          type: string
+        categoryName:
+          type: string
+        billingInterval:
+          $ref: '#/components/schemas/BillingInterval'
+        expenseType:
+          $ref: '#/components/schemas/ExpenseType'
+    ExpenseCategoryResponse:
+      type: object
+      properties:
+        meta:
+          $ref: 'common.yaml#/components/schemas/Metadata'
+        expenseCategory:
+          $ref: '#/components/schemas/ExpenseCategory'
+    BillingInterval:
+      type: string
+      enum:
+        - monthly
+        - bi-monthly
+        - quarterly
+        - yearly
+    ExpenseType:
+      type: string
+      enum:
+        - fixed
+        - not-fixed

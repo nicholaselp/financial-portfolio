@@ -20,8 +20,8 @@ public class UniquenessValidator implements EntityValidator<Expense> {
 
     @Override
     public Result<Nothing, String> validate(@Nullable Expense original, @NonNull Expense entity) throws ValidationException {
-         if(expenseRepositoryOperations.findByName(entity.getExpense()).isPresent()){
-             return Result.fail("Expense with name: " + entity.getExpense() + " already exists");
+         if(expenseRepositoryOperations.findByName(entity.getExpenseName()).isPresent()){
+             return Result.fail("Expense with name: " + entity.getExpenseName() + " already exists");
          }
          return Result.success();
     }

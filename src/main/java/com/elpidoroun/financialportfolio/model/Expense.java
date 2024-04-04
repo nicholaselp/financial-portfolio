@@ -1,23 +1,32 @@
 package com.elpidoroun.financialportfolio.model;
 
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
+import static java.util.Objects.nonNull;
 
 @Entity
-@Table(name = "expenses")
+@Table(name = "expense")
 public class Expense {
 
     @Id
@@ -25,20 +34,14 @@ public class Expense {
     @Column(name = "id")
     private Long id;
 
-    @Column
-    private String expense;
+    @Column(name = "expense_name")
+    private String expenseName;
 
-    @Column(name = "payment_type")
-    private PaymentType paymentType;
+    @Column(name = "monthly_allocated_amount")
+    private BigDecimal monthlyAllocatedAmount;
 
-    @Column(name = "monthly_amount")
-    private BigDecimal monthlyAmount;
-
-    @Column(name = "yearly_amount")
-    private BigDecimal yearlyAmount;
-
-    @Column(name = "currency")
-    private Currency currency;
+    @Column(name = "yearly_allocated_amount")
+    private BigDecimal yearlyAllocatedAmount;
 
     @Column(name = "note")
     private String note;
@@ -46,44 +49,59 @@ public class Expense {
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
+    @OneToMany(mappedBy = "expense",
+    cascade = {CascadeType.ALL})
+    @JsonIgnore
+    private List<Payment> paymentList = new ArrayList<>();
+
+    @ManyToOne()
+    @JoinColumn(name = "expense_category_id")
+    private ExpenseCategory expenseCategory;
+
     private Expense(){} //used for hibernate. Do not delete
 
-    private Expense(Long id, String expense, PaymentType paymentType, BigDecimal monthlyAmount, BigDecimal yearlyAmount, Currency currency, String note, OffsetDateTime createdAt){
+    private Expense(Long id, String expenseName, BigDecimal monthlyAllocatedAmount,
+                    BigDecimal yearlyAllocatedAmount, String note, OffsetDateTime createdAt,
+                    List<Payment> paymentList, ExpenseCategory expenseCategory){
         this.id = id;
-        this.expense = requireNonNull(expense, "expense is missing");
-        this.paymentType = requireNonNull(paymentType, "paymentType is missing");
-        if(isNull(monthlyAmount) && isNull(yearlyAmount)){
-            throw new ValidationException("Monthly and yearly amount are null");
+        this.expenseName = requireNonBlank(expenseName, "expenseName is missing");
+        if(isNull(monthlyAllocatedAmount) && isNull(yearlyAllocatedAmount)){
+            throw new ValidationException("Monthly and yearly amount are empty");
         }
-        this.monthlyAmount = monthlyAmount;
-        this.yearlyAmount = yearlyAmount;
-        this.currency = requireNonNull(currency, "Currency is missing");
+
+        if(nonNull(monthlyAllocatedAmount) && nonNull(yearlyAllocatedAmount)){
+            if(monthlyAllocatedAmount.multiply(BigDecimal.valueOf(12)).equals(yearlyAllocatedAmount)){
+                this.monthlyAllocatedAmount = monthlyAllocatedAmount;
+                this.yearlyAllocatedAmount = yearlyAllocatedAmount;
+            }
+        } else {
+            if(isNull(monthlyAllocatedAmount)){
+                this.monthlyAllocatedAmount = yearlyAllocatedAmount.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+                this.yearlyAllocatedAmount = yearlyAllocatedAmount;
+            } else {
+                this.monthlyAllocatedAmount = monthlyAllocatedAmount;
+                this.yearlyAllocatedAmount = monthlyAllocatedAmount.multiply(BigDecimal.valueOf(12));
+            }
+        }
+
         this.note = note;
         this.createdAt = isNull(createdAt) ? OffsetDateTime.now() : createdAt;
+        this.paymentList = paymentList;
+        this.expenseCategory = expenseCategory;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getExpense() {
-        return expense;
+    public String getExpenseName() { return expenseName; }
+
+    public Optional<BigDecimal> getMonthlyAllocatedAmount() {
+        return Optional.ofNullable(monthlyAllocatedAmount);
     }
 
-    public PaymentType getpaymentType() {
-        return paymentType;
-    }
-
-    public Optional<BigDecimal> getMonthlyAmount() {
-        return Optional.ofNullable(monthlyAmount);
-    }
-
-    public Optional<BigDecimal> getYearlyAmount() {
-        return Optional.ofNullable(yearlyAmount);
-    }
-
-    public Currency getCurrency() {
-        return currency;
+    public Optional<BigDecimal> getYearlyAllocatedAmount() {
+        return Optional.ofNullable(yearlyAllocatedAmount);
     }
 
     public Optional<String> getNote() {
@@ -92,17 +110,21 @@ public class Expense {
 
     public OffsetDateTime getCreatedAt(){ return createdAt; }
 
+    public List<Payment> getPayments(){ return paymentList; }
+
+    public ExpenseCategory getExpenseCategory(){ return expenseCategory; }
+
     public static Builder builder(){ return new Builder(); }
 
     public static Builder createExpenseWithId(Long id, Expense expense){
         return new Builder(id)
-                .withExpense(expense.getExpense())
-                .withPaymentType(expense.getpaymentType())
+                .withExpenseName(expense.getExpenseName())
                 .withNote(expense.getNote().orElse(null))
-                .withYearlyAmount(expense.getYearlyAmount().orElse(null))
-                .withMonthlyAmount(expense.getMonthlyAmount().orElse(null))
-                .withCurrency(expense.getCurrency())
-                .withCreatedAt(expense.getCreatedAt());
+                .withYearlyAllocatedAmount(expense.getYearlyAllocatedAmount().orElse(null))
+                .withMonthlyAllocatedAmount(expense.getMonthlyAllocatedAmount().orElse(null))
+                .withCreatedAt(expense.getCreatedAt())
+                .withPayments(expense.getPayments())
+                .withExpenseCategory(expense.getExpenseCategory());
     }
 
     public static Builder cloneExpense(Expense expense){
@@ -114,49 +136,39 @@ public class Expense {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense1 = (Expense) o;
-        return Objects.equals(id, expense1.id) && Objects.equals(expense, expense1.expense) && paymentType == expense1.paymentType && Objects.equals(monthlyAmount, expense1.monthlyAmount) && Objects.equals(yearlyAmount, expense1.yearlyAmount) && currency == expense1.currency && Objects.equals(note, expense1.note) && Objects.equals(createdAt, expense1.createdAt);
+        return Objects.equals(id, expense1.id) && Objects.equals(expenseName, expense1.expenseName) && Objects.equals(monthlyAllocatedAmount, expense1.monthlyAllocatedAmount) && Objects.equals(yearlyAllocatedAmount, expense1.yearlyAllocatedAmount) && Objects.equals(note, expense1.note) && Objects.equals(createdAt, expense1.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, expense, paymentType, monthlyAmount, yearlyAmount, currency, note, createdAt);
+        return Objects.hash(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, createdAt);
     }
 
     public static class Builder {
         private Long id;
-        private String expense;
-        private PaymentType paymentType;
-        private BigDecimal monthlyAmount;
-        private BigDecimal yearlyAmount;
-        private Currency currency;
+        private String expenseName;
+        private BigDecimal monthlyAllocatedAmount;
+        private BigDecimal yearlyAllocatedAmount;
         private String note;
         private OffsetDateTime createdAt;
+        private List<Payment> paymentList;
+        private ExpenseCategory expenseCategory;
 
         private Builder(){}
         private Builder(Long id){ this.id = id; }
 
-        public Builder withExpense(String expense){
-            this.expense = expense;
+        public Builder withExpenseName(String expenseName){
+            this.expenseName = expenseName;
             return this;
         }
 
-        public Builder withPaymentType(PaymentType paymentType){
-            this.paymentType = paymentType;
+        public Builder withMonthlyAllocatedAmount(BigDecimal monthlyAllocatedAmount){
+            this.monthlyAllocatedAmount = monthlyAllocatedAmount;
             return this;
         }
 
-        public Builder withMonthlyAmount(BigDecimal monthlyAmount){
-            this.monthlyAmount = monthlyAmount;
-            return this;
-        }
-
-        public Builder withYearlyAmount(BigDecimal yearlyAmount){
-            this.yearlyAmount = yearlyAmount;
-            return this;
-        }
-
-        public Builder withCurrency(Currency currency){
-            this.currency = currency;
+        public Builder withYearlyAllocatedAmount(BigDecimal yearlyAllocatedAmount){
+            this.yearlyAllocatedAmount = yearlyAllocatedAmount;
             return this;
         }
 
@@ -165,13 +177,23 @@ public class Expense {
             return this;
         }
 
-        public Builder withCreatedAt(OffsetDateTime offsetDateTime){
+        public Builder withCreatedAt(OffsetDateTime createdAt){
             this.createdAt = createdAt;
             return this;
         }
 
+        public Builder withPayments(List<Payment> paymentList){
+            this.paymentList = paymentList;
+            return this;
+        }
+
+        public Builder withExpenseCategory(ExpenseCategory expenseCategory){
+            this.expenseCategory = expenseCategory;
+            return this;
+        }
+
         public Expense build(){
-            return new Expense(id, expense, paymentType, monthlyAmount, yearlyAmount, currency, note, createdAt);
+            return new Expense(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, createdAt, paymentList, expenseCategory);
         }
     }
 }

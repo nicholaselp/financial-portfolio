@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Objects.requireNonNull;
+import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -78,8 +78,8 @@ public class MainController {
 
     public record ErrorResponse(String message, String errorType) {
             public ErrorResponse(String message, String errorType) {
-                this.message = requireNonNull(message, "Message is missing");
-                this.errorType = requireNonNull(errorType, "ErrorType is missing");
+                this.message = requireNonBlank(message, "Message is missing");
+                this.errorType = requireNonBlank(errorType, "ErrorType is missing");
             }
         }
 }

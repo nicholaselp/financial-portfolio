@@ -1,32 +1,44 @@
 components:
   schemas:
-    ExpenseEntity:
+    Expense:
+      type: object
+      properties:
+        expenseName:
+          type: string
+        monthlyAllocatedAmount:
+          type: number
+        yearlyAllocatedAmount:
+          type: number
+        note:
+          type: string
+        expenseCategory:
+          $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
+    ExpenseResponse:
       type: object
       properties:
         meta:
           $ref: 'common.yaml#/components/schemas/Metadata'
         expense:
           $ref: '#/components/schemas/Expense'
-    Expense:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        expenseCategory:
+          $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
+    Payment:
       type: object
       properties:
-        expense:
-          type: string
-        paymentType:
-          $ref: '#/components/schemas/PaymentType'
-        monthlyAmount:
+        paymentAmount:
           type: number
+        paymentDate:
+          type: date
         currency:
           $ref: '#/components/schemas/Currency'
-        yearlyAmount:
+        amountDifference:
           type: number
         note:
           type: string
-    PaymentType:
-      type: string
-      enum:
-        - monthly
-        - yearly
     Currency:
       type: string
       enum:

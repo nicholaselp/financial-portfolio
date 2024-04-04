@@ -2,7 +2,7 @@ package com.elpidoroun.financialportfolio.model;
 
 import com.elpidoroun.financialportfolio.utilities.EnumStringValue;
 
-import static java.util.Objects.requireNonNull;
+import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 
 public enum Currency implements EnumStringValue {
 
@@ -11,7 +11,7 @@ public enum Currency implements EnumStringValue {
     private final String currency;
 
     Currency(String currency){
-        this.currency = requireNonNull(currency, "Currency is missing");
+        this.currency = requireNonBlank(currency, "Currency is missing");
     }
 
     @Override

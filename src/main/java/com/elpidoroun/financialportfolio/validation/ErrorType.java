@@ -7,7 +7,7 @@ public enum ErrorType implements EnumStringValue {
 
     private final String errorType;
 
-    private ErrorType(String errorType) {
+    ErrorType(String errorType) {
         this.errorType = errorType;
     }
 
