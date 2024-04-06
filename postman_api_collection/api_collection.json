@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"expense\": \"an expense\",\r\n  \"paymentType\": \"monthly\",\r\n  \"monthlyAmount\": 10.0,\r\n  \"currency\": \"euro\",\r\n  \"yearlyAmount\": 10,\r\n  \"note\": \"string\"\r\n}",
+							"raw": "{\r\n  \"expenseName\": \"string\",\r\n  \"monthlyAllocatedAmount\": 0,\r\n  \"yearlyAllocatedAmount\": 0,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 0,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
