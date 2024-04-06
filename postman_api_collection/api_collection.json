@@ -163,7 +163,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/2"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/3"
 					},
 					"response": []
 				}
