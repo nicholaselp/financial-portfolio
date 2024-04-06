@@ -41,7 +41,7 @@ public class UpdateExpenseCommandTest {
 
         when(expenseMapper.convertToDomain(expenseDto)).thenReturn(createExpense());
         when(updateExpenseService.execute(any())).thenReturn(createExpense());
-        when(expenseMapper.convertToEntityDto(any())).thenReturn(expenseResponseDto);
+        when(expenseMapper.convertToResponseDto(any())).thenReturn(expenseResponseDto);
 
         UpdateExpenseCommand.UpdateExpenseRequest request = new UpdateExpenseCommand.UpdateExpenseRequest(expenseId, expenseDto);
 
@@ -51,7 +51,7 @@ public class UpdateExpenseCommandTest {
 
         verify(expenseMapper).convertToDomain(expenseDto);
         verify(updateExpenseService).execute(any());
-        verify(expenseMapper).convertToEntityDto(any());
+        verify(expenseMapper).convertToResponseDto(any());
     }
 
     @Test

@@ -4,18 +4,19 @@ components:
       type: object
       properties:
         id:
-          type: string
+          type: integer
+          format: int64
         categoryName:
           type: string
         billingInterval:
           $ref: '#/components/schemas/BillingInterval'
         expenseType:
           $ref: '#/components/schemas/ExpenseType'
+        status:
+          $ref: 'common.yaml#/components/schemas/Status'
     ExpenseCategoryResponse:
       type: object
       properties:
-        meta:
-          $ref: 'common.yaml#/components/schemas/Metadata'
         expenseCategory:
           $ref: '#/components/schemas/ExpenseCategory'
     BillingInterval:

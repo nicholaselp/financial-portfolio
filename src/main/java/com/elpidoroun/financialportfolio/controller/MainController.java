@@ -4,7 +4,7 @@ package com.elpidoroun.financialportfolio.controller;
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
 import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
-import com.elpidoroun.financialportfolio.exceptions.ExpenseNotFoundException;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.google.common.collect.ImmutableMap;
@@ -31,7 +31,7 @@ public class MainController {
 
     private static final Map<Class<?>, HttpStatus> exceptionStatuses = new ImmutableMap.Builder<Class<?>, HttpStatus>()
             .put(ValidationException.class, BAD_REQUEST)
-            .put(ExpenseNotFoundException.class, CONFLICT)
+            .put(EntityNotFoundException.class, CONFLICT)
             .put(IllegalArgumentException.class, BAD_REQUEST)
             .put(DatabaseOperationException.class, BAD_REQUEST)
             .build();

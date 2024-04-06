@@ -1,9 +1,11 @@
-package com.elpidoroun.financialportfolio.service;
+package com.elpidoroun.financialportfolio.service.expense;
 
 import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
-import com.elpidoroun.financialportfolio.exceptions.ExpenseNotFoundException;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
+import com.elpidoroun.financialportfolio.utilities.Nothing;
+import com.elpidoroun.financialportfolio.utilities.Result;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -28,18 +30,18 @@ public class ExpenseRepositoryOperations {
             throw new DatabaseOperationException("Exception occurred while saving expense");
         }
     }
-
     public Expense getById(String id){
         return expenseRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new ExpenseNotFoundException("Expense with ID: " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Expense with ID: " + id + " not found"));
     }
-    public void deleteById(String id){
+    public Result<Nothing, String> deleteById(String id){
         if(!expenseRepository.existsById(Long.valueOf(id))){
-            throw new ExpenseNotFoundException("Expense with ID: " + id + " not found. Nothing will be deleted");
+            return Result.fail("Expense with ID: " + id + " not found. Nothing will be deleted");
         }
 
         try {
             expenseRepository.deleteById(Long.valueOf(id));
+            return Result.success();
         } catch (Exception exception){
             throw new DatabaseOperationException("Exception occurred while deleting an Expense");
         }
@@ -49,7 +51,7 @@ public class ExpenseRepositoryOperations {
         if(expenseRepository.existsById(expense.getId())){
             return expenseRepository.save(expense);
         } else {
-            throw new ExpenseNotFoundException("Expense with ID: " + expense.getId() + " not found");
+            throw new EntityNotFoundException("Expense with ID: " + expense.getId() + " not found");
         }
     }
 

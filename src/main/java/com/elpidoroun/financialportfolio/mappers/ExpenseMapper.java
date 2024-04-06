@@ -4,12 +4,15 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.generated.dto.MetadataDto;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
+import com.elpidoroun.financialportfolio.model.Status;
 import org.springframework.stereotype.Component;
+
+import static java.util.Objects.isNull;
 
 @Component
 public class ExpenseMapper {
 
-    public ExpenseResponseDto convertToEntityDto(Expense expense){
+    public ExpenseResponseDto convertToResponseDto(Expense expense){
         ExpenseResponseDto expenseResponseDto = new ExpenseResponseDto();
         expenseResponseDto.setExpense(convertToDto(expense));
         MetadataDto meta = new MetadataDto();
@@ -25,6 +28,7 @@ public class ExpenseMapper {
         expenseDto.setExpenseName(expense.getExpenseName());
         expense.getMonthlyAllocatedAmount().ifPresent(expenseDto::setMonthlyAllocatedAmount);
         expense.getYearlyAllocatedAmount().ifPresent(expenseDto::setYearlyAllocatedAmount);
+        expenseDto.setStatus(StatusMapper.toDto(expense.getStatus()));
         expense.getNote().ifPresent(expenseDto::setNote);
         return expenseDto;
     }
@@ -35,6 +39,7 @@ public class ExpenseMapper {
                 .withMonthlyAllocatedAmount(expenseDto.getMonthlyAllocatedAmount())
                 .withYearlyAllocatedAmount(expenseDto.getYearlyAllocatedAmount())
                 .withNote(expenseDto.getNote())
+                .withStatus(isNull(expenseDto.getStatus()) ? Status.ACTIVE : StatusMapper.toDomain(expenseDto.getStatus()))
                 .build();
     }
 }

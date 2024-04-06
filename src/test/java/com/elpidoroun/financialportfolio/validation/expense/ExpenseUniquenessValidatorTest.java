@@ -1,7 +1,7 @@
 package com.elpidoroun.financialportfolio.validation.expense;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
-import com.elpidoroun.financialportfolio.service.ExpenseRepositoryOperations;
+import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,23 +15,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-class UniquenessValidatorTest {
+class ExpenseUniquenessValidatorTest {
 
     @Mock
     private ExpenseRepositoryOperations expenseRepositoryOperations;
-    private UniquenessValidator uniquenessValidator;
+    private ExpenseUniquenessValidator expenseUniquenessValidator;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        uniquenessValidator = new UniquenessValidator(expenseRepositoryOperations);
+        expenseUniquenessValidator = new ExpenseUniquenessValidator(expenseRepositoryOperations);
     }
 
     @Test
     void success_expense_is_unique() {
         when(expenseRepositoryOperations.findByName("UniqueExpense")).thenReturn(Optional.empty());
 
-        Result<Nothing, String> result = uniquenessValidator.validate(null, ExpenseTestFactory.createExpense());
+        Result<Nothing, String> result = expenseUniquenessValidator.validate(null, ExpenseTestFactory.createExpense());
 
         assertThat(result.isSuccess()).isTrue();
     }
@@ -41,7 +41,7 @@ class UniquenessValidatorTest {
         Expense entity = ExpenseTestFactory.createExpense();
         when(expenseRepositoryOperations.findByName(any())).thenReturn(Optional.of(entity));
 
-        Result<Nothing, String> result = uniquenessValidator.validate(null, ExpenseTestFactory.createExpense());
+        Result<Nothing, String> result = expenseUniquenessValidator.validate(null, ExpenseTestFactory.createExpense());
 
         assertThat(result.isFail()).isTrue();
         assertThat(result.getError()).isPresent().hasValue("Expense with name: rent already exists");
@@ -49,8 +49,8 @@ class UniquenessValidatorTest {
 
     @Test
     public void priority_and_method_name(){
-        assertThat(uniquenessValidator.priority()).isEqualTo(0);
-        assertThat(uniquenessValidator.name()).isEqualTo("UniquenessValidator");
+        assertThat(expenseUniquenessValidator.priority()).isEqualTo(0);
+        assertThat(expenseUniquenessValidator.name()).isEqualTo("UniquenessValidator");
 
     }
 }

@@ -4,18 +4,18 @@ import com.elpidoroun.financialportfolio.utilities.EnumStringValue;
 
 import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 
-public enum Currency implements EnumStringValue {
+public enum Status implements EnumStringValue {
 
-    EURO("EUR"),
-    USD("USD");
-    private final String currency;
+    ACTIVE("active"),
+    DELETED("deleted");
+    private final String status;
 
-    Currency(String currency){
-        this.currency = requireNonBlank(currency, "Currency is missing");
+    Status(String status) {
+        this.status = requireNonBlank(status, "Status is missing");
     }
 
     @Override
     public String getValue() {
-        return currency;
+        return status;
     }
 }

@@ -24,7 +24,7 @@ public class ExpenseMapperTest {
                 .monthlyAllocatedAmount(BigDecimal.valueOf(1000))
                 .note("Monthly rent payment");
 
-        var expenseResponseDto = converter.convertToEntityDto(expense);
+        var expenseResponseDto = converter.convertToResponseDto(expense);
 
         assertThat(expenseResponseDto.getExpense()).usingRecursiveComparison().isEqualTo(expectedDto);
     }

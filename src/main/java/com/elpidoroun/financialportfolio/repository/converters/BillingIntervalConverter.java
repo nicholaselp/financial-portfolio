@@ -1,8 +1,12 @@
 package com.elpidoroun.financialportfolio.repository.converters;
 
+import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
 import com.elpidoroun.financialportfolio.model.BillingInterval;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 
@@ -17,6 +21,13 @@ public class BillingIntervalConverter implements AttributeConverter<BillingInter
 
     @Override
     public BillingInterval convertToEntityAttribute(String dbPaymentType) {
-        return nonNull(dbPaymentType) ? BillingInterval.valueOf(dbPaymentType.toUpperCase()) : null;
+        if(nonNull(dbPaymentType)){
+            return Arrays.stream(BillingInterval.values())
+                    .filter(Objects::nonNull)
+                    .filter(paymentType -> paymentType.getValue().equals(dbPaymentType))
+                    .findFirst().orElseThrow(() -> new DatabaseOperationException("No PaymentType found for value: " + dbPaymentType));
+        }
+
+        return null;
     }
 }

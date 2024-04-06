@@ -21,6 +21,20 @@ operations:
           $ref: 'common.yaml#/errors/invalid-input'
         500:
           $ref: 'common.yaml#/errors/internal-error'
+    get:
+      tags:
+        - financial-portfolio
+      summary: Get all expense Categories
+      operationId: get-expense-categories
+      responses:
+        200:
+          description: Successfully returned all Expense Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategoryResponse'
   expense-category-operations-by-id:
     get:
       tags:

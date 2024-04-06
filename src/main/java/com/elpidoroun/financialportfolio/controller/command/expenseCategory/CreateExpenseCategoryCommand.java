@@ -4,6 +4,7 @@ import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
+import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
 import com.elpidoroun.financialportfolio.service.expenseCategory.CreateExpenseCategoryService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -21,10 +22,13 @@ import static java.util.Objects.isNull;
 public class CreateExpenseCategoryCommand implements Command<CreateExpenseCategoryCommand.CreateExpenseCategoryRequest, ExpenseCategoryResponseDto> {
 
     @NonNull private final CreateExpenseCategoryService createExpenseCategoryService;
+    @NonNull private final ExpenseCategoryMapper expenseCategoryMapper;
 
     @Override
     public ExpenseCategoryResponseDto execute(CreateExpenseCategoryRequest request) {
-        return null;
+        return expenseCategoryMapper.convertToResponseDto(
+                createExpenseCategoryService.execute(expenseCategoryMapper.convertToDomain(request.getExpenseCategoryDto()))
+        );
     }
 
     @Override

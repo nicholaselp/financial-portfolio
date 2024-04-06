@@ -29,7 +29,7 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
 
     @Override
     public ExpenseResponseDto execute(UpdateExpenseRequest request) {
-        return expenseMapper.convertToEntityDto(
+        return expenseMapper.convertToResponseDto(
                 updateExpenseService.execute(Expense.createExpenseWithId(Long.valueOf(request.getExpenseId()), expenseMapper.convertToDomain(request.getExpenseDto())).build()));
     }
 

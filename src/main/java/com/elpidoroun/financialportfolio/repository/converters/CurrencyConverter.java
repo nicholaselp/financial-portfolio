@@ -1,8 +1,12 @@
 package com.elpidoroun.financialportfolio.repository.converters;
 
+import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
 import com.elpidoroun.financialportfolio.model.Currency;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 
@@ -16,6 +20,13 @@ public class CurrencyConverter implements AttributeConverter<Currency, String> {
 
     @Override
     public Currency convertToEntityAttribute(String dbCurrency) {
-        return nonNull(dbCurrency) ? Currency.valueOf(dbCurrency.toUpperCase()) : null;
+        if(nonNull(dbCurrency)){
+            return Arrays.stream(Currency.values())
+                    .filter(Objects::nonNull)
+                    .filter(currency -> currency.getValue().equals(dbCurrency))
+                    .findFirst().orElseThrow(() -> new DatabaseOperationException("No Currency found for value: " + dbCurrency));
+        }
+
+        return null;
     }
 }

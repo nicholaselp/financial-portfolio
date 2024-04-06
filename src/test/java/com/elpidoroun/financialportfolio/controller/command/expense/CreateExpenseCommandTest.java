@@ -38,7 +38,7 @@ class CreateExpenseCommandTest {
 
         when(expenseMapper.convertToDomain(expenseDto)).thenReturn(ExpenseTestFactory.createExpense());
         when(createExpenseService.execute(any())).thenReturn(ExpenseTestFactory.createExpense());
-        when(expenseMapper.convertToEntityDto(any())).thenReturn(expenseResponseDto);
+        when(expenseMapper.convertToResponseDto(any())).thenReturn(expenseResponseDto);
 
         ExpenseResponseDto result = createExpenseCommand.execute(new CreateExpenseCommand.CreateExpenseRequest(expenseDto));
 
@@ -46,7 +46,7 @@ class CreateExpenseCommandTest {
 
         verify(expenseMapper).convertToDomain(expenseDto);
         verify(createExpenseService).execute(any());
-        verify(expenseMapper).convertToEntityDto(any());
+        verify(expenseMapper).convertToResponseDto(any());
     }
 
     @Test

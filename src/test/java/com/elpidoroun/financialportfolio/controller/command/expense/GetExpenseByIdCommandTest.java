@@ -34,14 +34,14 @@ public class GetExpenseByIdCommandTest {
         var expenseResponseDto = ExpenseTestFactory.createExpenseResponseDto();
 
         when(getExpenseService.execute(expenseId)).thenReturn(expense);
-        when(expenseMapper.convertToEntityDto(expense)).thenReturn(ExpenseTestFactory.createExpenseResponseDto());
+        when(expenseMapper.convertToResponseDto(expense)).thenReturn(ExpenseTestFactory.createExpenseResponseDto());
 
         ExpenseResponseDto result = getExpenseByIdCommand.execute(new GetExpenseByIdCommand.GetExpenseByIdRequest(expenseId));
 
         assertThat(result.getExpense()).isNotNull().isEqualTo(expenseResponseDto.getExpense());
 
         verify(getExpenseService).execute(expenseId);
-        verify(expenseMapper).convertToEntityDto(expense);
+        verify(expenseMapper).convertToResponseDto(expense);
     }
 
     @Test

@@ -3,31 +3,43 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
+import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
+import com.elpidoroun.financialportfolio.service.expenseCategory.GetExpenseCategoryService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.GET_EXPENSE_CATEGORY_BY_ID;
-import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
+import static com.elpidoroun.financialportfolio.utilities.StringUtils.nullIfBlank;
 import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Component
-public class GetExpenseCategoryByIdCommand implements Command<GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest, ExpenseCategoryResponseDto> {
+public class GetExpenseCategoryByIdCommand implements Command<GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest, List<ExpenseCategoryResponseDto>> {
 
-    @NonNull GetExpenseCategoryByIdCommand getExpenseCategoryByIdCommand;
+    @NonNull GetExpenseCategoryService getExpenseCategoryService;
+    @NonNull ExpenseCategoryMapper expenseCategoryMapper;
     @Override
-    public ExpenseCategoryResponseDto execute(GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request) {
-        return null;
+    public List<ExpenseCategoryResponseDto> execute(GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request) {
+
+        return request.getExpenseCategoryId()
+                .map(expenseCategoryId -> List.of(getExpenseCategoryService.getById(expenseCategoryId)))
+                .orElseGet(() -> getExpenseCategoryService.getAllExpenseCategories())
+                .stream()
+                .map(expenseCategory -> expenseCategoryMapper.convertToResponseDto(expenseCategory))
+                .collect(Collectors.toList());
+
     }
 
     @Override
     public boolean isRequestIncomplete(GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request) {
-        return (isNull(request) || isNull(request.getExpenseId()));
+        return (isNull(request) || isNull(request.getExpenseCategoryId()));
     }
 
     @Override
@@ -36,7 +48,7 @@ public class GetExpenseCategoryByIdCommand implements Command<GetExpenseCategory
             return "Request is empty";
         }
 
-        return Stream.of(isNull(request.getExpenseId())? "ExpenseCategoryId is missing" : null)
+        return Stream.of(isNull(request.getExpenseCategoryId())? "ExpenseCategoryId is missing" : null)
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining(",'"));
     }
@@ -52,9 +64,9 @@ public class GetExpenseCategoryByIdCommand implements Command<GetExpenseCategory
     protected static class GetExpenseCategoryByIdRequest extends AbstractRequest {
         private final String expenseCategoryId;
         protected GetExpenseCategoryByIdRequest(String expenseCategoryId){
-            this.expenseCategoryId = requireNonBlank(expenseCategoryId, "ExpenseCategoryId is missing");
+            this.expenseCategoryId = nullIfBlank(expenseCategoryId);
         }
 
-        public String getExpenseId(){ return expenseCategoryId; }
+        public Optional<String> getExpenseCategoryId(){ return Optional.ofNullable(expenseCategoryId); }
     }
 }

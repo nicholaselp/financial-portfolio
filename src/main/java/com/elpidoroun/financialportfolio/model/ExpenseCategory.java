@@ -13,7 +13,7 @@ import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNon
 import static java.util.Objects.requireNonNull;
 
 @Entity
-@Table(name = "expenseCategory")
+@Table(name = "expense_category")
 public class ExpenseCategory {
 
     @Id
@@ -30,22 +30,27 @@ public class ExpenseCategory {
     @Column(name = "expense_type")
     private ExpenseType expenseType;
 
+    @Column(name = "status")
+    private Status status;
+
     private ExpenseCategory(){}
 
-    private ExpenseCategory(Long id, String categoryName, BillingInterval billingInterval, ExpenseType expenseType){
+    private ExpenseCategory(Long id, String categoryName, BillingInterval billingInterval,
+                            ExpenseType expenseType, Status status){
         this.id = id;
         this.categoryName = requireNonBlank(categoryName, "CategoryName is missing");
         this.billingInterval = requireNonNull(billingInterval, "BillingInterval is missing");
         this.expenseType = requireNonNull(expenseType, "ExpenseType is missing");
+        this.status = requireNonNull(status, "Status is missing");
     }
 
     public Long getId() { return id; }
-
-    public String getCategoryName() { return categoryName; }
-
+    public String getExpenseCategoryName() { return categoryName; }
     public BillingInterval getBillingInterval() { return billingInterval; }
-
     public ExpenseType getExpenseType() { return expenseType; }
+    public Status getStatus(){ return status; }
+
+    public boolean isDeleted(){ return status == Status.DELETED; }
 
     @Override
     public boolean equals(Object o) {
@@ -62,13 +67,24 @@ public class ExpenseCategory {
 
     public static Builder builder(){ return new Builder(); }
 
+    public static Builder createExpenseCategoryWithId(Long id, ExpenseCategory expenseCategory){
+        return new Builder(id)
+                .withBillingInterval(expenseCategory.getBillingInterval())
+                .withCategoryName(expenseCategory.getExpenseCategoryName())
+                .withExpenseType(expenseCategory.getExpenseType())
+                .withStatus(expenseCategory.getStatus());
+    }
+
     public static class Builder {
         private Long id;
         private String categoryName;
         private BillingInterval billingInterval;
         private ExpenseType expenseType;
+        private Status status;
 
         private Builder(){}
+
+        private Builder(Long id){ this.id = requireNonNull(id, "id is missing"); }
 
         public Builder withCategoryName(String categoryName){
             this.categoryName = categoryName;
@@ -85,8 +101,13 @@ public class ExpenseCategory {
             return this;
         }
 
+        public Builder withStatus(Status status){
+            this.status = status;
+            return this;
+        }
+
         public ExpenseCategory build(){
-            return new ExpenseCategory(id, categoryName, billingInterval, expenseType);
+            return new ExpenseCategory(id, categoryName, billingInterval, expenseType, status);
         }
     }
 }

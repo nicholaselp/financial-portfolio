@@ -2,7 +2,10 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
-import com.elpidoroun.financialportfolio.service.expenseCategory.DeleteExpenseCategoryService;
+import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
+import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
+import com.elpidoroun.financialportfolio.utilities.Nothing;
+import com.elpidoroun.financialportfolio.utilities.Result;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
@@ -14,16 +17,19 @@ import java.util.stream.Stream;
 import static com.elpidoroun.financialportfolio.controller.command.Operations.DELETE_EXPENSE_CATREGORY_BY_ID;
 import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
 
 @AllArgsConstructor
 @Component
 public class DeleteExpenseCategoryCommand implements Command<DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest, Void> {
 
-    @NonNull private final DeleteExpenseCategoryService deleteExpenseCategoryService;
+    @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
 
     @Override
     public Void execute(DeleteExpenseCategoryRequest request) {
+        Result<Nothing, String> result = expenseCategoryRepositoryOperations.deleteById(request.getExpenseCategoryId());
+        if(result.isFail()){
+            throw new IllegalArgumentException(result.getError().orElse("Error occured while deleting Expense with ID: " + request.getExpenseCategoryId()));
+        }
         return null;
     }
 

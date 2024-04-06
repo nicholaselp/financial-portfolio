@@ -9,6 +9,11 @@ components:
         createdAt:
           type: string
           format: date-time
+    Status:
+      type: string
+      enum:
+        - active
+        - deleted
 errors:
   invalid-input:
     description: Invalid input

@@ -1,22 +1,20 @@
 package com.elpidoroun.financialportfolio.validation.expense;
 
 import com.elpidoroun.financialportfolio.model.Expense;
-import com.elpidoroun.financialportfolio.service.ExpenseRepositoryOperations;
+import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
 import com.elpidoroun.financialportfolio.validation.EntityValidator;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 
 import javax.validation.ValidationException;
 
 @AllArgsConstructor
-@Component
-public class UniquenessValidator implements EntityValidator<Expense> {
+public class ExpenseUniquenessValidator implements EntityValidator<Expense> {
 
-    private final ExpenseRepositoryOperations expenseRepositoryOperations;
+    @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
 
     @Override
     public Result<Nothing, String> validate(@Nullable Expense original, @NonNull Expense entity) throws ValidationException {
@@ -32,7 +30,5 @@ public class UniquenessValidator implements EntityValidator<Expense> {
     }
 
     @Override
-    public String name() {
-        return "UniquenessValidator";
-    }
+    public String name() { return "ExpenseUniquenessValidator"; }
 }

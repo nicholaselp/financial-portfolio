@@ -14,10 +14,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="monthly_amount" type="numeric">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="yearly_amount" type="numeric">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="currency" type="varchar(50)">
                 <constraints nullable="false"/>
@@ -28,6 +28,70 @@
             <column name="created_at" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
+            <column name="expense_category_id" type="SERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+
+        <createTable tableName="expense_category" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="category_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_interval" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expense_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="payments" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="payment_amount" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_difference" type="numeric">
+                <constraints nullable="true"/>
+            </column>
+            <column name="note" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="expense_id" type="SERIAL">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+<!--        <addUniqueConstraint constraintName="unique_expense_name" tableName="expenses"-->
+<!--                             columnNames="expense, status"/>-->
+        <addUniqueConstraint constraintName="unique_category_name" tableName="expense_category"
+                             columnNames="category_name, status"/>
+        <addForeignKeyConstraint baseTableName="payments" baseColumnNames="expense_id"
+                                 constraintName="fk_payments_expense_id"
+                                 referencedTableName="expenses" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="expenses" baseColumnNames="expense_category_id"
+                                 constraintName="fk_expenses_expense_category_id"
+                                 referencedTableName="expense_category" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="CASCADE"/>
+        <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Loan', 'monthly', 'fixed', 'active');</sql>
+        <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Electricity Utility', 'bi-monthly', 'not-fixed', 'active');</sql>
+        <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Water Utility', 'quarterly', 'not-fixed', 'active');</sql>
+        <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Deleted Category 1', 'quarterly', 'not-fixed', 'deleted');</sql>
+        <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Deleted Category 2', 'quarterly', 'not-fixed', 'deleted');</sql>
+
     </changeSet>
 </databaseChangeLog>

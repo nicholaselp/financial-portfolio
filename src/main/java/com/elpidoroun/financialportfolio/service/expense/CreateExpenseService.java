@@ -2,7 +2,6 @@ package com.elpidoroun.financialportfolio.service.expense;
 
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.elpidoroun.financialportfolio.model.Expense;
-import com.elpidoroun.financialportfolio.service.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.ValidationService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -31,7 +30,7 @@ public class CreateExpenseService {
         if(validate.isFail()){
             throw new ValidationException(validate.getError()
                     .flatMap(list -> list.isEmpty() ? empty() : Optional.of(String.join(";", list)))
-                    .orElse("Exception occured during validation"));
+                    .orElse("Exception occurred during validation of expense"));
         }
 
         return expenseRepositoryOperations.save(expense);

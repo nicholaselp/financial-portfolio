@@ -6,6 +6,6 @@ public class DatabaseOperationException extends RuntimeException{
 
     public DatabaseOperationException(String message){
         super(message);
-        this.errorType = "Expense Not Found";
+        this.errorType = "Database error";
     }
 }

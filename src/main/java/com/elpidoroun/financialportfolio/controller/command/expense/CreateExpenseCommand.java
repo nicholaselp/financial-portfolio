@@ -26,7 +26,7 @@ public class CreateExpenseCommand implements Command<CreateExpenseCommand.Create
 
     @Override
     public ExpenseResponseDto execute(CreateExpenseRequest request) {
-        return expenseMapper.convertToEntityDto(
+        return expenseMapper.convertToResponseDto(
                 createExpenseService.execute(
                     expenseMapper.convertToDomain(request.getExpenseDto())));
     }

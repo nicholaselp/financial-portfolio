@@ -1,9 +1,10 @@
 package com.elpidoroun.financialportfolio.service;
 
 import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
-import com.elpidoroun.financialportfolio.exceptions.ExpenseNotFoundException;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
+import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -74,7 +75,7 @@ public class ExpenseRepositoryOperationsTest {
         when(expenseRepository.findById(any())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> expenseRepositoryOperations.getById("1"))
-                .isInstanceOf(ExpenseNotFoundException.class)
+                .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Expense with ID: 1 not found");
         verify(expenseRepository, times(1)).findById(any());
     }
@@ -94,7 +95,7 @@ public class ExpenseRepositoryOperationsTest {
         when(expenseRepository.existsById(any())).thenReturn(false);
 
         assertThatThrownBy(() -> expenseRepositoryOperations.deleteById("1"))
-                .isInstanceOf(ExpenseNotFoundException.class)
+                .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Expense with ID: 1 not found. Nothing will be deleted");
         verify(expenseRepository, times(1)).existsById(any());
         verify(expenseRepository, never()).deleteById(any());
@@ -119,7 +120,7 @@ public class ExpenseRepositoryOperationsTest {
         when(expenseRepository.existsById(any())).thenReturn(false);
 
         assertThatThrownBy(() -> expenseRepositoryOperations.update(expense))
-                .isInstanceOf(ExpenseNotFoundException.class)
+                .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Expense with ID: null not found");
         verify(expenseRepository, times(1)).existsById(any());
         verify(expenseRepository, never()).save(any());

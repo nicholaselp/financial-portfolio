@@ -24,15 +24,16 @@ import java.util.Optional;
 import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
 
 @Entity
 @Table(name = "expense")
-public class Expense {
+public class Expense extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    protected Long id;
 
     @Column(name = "expense_name")
     private String expenseName;
@@ -46,9 +47,6 @@ public class Expense {
     @Column(name = "note")
     private String note;
 
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-
     @OneToMany(mappedBy = "expense",
     cascade = {CascadeType.ALL})
     @JsonIgnore
@@ -58,11 +56,14 @@ public class Expense {
     @JoinColumn(name = "expense_category_id")
     private ExpenseCategory expenseCategory;
 
+    @Column(name = "status")
+    private Status status;
+
     private Expense(){} //used for hibernate. Do not delete
 
     private Expense(Long id, String expenseName, BigDecimal monthlyAllocatedAmount,
                     BigDecimal yearlyAllocatedAmount, String note, OffsetDateTime createdAt,
-                    List<Payment> paymentList, ExpenseCategory expenseCategory){
+                    List<Payment> paymentList, ExpenseCategory expenseCategory, Status status){
         this.id = id;
         this.expenseName = requireNonBlank(expenseName, "expenseName is missing");
         if(isNull(monthlyAllocatedAmount) && isNull(yearlyAllocatedAmount)){
@@ -88,31 +89,25 @@ public class Expense {
         this.createdAt = isNull(createdAt) ? OffsetDateTime.now() : createdAt;
         this.paymentList = paymentList;
         this.expenseCategory = expenseCategory;
+        this.status = status;
     }
 
     public Long getId() {
         return id;
     }
-
     public String getExpenseName() { return expenseName; }
-
     public Optional<BigDecimal> getMonthlyAllocatedAmount() {
         return Optional.ofNullable(monthlyAllocatedAmount);
     }
-
     public Optional<BigDecimal> getYearlyAllocatedAmount() {
         return Optional.ofNullable(yearlyAllocatedAmount);
     }
-
     public Optional<String> getNote() {
         return Optional.ofNullable(note);
     }
-
-    public OffsetDateTime getCreatedAt(){ return createdAt; }
-
     public List<Payment> getPayments(){ return paymentList; }
-
     public ExpenseCategory getExpenseCategory(){ return expenseCategory; }
+    public Status getStatus(){ return status; }
 
     public static Builder builder(){ return new Builder(); }
 
@@ -124,7 +119,8 @@ public class Expense {
                 .withMonthlyAllocatedAmount(expense.getMonthlyAllocatedAmount().orElse(null))
                 .withCreatedAt(expense.getCreatedAt())
                 .withPayments(expense.getPayments())
-                .withExpenseCategory(expense.getExpenseCategory());
+                .withExpenseCategory(expense.getExpenseCategory())
+                .withStatus(expense.getStatus());
     }
 
     public static Builder cloneExpense(Expense expense){
@@ -153,9 +149,10 @@ public class Expense {
         private OffsetDateTime createdAt;
         private List<Payment> paymentList;
         private ExpenseCategory expenseCategory;
+        private Status status;
 
         private Builder(){}
-        private Builder(Long id){ this.id = id; }
+        private Builder(Long id){ this.id = requireNonNull(id, "id is missing"); }
 
         public Builder withExpenseName(String expenseName){
             this.expenseName = expenseName;
@@ -192,8 +189,13 @@ public class Expense {
             return this;
         }
 
+        public Builder withStatus(Status status){
+            this.status = status;
+            return this;
+        }
+
         public Expense build(){
-            return new Expense(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, createdAt, paymentList, expenseCategory);
+            return new Expense(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, createdAt, paymentList, expenseCategory, status);
         }
     }
 }

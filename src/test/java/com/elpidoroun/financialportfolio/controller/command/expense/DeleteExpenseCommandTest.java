@@ -1,6 +1,6 @@
 package com.elpidoroun.financialportfolio.controller.command.expense;
 
-import com.elpidoroun.financialportfolio.service.ExpenseRepositoryOperations;
+import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

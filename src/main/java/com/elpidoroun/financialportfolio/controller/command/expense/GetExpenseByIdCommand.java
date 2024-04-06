@@ -25,7 +25,7 @@ public class GetExpenseByIdCommand implements Command<GetExpenseByIdCommand.GetE
 
     @Override
     public ExpenseResponseDto execute(GetExpenseByIdRequest request) {
-        return expenseMapper.convertToEntityDto(getExpenseService.execute(request.getExpenseId()));
+        return expenseMapper.convertToResponseDto(getExpenseService.execute(request.getExpenseId()));
     }
 
     @Override

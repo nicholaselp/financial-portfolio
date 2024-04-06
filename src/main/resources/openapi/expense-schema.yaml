@@ -13,6 +13,8 @@ components:
           type: string
         expenseCategory:
           $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
+        status:
+          $ref: 'common.yaml#/components/schemas/Status'
     ExpenseResponse:
       type: object
       properties:

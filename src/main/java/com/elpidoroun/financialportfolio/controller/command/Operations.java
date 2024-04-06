@@ -11,6 +11,7 @@ public enum Operations implements EnumStringValue {
 
     CREATE_EXPENSE_CATEGORY("create-expense-category"),
     GET_EXPENSE_CATEGORY_BY_ID("get-expense-category-by-id"),
+    GET_EXPENSE_CATEGORIES("get-expense-categories"),
     UPDATE_EXPENSE_CATEGORY("update-expense-category"),
     DELETE_EXPENSE_CATREGORY_BY_ID("delete-expense-category-by-id");
 
