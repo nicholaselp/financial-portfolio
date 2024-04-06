@@ -95,7 +95,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoryName\": \"string2\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
+							"raw": "{\r\n  \"categoryName\": \"Telecom Utility\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -117,19 +117,19 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": 3,\r\n  \"categoryName\": \"strinaaaaasdassdffsdsdffsdsdffsdsdfddasg\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
+							"raw": "{\r\n  \"categoryName\": \"aaa\",\r\n  \"billingInterval\": \"yearly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/7"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/3"
 					},
 					"response": []
 				},
 				{
-					"name": "Get ExpenseCategory",
+					"name": "Get ExpenseCategory by ID",
 					"id": "57ea2c67-0248-4160-85ae-e93007ce6d3e",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -137,7 +137,20 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/3"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/4"
+					},
+					"response": []
+				},
+				{
+					"name": "Get ExpenseCategories",
+					"id": "bcce1fef-58bd-42b5-ab4a-c5fe4a04ebeb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/4"
 					},
 					"response": []
 				},
@@ -150,7 +163,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/3"
 					},
 					"response": []
 				}
