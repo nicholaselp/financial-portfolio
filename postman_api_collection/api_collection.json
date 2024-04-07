@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"expenseName\": \"string\",\r\n  \"monthlyAllocatedAmount\": 0,\r\n  \"yearlyAllocatedAmount\": 0,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 0,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
+							"raw": "{\r\n  \"expenseName\": \"expense100aa\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 0,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 1,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -41,14 +41,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"expense\": \"stringasd\",\r\n        \"paymentType\": \"monthly\",\r\n        \"monthlyAmount\": 10.0,\r\n        \"currency\": \"euro\",\r\n        \"yearlyAmount\": 1111111111111,\r\n        \"note\": \"string\"\r\n    }",
+							"raw": "{\r\n        \"expenseName\": \"expenssdfsfdfdse100\",\r\n        \"monthlyAllocatedAmount\": 100,\r\n        \"yearlyAllocatedAmount\": 1200,\r\n        \"note\": \"string\",\r\n        \"expenseCategory\": {\r\n            \"id\": 1,\r\n            \"categoryName\": \"Loan\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+						"url": "http://localhost:8080/financial-portfolio/v1/expenses/3"
 					},
 					"response": []
 				},
@@ -61,7 +61,20 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+						"url": "http://localhost:8080/financial-portfolio/v1/expenses/16"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Expenses",
+					"id": "16b7d0b7-0a7c-4212-a5ec-3e5406d26f9f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/financial-portfolio/v1/expenses/16"
 					},
 					"response": []
 				},
@@ -74,7 +87,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+						"url": "http://localhost:8080/financial-portfolio/v1/expenses/3"
 					},
 					"response": []
 				}
