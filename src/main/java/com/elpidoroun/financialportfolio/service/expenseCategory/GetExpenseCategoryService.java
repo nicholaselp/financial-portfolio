@@ -1,5 +1,6 @@
 package com.elpidoroun.financialportfolio.service.expenseCategory;
 
+import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;

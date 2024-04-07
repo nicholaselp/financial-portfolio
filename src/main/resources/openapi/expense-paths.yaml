@@ -21,6 +21,20 @@ operations:
           $ref: 'common.yaml#/errors/invalid-input'
         500:
           $ref: 'common.yaml#/errors/internal-error'
+    get:
+      tags:
+        - financial-portfolio
+      summary: Get all expenses
+      operationId: get-expenses
+      responses:
+        200:
+          description: Successfully returned all Expenses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'expense-schema.yaml#/components/schemas/ExpenseResponse'
   expense-operations-by-id:
     get:
       tags:

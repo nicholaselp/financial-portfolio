@@ -63,10 +63,10 @@ public class ExpenseRepositoryOperationsTest {
         Expense expense = createExpense();
         when(expenseRepository.findById(any())).thenReturn(Optional.of(expense));
 
-        Expense foundExpense = expenseRepositoryOperations.getById("1");
+        var result = expenseRepositoryOperations.getById("1");
 
-        assertThat(foundExpense).isNotNull();
-        assertThat(foundExpense.getId()).isEqualTo(expense.getId());
+        assertThat(result.isSuccess()).isTrue();
+        assertThat(result.getSuccessValue().getId()).isEqualTo(expense.getId());
         verify(expenseRepository, times(1)).findById(any());
     }
 

@@ -66,15 +66,7 @@ public class ExpenseCategory {
     }
 
     public static Builder builder(){ return new Builder(); }
-
-    public static Builder createExpenseCategoryWithId(Long id, ExpenseCategory expenseCategory){
-        return new Builder(id)
-                .withBillingInterval(expenseCategory.getBillingInterval())
-                .withCategoryName(expenseCategory.getExpenseCategoryName())
-                .withExpenseType(expenseCategory.getExpenseType())
-                .withStatus(expenseCategory.getStatus());
-    }
-
+    public static Builder builder(Long id){ return new Builder(id); }
     public static class Builder {
         private Long id;
         private String categoryName;

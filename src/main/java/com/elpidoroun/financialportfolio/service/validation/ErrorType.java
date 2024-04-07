@@ -1,4 +1,4 @@
-package com.elpidoroun.financialportfolio.validation;
+package com.elpidoroun.financialportfolio.service.validation;
 
 import com.elpidoroun.financialportfolio.utilities.EnumStringValue;
 

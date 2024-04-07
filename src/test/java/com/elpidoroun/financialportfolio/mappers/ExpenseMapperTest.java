@@ -45,8 +45,7 @@ public class ExpenseMapperTest {
         Expense convertedExpense = converter.convertToDomain(expenseDto);
 
         assertThat(convertedExpense.getExpenseName()).isEqualTo(expectedExpense.getExpenseName());
-        assertThat(convertedExpense.getMonthlyAllocatedAmount()).isPresent().hasValue(expectedExpense.getMonthlyAllocatedAmount().orElse(null));
-        assertThat(convertedExpense.getYearlyAllocatedAmount()).isEmpty();
-        assertThat(convertedExpense.getNote()).isPresent().hasValue(expectedExpense.getNote().orElse(null));
+        assertThat(convertedExpense.getMonthlyAllocatedAmount()).isEqualTo(expectedExpense.getMonthlyAllocatedAmount());
+        assertThat(convertedExpense.getNote()).isEqualTo((expectedExpense.getNote()));
     }
 }

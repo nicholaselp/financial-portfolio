@@ -23,12 +23,11 @@ import java.util.Optional;
 
 import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 @Entity
-@Table(name = "expense")
-public class Expense extends AbstractEntity{
+@Table(name = "expenses")
+public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +58,9 @@ public class Expense extends AbstractEntity{
     @Column(name = "status")
     private Status status;
 
+    @Column(name = "created_at")
+    protected OffsetDateTime createdAt;
+
     private Expense(){} //used for hibernate. Do not delete
 
     private Expense(Long id, String expenseName, BigDecimal monthlyAllocatedAmount,
@@ -66,65 +68,72 @@ public class Expense extends AbstractEntity{
                     List<Payment> paymentList, ExpenseCategory expenseCategory, Status status){
         this.id = id;
         this.expenseName = requireNonBlank(expenseName, "expenseName is missing");
-        if(isNull(monthlyAllocatedAmount) && isNull(yearlyAllocatedAmount)){
-            throw new ValidationException("Monthly and yearly amount are empty");
-        }
-
-        if(nonNull(monthlyAllocatedAmount) && nonNull(yearlyAllocatedAmount)){
-            if(monthlyAllocatedAmount.multiply(BigDecimal.valueOf(12)).equals(yearlyAllocatedAmount)){
-                this.monthlyAllocatedAmount = monthlyAllocatedAmount;
-                this.yearlyAllocatedAmount = yearlyAllocatedAmount;
-            }
-        } else {
-            if(isNull(monthlyAllocatedAmount)){
-                this.monthlyAllocatedAmount = yearlyAllocatedAmount.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
-                this.yearlyAllocatedAmount = yearlyAllocatedAmount;
-            } else {
-                this.monthlyAllocatedAmount = monthlyAllocatedAmount;
-                this.yearlyAllocatedAmount = monthlyAllocatedAmount.multiply(BigDecimal.valueOf(12));
-            }
-        }
-
+        validateAmounts(monthlyAllocatedAmount, yearlyAllocatedAmount);
+        updateAmounts(monthlyAllocatedAmount, yearlyAllocatedAmount);
         this.note = note;
         this.createdAt = isNull(createdAt) ? OffsetDateTime.now() : createdAt;
         this.paymentList = paymentList;
-        this.expenseCategory = expenseCategory;
-        this.status = status;
+        this.expenseCategory = requireNonNull(expenseCategory, "ExpenseCategory is missing");
+        this.status = requireNonNull(status, "Status is missing");
+    }
+
+    private void validateAmounts(BigDecimal monthlyAllocatedAmount, BigDecimal yearlyAllocatedAmount) {
+        if(isNull(monthlyAllocatedAmount) && isNull(yearlyAllocatedAmount)){
+            throw new ValidationException("");
+        }
+
+        if((isNull(monthlyAllocatedAmount) || monthlyAllocatedAmount.equals(BigDecimal.ZERO))
+                && (isNull(yearlyAllocatedAmount) || yearlyAllocatedAmount.equals(BigDecimal.ZERO))){
+            throw new ValidationException("Monthly and yearly amount are empty");
+        } else {
+            if(!(isNull(monthlyAllocatedAmount) || isNull(yearlyAllocatedAmount))){
+                if(!monthlyAllocatedAmount.multiply(BigDecimal.valueOf(12)).equals(yearlyAllocatedAmount)){
+                    throw new ValidationException("Amounts provided are not correct. Monthly amount is: " + monthlyAllocatedAmount + " and yearly is: " + yearlyAllocatedAmount);
+                }
+            }
+        }
+    }
+
+    private void updateAmounts(BigDecimal monthlyAllocatedAmount, BigDecimal yearlyAllocatedAmount) {
+        // If monthly is present, calculate yearly
+        if (monthlyAllocatedAmount != null && monthlyAllocatedAmount.compareTo(BigDecimal.ZERO) != 0) {
+            this.yearlyAllocatedAmount = monthlyAllocatedAmount.multiply(BigDecimal.valueOf(12));
+            this.monthlyAllocatedAmount = monthlyAllocatedAmount.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        // If yearly is present, calculate monthly
+        if (yearlyAllocatedAmount != null && yearlyAllocatedAmount.compareTo(BigDecimal.ZERO) != 0) {
+            this.monthlyAllocatedAmount = yearlyAllocatedAmount.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+            this.yearlyAllocatedAmount = yearlyAllocatedAmount.setScale(2, RoundingMode.HALF_UP);
+        }
     }
 
     public Long getId() {
         return id;
     }
     public String getExpenseName() { return expenseName; }
-    public Optional<BigDecimal> getMonthlyAllocatedAmount() {
-        return Optional.ofNullable(monthlyAllocatedAmount);
-    }
-    public Optional<BigDecimal> getYearlyAllocatedAmount() {
-        return Optional.ofNullable(yearlyAllocatedAmount);
-    }
+    public BigDecimal getMonthlyAllocatedAmount() { return monthlyAllocatedAmount; }
+    public BigDecimal getYearlyAllocatedAmount() { return yearlyAllocatedAmount; }
     public Optional<String> getNote() {
         return Optional.ofNullable(note);
     }
     public List<Payment> getPayments(){ return paymentList; }
     public ExpenseCategory getExpenseCategory(){ return expenseCategory; }
     public Status getStatus(){ return status; }
+    public OffsetDateTime getCreatedAt(){ return createdAt; }
 
     public static Builder builder(){ return new Builder(); }
+    public static Builder builder(Long id){ return new Builder(id); }
 
-    public static Builder createExpenseWithId(Long id, Expense expense){
-        return new Builder(id)
-                .withExpenseName(expense.getExpenseName())
-                .withNote(expense.getNote().orElse(null))
-                .withYearlyAllocatedAmount(expense.getYearlyAllocatedAmount().orElse(null))
-                .withMonthlyAllocatedAmount(expense.getMonthlyAllocatedAmount().orElse(null))
-                .withCreatedAt(expense.getCreatedAt())
-                .withPayments(expense.getPayments())
-                .withExpenseCategory(expense.getExpenseCategory())
-                .withStatus(expense.getStatus());
-    }
-
-    public static Builder cloneExpense(Expense expense){
-        return createExpenseWithId(expense.getId(), expense);
+    public Builder clone(){
+        return new Builder(this.getId())
+                .withExpenseName(this.getExpenseName())
+                .withMonthlyAllocatedAmount(this.getMonthlyAllocatedAmount())
+                .withYearlyAllocatedAmount(this.getYearlyAllocatedAmount())
+                .withNote(this.getNote().orElse(null))
+                .withStatus(this.getStatus())
+                .withExpenseCategory(this.getExpenseCategory())
+                .withCreatedAt(this.getCreatedAt());
     }
 
     @Override
@@ -152,7 +161,7 @@ public class Expense extends AbstractEntity{
         private Status status;
 
         private Builder(){}
-        private Builder(Long id){ this.id = requireNonNull(id, "id is missing"); }
+        private Builder(Long id){ this.id = id; }
 
         public Builder withExpenseName(String expenseName){
             this.expenseName = expenseName;

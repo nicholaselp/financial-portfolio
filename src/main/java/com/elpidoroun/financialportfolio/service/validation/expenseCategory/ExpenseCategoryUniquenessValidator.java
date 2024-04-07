@@ -1,10 +1,10 @@
-package com.elpidoroun.financialportfolio.validation.expenseCategory;
+package com.elpidoroun.financialportfolio.service.validation.expenseCategory;
 
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
-import com.elpidoroun.financialportfolio.validation.EntityValidator;
+import com.elpidoroun.financialportfolio.service.validation.EntityValidator;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.lang.Nullable;

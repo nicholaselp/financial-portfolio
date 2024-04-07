@@ -6,6 +6,7 @@ public enum Operations implements EnumStringValue {
 
     CREATE_EXPENSE("create-expense"),
     GET_EXPENSE_BY_ID("get-expense-by-id"),
+    GET_EXPENSES("get-expenses"),
     UPDATE_EXPENSE("update-expense"),
     DELETE_EXPENSE_BY_ID("delete-expense-by-id"),
 

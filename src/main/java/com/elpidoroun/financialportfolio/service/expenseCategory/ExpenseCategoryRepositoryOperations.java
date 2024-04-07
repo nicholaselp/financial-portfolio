@@ -35,14 +35,8 @@ public class ExpenseCategoryRepositoryOperations {
     }
 
     public Result<ExpenseCategory, String> getById(String id){
-        return (Result<ExpenseCategory, String>) expenseCategoryRepository.findById(Long.valueOf(id))
-                .map(category -> {
-                    if(category.isDeleted()) {
-                        return Result.fail("ExpenseCategory with ID: " + id + " already deleted");
-                    } else {
-                        return Result.success(category);
-                    }
-                }).orElse(Result.fail("ExpenseCategory with ID: " + id + " not found. Nothing will be deleted"));
+        return expenseCategoryRepository.findById(Long.valueOf(id)).<Result<ExpenseCategory, String>>map(Result::success)
+                .orElseGet(() -> Result.fail("Expense Category with ID: " + id + " not found"));
     }
 
     public List<ExpenseCategory> findAll(){
@@ -58,20 +52,16 @@ public class ExpenseCategoryRepositoryOperations {
     }
 
     public Result<Nothing, String> deleteById(String id){
-        return (Result<Nothing, String>) expenseCategoryRepository.findById(Long.valueOf(id))
-                .map(category -> {
-                    if(category.isDeleted()) {
-                        return Result.fail("ExpenseCategory with ID: " + id + " already deleted");
-                    } else {
-                        try {
-                            expenseCategoryRepository.deleteCategoryById(Long.valueOf(id));
-                            return Result.success();
-                        } catch (Exception exception) {
-                            logger.error(exception.getMessage());
-                            throw new DatabaseOperationException("Exception occurred while deleting an Expense");
-                        }
-                    }
-                }).orElse(Result.fail("ExpenseCategory with ID: " + id + " not found. Nothing will be deleted"));
+        if(!expenseCategoryRepository.existsById(Long.valueOf(id))){
+            return Result.fail("Expense Category with ID: " + id + " not found. Nothing will be deleted");
+        }
+
+        try {
+            expenseCategoryRepository.deleteCategoryById(Long.valueOf(id));
+            return Result.success();
+        } catch (Exception exception){
+            throw new DatabaseOperationException("Exception occurred while deleting an Expense Category");
+        }
     }
 
     public Optional<ExpenseCategory> findByName(String expenseCategory) {

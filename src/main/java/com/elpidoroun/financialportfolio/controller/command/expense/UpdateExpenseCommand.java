@@ -2,10 +2,11 @@ package com.elpidoroun.financialportfolio.controller.command.expense;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
-import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expense.UpdateExpenseService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -26,11 +27,26 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
 
     @NonNull private final UpdateExpenseService updateExpenseService;
     @NonNull private final ExpenseMapper expenseMapper;
+    @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
 
     @Override
     public ExpenseResponseDto execute(UpdateExpenseRequest request) {
         return expenseMapper.convertToResponseDto(
-                updateExpenseService.execute(Expense.createExpenseWithId(Long.valueOf(request.getExpenseId()), expenseMapper.convertToDomain(request.getExpenseDto())).build()));
+                updateExpenseService.execute(buildContext(request)));
+
+    }
+
+    private UpdateExpenseContext buildContext(UpdateExpenseRequest request){
+        var result = expenseRepositoryOperations.getById(request.getExpenseId());
+
+        if(result.isFail()){
+            throw new EntityNotFoundException(result.getError().orElse("Error while Updating Expense"));
+        }
+
+        return new UpdateExpenseContext(
+                result.getSuccessValue(),
+                expenseMapper.convertToDomain(request.getExpenseDto(),
+                        request.getExpenseId()));
     }
 
     @Override

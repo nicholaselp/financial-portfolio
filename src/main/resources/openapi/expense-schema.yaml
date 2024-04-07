@@ -2,6 +2,8 @@ components:
   schemas:
     Expense:
       type: object
+      required:
+        - expenseCategoryId
       properties:
         expenseName:
           type: string
@@ -11,10 +13,14 @@ components:
           type: number
         note:
           type: string
-        expenseCategory:
+        expenseCategoryId:
           $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
         status:
           $ref: 'common.yaml#/components/schemas/Status'
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
     ExpenseResponse:
       type: object
       properties:
@@ -22,12 +28,6 @@ components:
           $ref: 'common.yaml#/components/schemas/Metadata'
         expense:
           $ref: '#/components/schemas/Expense'
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payment'
-        expenseCategory:
-          $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
     Payment:
       type: object
       properties:

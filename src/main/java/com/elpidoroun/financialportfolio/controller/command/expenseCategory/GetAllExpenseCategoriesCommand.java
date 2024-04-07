@@ -1,4 +1,4 @@
-package com.elpidoroun.financialportfolio.controller.command.expense;
+package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
@@ -16,7 +16,7 @@ import static com.elpidoroun.financialportfolio.controller.command.Operations.GE
 
 @AllArgsConstructor
 @Component
-public class GetExpenseCategoriesCommand implements Command<GetExpenseCategoriesCommand.GetExpenseCategoriesRequest, List<ExpenseCategoryResponseDto>> {
+public class GetAllExpenseCategoriesCommand implements Command<GetAllExpenseCategoriesCommand.GetExpenseCategoriesRequest, List<ExpenseCategoryResponseDto>> {
 
     @NonNull GetExpenseCategoryService getExpenseCategoryService;
     @NonNull ExpenseCategoryMapper expenseCategoryMapper;
@@ -36,8 +36,8 @@ public class GetExpenseCategoriesCommand implements Command<GetExpenseCategories
     @Override
     public String getOperation() { return GET_EXPENSE_CATEGORIES.getValue(); }
 
-    public static GetExpenseCategoriesCommand.GetExpenseCategoriesRequest request(){
-        return new GetExpenseCategoriesCommand.GetExpenseCategoriesRequest();
+    public static GetAllExpenseCategoriesCommand.GetExpenseCategoriesRequest request(){
+        return new GetAllExpenseCategoriesCommand.GetExpenseCategoriesRequest();
     }
 
     protected static class GetExpenseCategoriesRequest extends AbstractRequest {

@@ -13,21 +13,21 @@ import java.util.Optional;
 @Repository
 public interface ExpenseCategoryRepository extends JpaRepository<ExpenseCategory, Long> {
 
-    @Query(value = "SELECT ec FROM ExpenseCategory ec WHERE ec.categoryName = ?1 AND ec.status = com.elpidoroun.financialportfolio.model.Status.ACTIVE")
+    @Override
+    @Query(value = "SELECT ec from ExpenseCategory ec WHERE ec.id = ?1 and ec.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
+    Optional<ExpenseCategory> findById(Long id);
+
+    @Query(value = "SELECT ec FROM ExpenseCategory ec WHERE ec.categoryName = ?1 AND ec.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
     Optional<ExpenseCategory> findByCategoryName(String expenseCategory);
 
     @Override
     @NonNull
-    @Query(value = "SELECT ec from ExpenseCategory ec WHERE ec.status = com.elpidoroun.financialportfolio.model.Status.ACTIVE")
+    @Query(value = "SELECT ec from ExpenseCategory ec WHERE ec.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
     List<ExpenseCategory> findAll();
 
     @Override
-    default boolean existsById(@NonNull Long id){
-        return existsById(id, false);
-    }
-
-    @Query(value = "SELECT CASE WHEN COUNT(ec) > 0 THEN TRUE ELSE FALSE END FROM ExpenseCategory ec WHERE ec.id = ?1 AND (?2 = true OR ec.status != com.elpidoroun.financialportfolio.model.Status.DELETED)")
-    boolean existsById(@NonNull Long id, boolean includeDeleted);
+    @Query(value = "SELECT CASE WHEN COUNT(ec) > 0 THEN TRUE ELSE FALSE END FROM ExpenseCategory ec WHERE ec.id = ?1 AND ec.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
+    boolean existsById(@NonNull Long id);
 
     @Modifying
     @Query(value = "UPDATE ExpenseCategory SET status = com.elpidoroun.financialportfolio.model.Status.DELETED WHERE id = ?1")

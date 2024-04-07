@@ -1,19 +1,14 @@
 package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
 
-import static java.util.Objects.requireNonNull;
-
+@AllArgsConstructor
+@Getter
 public class UpdateExpenseCategoryContext {
 
-    private final ExpenseCategory original;
-    private final ExpenseCategory entity;
-
-    public UpdateExpenseCategoryContext(ExpenseCategory original, ExpenseCategory entity){
-        this.original = requireNonNull(original, "Original ExpenseCategory is missing");
-        this.entity = requireNonNull(entity, "new ExpenseCategory is missing");
-    }
-
-    public ExpenseCategory getOriginal(){ return original; }
-    public ExpenseCategory getEntity(){ return entity; }
+    @NonNull private final ExpenseCategory original;
+    @NonNull private final ExpenseCategory entity;
 }

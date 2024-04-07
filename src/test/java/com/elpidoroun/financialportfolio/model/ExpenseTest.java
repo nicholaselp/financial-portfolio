@@ -17,8 +17,8 @@ public class ExpenseTest {
                 .build();
 
         assertThat(expense.getExpenseName()).isEqualTo("Groceries");
-        assertThat(expense.getYearlyAllocatedAmount()).isEmpty();
-        assertThat(expense.getMonthlyAllocatedAmount()).isPresent().hasValue(BigDecimal.valueOf(200));
+        assertThat(expense.getYearlyAllocatedAmount()).isNull();
+        assertThat(expense.getMonthlyAllocatedAmount()).isEqualTo(BigDecimal.valueOf(200));
         assertThat(expense.getNote()).isEmpty();
         assertThat(expense.getCreatedAt()).isNotNull();
     }

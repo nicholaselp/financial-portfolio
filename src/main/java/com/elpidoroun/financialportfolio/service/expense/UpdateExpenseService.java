@@ -1,5 +1,6 @@
 package com.elpidoroun.financialportfolio.service.expense;
 
+import com.elpidoroun.financialportfolio.controller.command.expense.UpdateExpenseContext;
 import com.elpidoroun.financialportfolio.model.Expense;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -11,7 +12,7 @@ public class UpdateExpenseService {
 
     @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
 
-    public Expense execute(Expense expense){
-        return expenseRepositoryOperations.update(expense);
+    public Expense execute(UpdateExpenseContext context){
+        return expenseRepositoryOperations.update(context.getEntity());
     }
 }

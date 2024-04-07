@@ -2,24 +2,18 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd">
-    <changeSet id="2" author="nicholaselp">
+    <changeSet id="1" author="nicholaselp">
         <createTable tableName="expenses" schemaName="public">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="expense" type="varchar(50)">
+            <column name="expense_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="payment_type" type="varchar(50)">
+            <column name="monthly_allocated_amount" type="numeric">
                 <constraints nullable="false"/>
             </column>
-            <column name="monthly_amount" type="numeric">
-                <constraints nullable="false"/>
-            </column>
-            <column name="yearly_amount" type="numeric">
-                <constraints nullable="false"/>
-            </column>
-            <column name="currency" type="varchar(50)">
+            <column name="yearly_allocated_amount" type="numeric">
                 <constraints nullable="false"/>
             </column>
             <column name="note" type="varchar(50)">
@@ -74,9 +68,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-<!--        <addUniqueConstraint constraintName="unique_expense_name" tableName="expenses"-->
-<!--                             columnNames="expense, status"/>-->
         <addUniqueConstraint constraintName="unique_category_name" tableName="expense_category"
                              columnNames="category_name, status"/>
         <addForeignKeyConstraint baseTableName="payments" baseColumnNames="expense_id"
@@ -87,11 +78,12 @@
                                  constraintName="fk_expenses_expense_category_id"
                                  referencedTableName="expense_category" referencedColumnNames="id"
                                  onDelete="CASCADE" onUpdate="CASCADE"/>
+    </changeSet>
+    <changeSet id="2" author="nicholaselp">
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Loan', 'monthly', 'fixed', 'active');</sql>
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Electricity Utility', 'bi-monthly', 'not-fixed', 'active');</sql>
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Water Utility', 'quarterly', 'not-fixed', 'active');</sql>
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Deleted Category 1', 'quarterly', 'not-fixed', 'deleted');</sql>
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Deleted Category 2', 'quarterly', 'not-fixed', 'deleted');</sql>
-
     </changeSet>
 </databaseChangeLog>

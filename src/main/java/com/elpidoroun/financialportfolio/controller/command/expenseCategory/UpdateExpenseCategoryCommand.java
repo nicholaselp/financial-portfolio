@@ -2,10 +2,10 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
-import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expenseCategory.UpdateExpenseCategoryService;
 import lombok.AllArgsConstructor;
@@ -40,11 +40,13 @@ public class UpdateExpenseCategoryCommand implements Command<UpdateExpenseCatego
         var result = expenseCategoryRepositoryOperations.getById(request.getExpenseCategoryId());
 
         if(result.isFail()){
-            throw new IllegalArgumentException(result.getError().orElse("Error while Updating ExpenseCategory"));
+            throw new EntityNotFoundException(result.getError().orElse("Error while Updating ExpenseCategory"));
         }
 
-        return new UpdateExpenseCategoryContext(result.getSuccessValue(),
-                ExpenseCategory.createExpenseCategoryWithId(Long.valueOf(request.getExpenseCategoryId()), expenseCategoryMapper.convertToDomain(request.getExpenseCategoryDto())).build());
+        return new UpdateExpenseCategoryContext(
+                result.getSuccessValue(),
+                expenseCategoryMapper.convertToDomain(request.getExpenseCategoryDto(),
+                        request.getExpenseCategoryId()));
     }
 
     @Override

@@ -6,14 +6,17 @@ import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @AllArgsConstructor
 @Service
 public class ExpenseRepositoryOperations {
@@ -30,21 +33,13 @@ public class ExpenseRepositoryOperations {
             throw new DatabaseOperationException("Exception occurred while saving expense");
         }
     }
-    public Expense getById(String id){
-        return expenseRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new EntityNotFoundException("Expense with ID: " + id + " not found"));
+    public Result<Expense, String> getById(String id){
+        return expenseRepository.findById(Long.valueOf(id)).<Result<Expense, String>>map(Result::success)
+                .orElseGet(() -> Result.fail("Expense with ID: " + id + " not found"));
     }
-    public Result<Nothing, String> deleteById(String id){
-        if(!expenseRepository.existsById(Long.valueOf(id))){
-            return Result.fail("Expense with ID: " + id + " not found. Nothing will be deleted");
-        }
 
-        try {
-            expenseRepository.deleteById(Long.valueOf(id));
-            return Result.success();
-        } catch (Exception exception){
-            throw new DatabaseOperationException("Exception occurred while deleting an Expense");
-        }
+    public List<Expense> findAll(){
+        return expenseRepository.findAll();
     }
 
     public Expense update(Expense expense){
@@ -55,8 +50,26 @@ public class ExpenseRepositoryOperations {
         }
     }
 
+    public Result<Nothing, String> deleteById(String id){
+        if(!expenseRepository.existsById(Long.valueOf(id))){
+            return Result.fail("Expense with ID: " + id + " not found. Nothing will be deleted");
+        }
+
+        try {
+            expenseRepository.deleteExpenseById(Long.valueOf(id));
+            return Result.success();
+        } catch (Exception exception){
+            logger.error(exception.getMessage());
+            throw new DatabaseOperationException("Exception occurred while deleting an Expense");
+        }
+    }
     public Optional<Expense> findByName(String expense) {
         return expenseRepository.findByExpenseName(expense)
                 .stream().findFirst();
+    }
+
+    public boolean expenseExistWithCategoryId(String categoryId){
+        return !expenseRepository.findByExpenseCategoryIdAndStatusNot(Long.valueOf(categoryId))
+                .isEmpty();
     }
 }

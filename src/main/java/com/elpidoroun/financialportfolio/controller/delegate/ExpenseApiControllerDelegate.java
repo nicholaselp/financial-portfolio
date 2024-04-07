@@ -3,8 +3,9 @@ package com.elpidoroun.financialportfolio.controller.delegate;
 import com.elpidoroun.financialportfolio.controller.MainController;
 import com.elpidoroun.financialportfolio.controller.command.expense.CreateExpenseCommand;
 import com.elpidoroun.financialportfolio.controller.command.expense.DeleteExpenseCommand;
+import com.elpidoroun.financialportfolio.controller.command.expense.GetAllExpensesCommand;
 import com.elpidoroun.financialportfolio.controller.command.expense.GetExpenseByIdCommand;
-import com.elpidoroun.financialportfolio.controller.command.expense.GetExpenseCategoriesCommand;
+import com.elpidoroun.financialportfolio.controller.command.expenseCategory.GetAllExpenseCategoriesCommand;
 import com.elpidoroun.financialportfolio.controller.command.expense.UpdateExpenseCommand;
 import com.elpidoroun.financialportfolio.controller.command.expenseCategory.CreateExpenseCategoryCommand;
 import com.elpidoroun.financialportfolio.controller.command.expenseCategory.DeleteExpenseCategoryCommand;
@@ -29,14 +30,15 @@ public class ExpenseApiControllerDelegate extends MainController implements Fina
 
     @NonNull private final CreateExpenseCommand createExpenseCommand;
     @NonNull private final GetExpenseByIdCommand getExpenseByIdCommand;
+    @NonNull private final GetAllExpensesCommand getAllExpensesCommand;
     @NonNull private final UpdateExpenseCommand updateExpenseCommand;
     @NonNull private final DeleteExpenseCommand deleteExpenseCommand;
 
     @NonNull private final CreateExpenseCategoryCommand createExpenseCategoryCommand;
     @NonNull private final UpdateExpenseCategoryCommand updateExpenseCategoryCommand;
     @NonNull private final GetExpenseCategoryByIdCommand getExpenseCategoryByIdCommand;
+    @NonNull private final GetAllExpenseCategoriesCommand getAllExpenseCategoriesCommand;
     @NonNull private final DeleteExpenseCategoryCommand deleteExpenseCategoryCommand;
-    @NonNull private final GetExpenseCategoriesCommand getExpenseCategoriesCommand;
 
     @Override
     public ResponseEntity<ExpenseResponseDto> createExpense(ExpenseDto expenseDto) {
@@ -46,6 +48,11 @@ public class ExpenseApiControllerDelegate extends MainController implements Fina
     @Override
     public ResponseEntity<ExpenseResponseDto> getExpenseById(String id){
         return (ResponseEntity<ExpenseResponseDto>) execute(getExpenseByIdCommand, GetExpenseByIdCommand.request(id));
+    }
+
+    @Override
+    public ResponseEntity<List<ExpenseResponseDto>> getExpenses(){
+        return (ResponseEntity<List<ExpenseResponseDto>>) execute(getAllExpensesCommand, GetAllExpensesCommand.request());
     }
 
     @Override
@@ -71,7 +78,7 @@ public class ExpenseApiControllerDelegate extends MainController implements Fina
 
     @Override
     public ResponseEntity<List<ExpenseCategoryResponseDto>> getExpenseCategories(){
-        return (ResponseEntity<List<ExpenseCategoryResponseDto>>) execute(getExpenseCategoriesCommand, GetExpenseCategoriesCommand.request());
+        return (ResponseEntity<List<ExpenseCategoryResponseDto>>) execute(getAllExpenseCategoriesCommand, GetAllExpenseCategoriesCommand.request());
     }
 
     @Override
