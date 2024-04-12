@@ -30,7 +30,7 @@ public class ExpenseCategoryRepositoryOperations {
             return expenseCategoryRepository.save(expenseCategory);
         } catch (Exception exception){
             logger.error(exception.getMessage());
-            throw new DatabaseOperationException("Exception occured while saving expenseCategory");
+            throw new DatabaseOperationException("Exception occurred while saving expenseCategory");
         }
     }
 
@@ -45,9 +45,14 @@ public class ExpenseCategoryRepositoryOperations {
 
     public ExpenseCategory update(ExpenseCategory expenseCategory){
         if(expenseCategoryRepository.existsById(expenseCategory.getId())){
-            return expenseCategoryRepository.save(expenseCategory);
+            try {
+                return expenseCategoryRepository.save(expenseCategory);
+            } catch (Exception exception) {
+                logger.error(exception.getMessage());
+                throw new DatabaseOperationException("Exception occurred while updating expenseCategory");
+            }
         } else {
-            throw new EntityNotFoundException("Expense with ID: " + expenseCategory.getId() + " not found");
+            throw new EntityNotFoundException("Expense Category with ID: " + expenseCategory.getId() + " not found");
         }
     }
 
@@ -57,7 +62,7 @@ public class ExpenseCategoryRepositoryOperations {
         }
 
         try {
-            expenseCategoryRepository.deleteCategoryById(Long.valueOf(id));
+            expenseCategoryRepository.deleteById(Long.valueOf(id));
             return Result.success();
         } catch (Exception exception){
             throw new DatabaseOperationException("Exception occurred while deleting an Expense Category");

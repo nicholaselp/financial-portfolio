@@ -16,7 +16,7 @@ public class BillingIntervalMapperTest {
     @ParameterizedTest
     @EnumSource(BillingInterval.class)
     public void convert_to_dto(BillingInterval billingInterval) {
-        var paymentTypeDtos = Arrays.asList(BillingInterval.values());
+        var paymentTypeDtos = Arrays.asList(BillingIntervalDto.values());
         assertThat(BillingIntervalMapper.toDto(billingInterval)).isIn(paymentTypeDtos);
     }
 
@@ -37,9 +37,9 @@ public class BillingIntervalMapperTest {
 
     @Test
     public void to_domain_with_unsupported_value() {
-        assertThatThrownBy(() -> BillingIntervalMapper.toDomain(BillingIntervalDto.valueOf("QUARTERLY")))
+        assertThatThrownBy(() -> BillingIntervalMapper.toDomain(BillingIntervalDto.valueOf("UNSUPPORTED")))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("No enum constant")
-                .hasMessageContaining("QUARTERLY");
+                .hasMessageContaining("UNSUPPORTED");
     }
 }

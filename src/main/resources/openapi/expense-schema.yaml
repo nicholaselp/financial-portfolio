@@ -13,7 +13,7 @@ components:
           type: number
         note:
           type: string
-        expenseCategoryId:
+        expenseCategory:
           $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
         status:
           $ref: 'common.yaml#/components/schemas/Status'

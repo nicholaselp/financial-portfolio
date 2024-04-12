@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-class ExpenseUniquenessValidatorTest {
+public class ExpenseUniquenessValidatorTest {
 
     @Mock
     private ExpenseRepositoryOperations expenseRepositoryOperations;
@@ -32,17 +32,17 @@ class ExpenseUniquenessValidatorTest {
     void success_expense_is_unique() {
         when(expenseRepositoryOperations.findByName("UniqueExpense")).thenReturn(Optional.empty());
 
-        Result<Nothing, String> result = expenseUniquenessValidator.validate(null, ExpenseTestFactory.createExpense());
+        Result<Nothing, String> result = expenseUniquenessValidator.validate(null, ExpenseTestFactory.createExpense("rent"));
 
         assertThat(result.isSuccess()).isTrue();
     }
 
     @Test
     void fail_expense_not_unique() {
-        Expense entity = ExpenseTestFactory.createExpense();
+        Expense entity = ExpenseTestFactory.createExpense("rent");
         when(expenseRepositoryOperations.findByName(any())).thenReturn(Optional.of(entity));
 
-        Result<Nothing, String> result = expenseUniquenessValidator.validate(null, ExpenseTestFactory.createExpense());
+        Result<Nothing, String> result = expenseUniquenessValidator.validate(null, ExpenseTestFactory.createExpense("rent"));
 
         assertThat(result.isFail()).isTrue();
         assertThat(result.getError()).isPresent().hasValue("Expense with name: rent already exists");

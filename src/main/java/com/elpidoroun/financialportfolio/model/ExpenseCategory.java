@@ -1,6 +1,10 @@
 package com.elpidoroun.financialportfolio.model;
 
+import com.elpidoroun.financialportfolio.repository.converters.BillingIntervalConverter;
+import com.elpidoroun.financialportfolio.repository.converters.ExpenseTypeConverter;
+import com.elpidoroun.financialportfolio.repository.converters.StatusConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +14,7 @@ import jakarta.persistence.Table;
 import java.util.Objects;
 
 import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 @Entity
@@ -24,12 +29,15 @@ public class ExpenseCategory {
     @Column(name = "category_name")
     private String categoryName;
 
+    @Convert(converter = BillingIntervalConverter.class)
     @Column(name = "billing_interval")
     private BillingInterval billingInterval;
 
+    @Convert(converter = ExpenseTypeConverter.class)
     @Column(name = "expense_type")
     private ExpenseType expenseType;
 
+    @Convert(converter = StatusConverter.class)
     @Column(name = "status")
     private Status status;
 
@@ -50,19 +58,28 @@ public class ExpenseCategory {
     public ExpenseType getExpenseType() { return expenseType; }
     public Status getStatus(){ return status; }
 
-    public boolean isDeleted(){ return status == Status.DELETED; }
+    public ExpenseCategory.Builder clone(){
+        var builder = isNull(this.id) ? ExpenseCategory.builder() : ExpenseCategory.builder(id);
+
+        builder.withBillingInterval(this.billingInterval);
+        builder.withStatus(this.status);
+        builder.withCategoryName(this.categoryName);
+        builder.withExpenseType(this.expenseType);
+
+        return builder;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ExpenseCategory that = (ExpenseCategory) o;
-        return Objects.equals(id, that.id) && Objects.equals(categoryName, that.categoryName) && billingInterval == that.billingInterval && expenseType == that.expenseType;
+        ExpenseCategory category = (ExpenseCategory) o;
+        return Objects.equals(id, category.id) && Objects.equals(categoryName, category.categoryName) && billingInterval == category.billingInterval && expenseType == category.expenseType && status == category.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, categoryName, billingInterval, expenseType);
+        return Objects.hash(id, categoryName, billingInterval, expenseType, status);
     }
 
     public static Builder builder(){ return new Builder(); }

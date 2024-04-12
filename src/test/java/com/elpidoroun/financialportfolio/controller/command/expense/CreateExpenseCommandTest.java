@@ -36,8 +36,8 @@ class CreateExpenseCommandTest {
         ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto();
         ExpenseResponseDto expenseResponseDto = new ExpenseResponseDto();
 
-        when(expenseMapper.convertToDomain(expenseDto)).thenReturn(ExpenseTestFactory.createExpense());
-        when(createExpenseService.execute(any())).thenReturn(ExpenseTestFactory.createExpense());
+        when(expenseMapper.convertToDomain(expenseDto)).thenReturn(ExpenseTestFactory.createExpense("rent"));
+        when(createExpenseService.execute(any())).thenReturn(ExpenseTestFactory.createExpense("rent"));
         when(expenseMapper.convertToResponseDto(any())).thenReturn(expenseResponseDto);
 
         ExpenseResponseDto result = createExpenseCommand.execute(new CreateExpenseCommand.CreateExpenseRequest(expenseDto));

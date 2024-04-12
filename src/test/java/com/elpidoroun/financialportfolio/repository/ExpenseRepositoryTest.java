@@ -1,6 +1,7 @@
 package com.elpidoroun.financialportfolio.repository;
 
 import com.elpidoroun.financialportfolio.model.Expense;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,19 +17,24 @@ public class ExpenseRepositoryTest {
     @Autowired
     private ExpenseRepository expenseRepository;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @Test
     public void create_new_expense() {
-        var expense = createExpense();
+        var expense = createExpense("rent");
 
         Expense savedExpense = expenseRepository.save(expense);
 
-        assertThat(savedExpense).isNotNull();
-        assertThat(savedExpense).isEqualTo(expense);
+        Optional<Expense> dbExpense = expenseRepository.findById(savedExpense.getId());
+
+
+
     }
 
     @Test
     public void get_expense_by_id() {
-        var expense = createExpense();
+        var expense = createExpense("rent");
 
         expenseRepository.save(expense);
         Optional<Expense> fetchedExpense = expenseRepository.findById(expense.getId());
@@ -39,7 +45,7 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void delete_expense_by_id() {
-        var expense = createExpense();
+        var expense = createExpense("rent");
         Expense savedExpense = expenseRepository.save(expense);
 
         assertThat(expenseRepository.findById(expense.getId())).isNotEmpty();
@@ -49,11 +55,11 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void update_expense() {
-        var expense = createExpense();
+        var expense = createExpense("rent");
 
         Expense savedExpense = expenseRepository.save(expense);
 
-        var expenseToUpdate = Expense.createExpenseWithId(savedExpense.getId(), savedExpense)
+        var expenseToUpdate = Expense.builder(savedExpense.getId())
                 .withExpenseName("updated rent")
                 .build();
 

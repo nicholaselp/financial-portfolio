@@ -11,13 +11,15 @@ import org.springframework.lang.Nullable;
 
 import javax.validation.ValidationException;
 
+import static java.util.Objects.isNull;
+
 @AllArgsConstructor
 public class ExpenseCategoryUniquenessValidator  implements EntityValidator<ExpenseCategory> {
 
     @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
     @Override
     public Result<Nothing, String> validate(@Nullable ExpenseCategory original, @NonNull ExpenseCategory entity) throws ValidationException {
-        if(expenseCategoryRepositoryOperations.findByName(entity.getExpenseCategoryName()).isPresent()){
+        if(isNull(original) && expenseCategoryRepositoryOperations.findByName(entity.getExpenseCategoryName()).isPresent()){
             return Result.fail("Expense Category with name: " + entity.getExpenseCategoryName() + " already exists");
         }
         return Result.success();

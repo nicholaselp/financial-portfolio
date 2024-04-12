@@ -29,7 +29,7 @@ public class DeleteExpenseCategoryCommand implements Command<DeleteExpenseCatego
     @Override
     public Void execute(DeleteExpenseCategoryRequest request) {
         if(expenseRepositoryOperations.expenseExistWithCategoryId(request.getExpenseCategoryId())){
-            throw new IllegalArgumentException("Cannot delete Expense Category. Expenses found that use expenseCategoryId: " + request.getExpenseCategoryId());
+            throw new IllegalArgumentException("Cannot delete Expense Category. Expenses found that use expense category with ID: " + request.getExpenseCategoryId());
         }
         Result<Nothing, String> result = expenseCategoryRepositoryOperations.deleteById(request.getExpenseCategoryId());
         if(result.isFail()){
@@ -64,8 +64,8 @@ public class DeleteExpenseCategoryCommand implements Command<DeleteExpenseCatego
     protected static class DeleteExpenseCategoryRequest extends AbstractRequest {
         private final String expenseCategoryId;
 
-        private DeleteExpenseCategoryRequest(String expenseCategoryId){
-            this.expenseCategoryId = requireNonBlank(expenseCategoryId, "ExpenseCategoryId is missing");
+        DeleteExpenseCategoryRequest(String expenseCategoryId){
+            this.expenseCategoryId = expenseCategoryId;
         }
 
         public String getExpenseCategoryId(){ return expenseCategoryId; }

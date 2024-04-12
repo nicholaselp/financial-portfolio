@@ -3,7 +3,6 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
 import com.elpidoroun.financialportfolio.service.expenseCategory.CreateExpenseCategoryService;
 import lombok.AllArgsConstructor;
@@ -19,14 +18,14 @@ import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Component
-public class CreateExpenseCategoryCommand implements Command<CreateExpenseCategoryCommand.CreateExpenseCategoryRequest, ExpenseCategoryResponseDto> {
+public class CreateExpenseCategoryCommand implements Command<CreateExpenseCategoryCommand.CreateExpenseCategoryRequest, ExpenseCategoryDto> {
 
     @NonNull private final CreateExpenseCategoryService createExpenseCategoryService;
     @NonNull private final ExpenseCategoryMapper expenseCategoryMapper;
 
     @Override
-    public ExpenseCategoryResponseDto execute(CreateExpenseCategoryRequest request) {
-        return expenseCategoryMapper.convertToResponseDto(
+    public ExpenseCategoryDto execute(CreateExpenseCategoryRequest request) {
+        return expenseCategoryMapper.convertToDto(
                 createExpenseCategoryService.execute(expenseCategoryMapper.convertToDomain(request.getExpenseCategoryDto()))
         );
     }
@@ -57,7 +56,7 @@ public class CreateExpenseCategoryCommand implements Command<CreateExpenseCatego
     protected static class CreateExpenseCategoryRequest extends AbstractRequest {
         private final ExpenseCategoryDto expenseCategoryDto;
 
-        private CreateExpenseCategoryRequest(ExpenseCategoryDto expenseCategoryDto){
+        CreateExpenseCategoryRequest(ExpenseCategoryDto expenseCategoryDto){
             this.expenseCategoryDto = expenseCategoryDto;
         }
 

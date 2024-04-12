@@ -18,6 +18,7 @@ public class UpdateExpenseCategoryService {
 
     @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
     @NonNull private final ValidationService<ExpenseCategory> validationService;
+
     public ExpenseCategory execute(UpdateExpenseCategoryContext context){
 
         var result = validationService.validate(context.getOriginal(), context.getEntity());

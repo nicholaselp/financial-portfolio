@@ -1,7 +1,6 @@
 package com.elpidoroun.financialportfolio.mappers;
 
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.model.Status;
 import org.springframework.lang.Nullable;
@@ -11,13 +10,6 @@ import static java.util.Objects.isNull;
 
 @Component
 public class ExpenseCategoryMapper {
-
-    public ExpenseCategoryResponseDto convertToResponseDto(ExpenseCategory expenseCategory){
-        ExpenseCategoryResponseDto expenseCategoryResponseDto = new ExpenseCategoryResponseDto();
-        expenseCategoryResponseDto.setExpenseCategory(convertToDto(expenseCategory));
-
-        return expenseCategoryResponseDto;
-    }
 
     public ExpenseCategoryDto convertToDto(ExpenseCategory expenseCategory){
         ExpenseCategoryDto expenseCategoryDto = new ExpenseCategoryDto();
@@ -30,7 +22,12 @@ public class ExpenseCategoryMapper {
     }
 
     public ExpenseCategory convertToDomain(ExpenseCategoryDto expenseCategoryDto){
-        return convertToDomain(expenseCategoryDto, expenseCategoryDto.getId().toString());
+        return ExpenseCategory.builder()
+                .withCategoryName(expenseCategoryDto.getCategoryName())
+                .withExpenseType(ExpenseTypeMapper.toDomain(expenseCategoryDto.getExpenseType()))
+                .withBillingInterval(BillingIntervalMapper.toDomain(expenseCategoryDto.getBillingInterval()))
+                .withStatus(isNull(expenseCategoryDto.getStatus())? Status.ACTIVE : StatusMapper.toDomain(expenseCategoryDto.getStatus()))
+                .build();
     }
 
     public ExpenseCategory convertToDomain(ExpenseCategoryDto expenseCategoryDto, @Nullable String id){

@@ -17,9 +17,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.UPDATE_EXPENSE;
-import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
+import static org.apache.logging.log4j.util.Strings.isBlank;
 
 @AllArgsConstructor
 @Component
@@ -61,7 +60,7 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
         }
 
         return Stream.of(
-                isNull(request.getExpenseId()) ? "ExpenseId is missing" : null,
+                isBlank(request.getExpenseId()) ? "ExpenseId is missing" : null,
                        isNull(request.getExpenseDto()) ? "ExpenseDto is missing" : null
                 )
                 .filter(Objects::nonNull)
@@ -81,8 +80,8 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
         private final ExpenseDto expenseDto;
 
         protected UpdateExpenseRequest(String expenseId, ExpenseDto expenseDto){
-            this.expenseId = requireNonBlank(expenseId, "expenseId is missing");
-            this.expenseDto = requireNonNull(expenseDto, "expenseDto is missing");
+            this.expenseId = expenseId;
+            this.expenseDto = expenseDto;
         }
         public String getExpenseId(){ return expenseId; }
         public ExpenseDto getExpenseDto(){ return expenseDto; }

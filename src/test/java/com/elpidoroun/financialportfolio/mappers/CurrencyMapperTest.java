@@ -13,7 +13,7 @@ import static com.elpidoroun.financialportfolio.mappers.CurrencyMapper.toDto;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class CurrencyConverterTest {
+public class CurrencyMapperTest {
 
     @ParameterizedTest
     @EnumSource(Currency.class)

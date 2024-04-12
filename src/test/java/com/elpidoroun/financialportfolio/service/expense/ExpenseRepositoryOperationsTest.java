@@ -1,10 +1,9 @@
-package com.elpidoroun.financialportfolio.service;
+package com.elpidoroun.financialportfolio.service.expense;
 
 import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
 import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
-import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -37,8 +36,8 @@ public class ExpenseRepositoryOperationsTest {
 
     @Test
     public void create_new_expense() {
-        Expense expense = createExpense();
-        when(expenseRepository.save(any())).thenReturn(Expense.createExpenseWithId(1L, expense).build());
+        Expense expense = createExpense("rent");
+        when(expenseRepository.save(any())).thenReturn(Expense.builder(1L).build());
 
         Expense savedExpense = expenseRepositoryOperations.save(expense);
 
@@ -49,8 +48,8 @@ public class ExpenseRepositoryOperationsTest {
 
     @Test
     public void fail_create_new_expense() {
-        Expense expense = createExpense();
-        when(expenseRepository.save(any())).thenReturn(Expense.createExpenseWithId(1L, expense));
+        Expense expense = createExpense("rent");
+        when(expenseRepository.save(any())).thenReturn(Expense.builder(1L));
 
         assertThatThrownBy(() -> expenseRepositoryOperations.save(expense))
                 .isInstanceOf(DatabaseOperationException.class)
@@ -60,7 +59,7 @@ public class ExpenseRepositoryOperationsTest {
 
     @Test
     public void get_expense_by_id_found() {
-        Expense expense = createExpense();
+        Expense expense = createExpense("rent");
         when(expenseRepository.findById(any())).thenReturn(Optional.of(expense));
 
         var result = expenseRepositoryOperations.getById("1");
@@ -103,7 +102,7 @@ public class ExpenseRepositoryOperationsTest {
 
     @Test
     public void update_expense_found() {
-        Expense expense = createExpense();
+        Expense expense = createExpense("rent");
         when(expenseRepository.existsById(any())).thenReturn(true);
         when(expenseRepository.save(any())).thenReturn(expense);
 
@@ -116,7 +115,7 @@ public class ExpenseRepositoryOperationsTest {
 
     @Test
     public void update_expense_not_found() {
-        Expense expense = createExpense();
+        Expense expense = createExpense("rent");
         when(expenseRepository.existsById(any())).thenReturn(false);
 
         assertThatThrownBy(() -> expenseRepositoryOperations.update(expense))

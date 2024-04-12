@@ -14,11 +14,6 @@ components:
           $ref: '#/components/schemas/ExpenseType'
         status:
           $ref: 'common.yaml#/components/schemas/Status'
-    ExpenseCategoryResponse:
-      type: object
-      properties:
-        expenseCategory:
-          $ref: '#/components/schemas/ExpenseCategory'
     BillingInterval:
       type: string
       enum:

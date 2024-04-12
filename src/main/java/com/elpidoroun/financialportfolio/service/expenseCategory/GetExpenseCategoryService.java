@@ -1,6 +1,6 @@
 package com.elpidoroun.financialportfolio.service.expenseCategory;
 
-import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -18,7 +18,7 @@ public class GetExpenseCategoryService {
         var result = expenseCategoryRepositoryOperations.getById(expenseId);
 
         if(result.isFail()){
-            throw new IllegalArgumentException(result.getError().orElse("Error while Updating ExpenseCategory"));
+            throw new EntityNotFoundException(result.getError().orElse("Expense Category with ID: " + expenseId + " not found"));
         }
 
         return result.getSuccessValue();

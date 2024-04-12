@@ -30,7 +30,7 @@ public class GetExpenseByIdCommandTest {
     @Test
     public void success_get_expense_by_id() {
         String expenseId = "expense-123";
-        var expense = ExpenseTestFactory.createExpense();
+        var expense = ExpenseTestFactory.createExpense("rent");
         var expenseResponseDto = ExpenseTestFactory.createExpenseResponseDto();
 
         when(getExpenseService.execute(expenseId)).thenReturn(expense);

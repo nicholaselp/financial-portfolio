@@ -15,7 +15,8 @@ public interface ExpenseCategoryRepository extends JpaRepository<ExpenseCategory
 
     @Override
     @Query(value = "SELECT ec from ExpenseCategory ec WHERE ec.id = ?1 and ec.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
-    Optional<ExpenseCategory> findById(Long id);
+    @NonNull
+    Optional<ExpenseCategory> findById(@NonNull Long id);
 
     @Query(value = "SELECT ec FROM ExpenseCategory ec WHERE ec.categoryName = ?1 AND ec.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
     Optional<ExpenseCategory> findByCategoryName(String expenseCategory);
@@ -29,7 +30,8 @@ public interface ExpenseCategoryRepository extends JpaRepository<ExpenseCategory
     @Query(value = "SELECT CASE WHEN COUNT(ec) > 0 THEN TRUE ELSE FALSE END FROM ExpenseCategory ec WHERE ec.id = ?1 AND ec.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
     boolean existsById(@NonNull Long id);
 
+    @Override
     @Modifying
     @Query(value = "UPDATE ExpenseCategory SET status = com.elpidoroun.financialportfolio.model.Status.DELETED WHERE id = ?1")
-    void deleteCategoryById(@NonNull Long id);
+    void deleteById(@NonNull Long id);
 }

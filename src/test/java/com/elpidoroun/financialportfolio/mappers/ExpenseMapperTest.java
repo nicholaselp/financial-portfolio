@@ -1,51 +1,43 @@
 package com.elpidoroun.financialportfolio.mappers;
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
-import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExpenseMapperTest {
-
-    ExpenseMapper converter = new ExpenseMapper();
-
+    ExpenseCategoryMapper expenseCategoryMapper = new ExpenseCategoryMapper();
+    ExpenseMapper converter = new ExpenseMapper(new ExpenseCategoryMapper());
     @Test
     public void convert_to_entity_dto() {
-        Expense expense = Expense.builder()
-                .withExpenseName("Rent")
-                .withMonthlyAllocatedAmount(BigDecimal.valueOf(1000))
-                .withNote("Monthly rent payment")
-                .build();
-
-        ExpenseDto expectedDto = new ExpenseDto()
-                .expenseName("Rent")
-                .monthlyAllocatedAmount(BigDecimal.valueOf(1000))
-                .note("Monthly rent payment");
-
+        var expense = ExpenseTestFactory.createExpense("expenseName");
         var expenseResponseDto = converter.convertToResponseDto(expense);
 
-        assertThat(expenseResponseDto.getExpense()).usingRecursiveComparison().isEqualTo(expectedDto);
+        assertThat(expense.getId()).isEqualTo(expenseResponseDto.getMeta().getId());
+        assertThat(expense.getCreatedAt()).isEqualTo(expenseResponseDto.getMeta().getCreatedAt());
+        assertThat(expense.getExpenseName()).isEqualTo(expenseResponseDto.getExpense().getExpenseName());
+        assertThat(expense.getExpenseCategory()).isEqualTo(expenseCategoryMapper.convertToDomain(expenseResponseDto.getExpense().getExpenseCategory()));
+        assertThat(expense.getStatus()).isEqualTo(StatusMapper.toDomain(expenseResponseDto.getExpense().getStatus()));
+        assertThat(expense.getNote()).isEqualTo(Optional.ofNullable(expenseResponseDto.getExpense().getNote()));
+        assertThat(expense.getYearlyAllocatedAmount()).isEqualTo(expenseResponseDto.getExpense().getYearlyAllocatedAmount());
+        assertThat(expense.getMonthlyAllocatedAmount()).isEqualTo(expenseResponseDto.getExpense().getMonthlyAllocatedAmount());
+        assertThat(expense.getPayments()).isEqualTo(null); //TODO change when Payments is developed
+
     }
 
     @Test
     public void convert_to_domain() {
-        ExpenseDto expenseDto = new ExpenseDto()
-                .expenseName("Rent")
-                .monthlyAllocatedAmount(BigDecimal.valueOf(1000))
-                .note("Monthly rent payment");
+        var expenseDto = ExpenseTestFactory.createExpenseDto();
 
-        Expense expectedExpense = Expense.builder()
-                .withExpenseName("Rent")
-                .withMonthlyAllocatedAmount(BigDecimal.valueOf(1000))
-                .withNote("Monthly rent payment")
-                .build();
+        var expense = converter.convertToDomain(expenseDto);
 
-        Expense convertedExpense = converter.convertToDomain(expenseDto);
-
-        assertThat(convertedExpense.getExpenseName()).isEqualTo(expectedExpense.getExpenseName());
-        assertThat(convertedExpense.getMonthlyAllocatedAmount()).isEqualTo(expectedExpense.getMonthlyAllocatedAmount());
-        assertThat(convertedExpense.getNote()).isEqualTo((expectedExpense.getNote()));
+        assertThat(expenseDto.getExpenseName()).isEqualTo(expense.getExpenseName());
+        assertThat(expenseDto.getExpenseCategory()).isEqualTo(expenseCategoryMapper.convertToDto(expense.getExpenseCategory()));
+        assertThat(expenseDto.getStatus()).isEqualTo(StatusMapper.toDto(expense.getStatus()));
+        assertThat(Optional.of(expenseDto.getNote())).isEqualTo(expense.getNote());
+        assertThat(expenseDto.getMonthlyAllocatedAmount()).isEqualTo(expense.getMonthlyAllocatedAmount());
+        assertThat(expenseDto.getYearlyAllocatedAmount()).isEqualTo(expense.getYearlyAllocatedAmount());
+        assertThat(expenseDto.getPayments()).isEqualTo(null); //TODO change when Payments is developed
     }
 }

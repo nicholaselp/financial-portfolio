@@ -13,7 +13,6 @@ import com.elpidoroun.financialportfolio.controller.command.expenseCategory.GetE
 import com.elpidoroun.financialportfolio.controller.command.expenseCategory.UpdateExpenseCategoryCommand;
 import com.elpidoroun.financialportfolio.generated.api.FinancialPortfolioApiDelegate;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import lombok.AllArgsConstructor;
@@ -67,28 +66,27 @@ public class ExpenseApiControllerDelegate extends MainController implements Fina
 
 
     @Override
-    public ResponseEntity<ExpenseCategoryResponseDto> createExpenseCategory(ExpenseCategoryDto expenseCategoryDto) {
-        return (ResponseEntity<ExpenseCategoryResponseDto>) execute(createExpenseCategoryCommand, CreateExpenseCategoryCommand.request(expenseCategoryDto));
+    public ResponseEntity<ExpenseCategoryDto> createExpenseCategory(ExpenseCategoryDto expenseCategoryDto) {
+        return (ResponseEntity<ExpenseCategoryDto>) execute(createExpenseCategoryCommand, CreateExpenseCategoryCommand.request(expenseCategoryDto));
     }
 
     @Override
-    public ResponseEntity<ExpenseCategoryResponseDto> getExpenseCategoryById(String id){
-        return (ResponseEntity<ExpenseCategoryResponseDto>) execute(getExpenseCategoryByIdCommand, GetExpenseCategoryByIdCommand.request(id));
+    public ResponseEntity<ExpenseCategoryDto> getExpenseCategoryById(String id){
+        return (ResponseEntity<ExpenseCategoryDto>) execute(getExpenseCategoryByIdCommand, GetExpenseCategoryByIdCommand.request(id));
     }
 
     @Override
-    public ResponseEntity<List<ExpenseCategoryResponseDto>> getExpenseCategories(){
-        return (ResponseEntity<List<ExpenseCategoryResponseDto>>) execute(getAllExpenseCategoriesCommand, GetAllExpenseCategoriesCommand.request());
+    public ResponseEntity<List<ExpenseCategoryDto>> getExpenseCategories(){
+        return (ResponseEntity<List<ExpenseCategoryDto>>) execute(getAllExpenseCategoriesCommand, GetAllExpenseCategoriesCommand.request());
     }
 
     @Override
-    public ResponseEntity<ExpenseCategoryResponseDto> updateExpenseCategoryById(String expenseId, ExpenseCategoryDto expenseCategoryDto){
-        return (ResponseEntity<ExpenseCategoryResponseDto>) execute(updateExpenseCategoryCommand, UpdateExpenseCategoryCommand.request(expenseId, expenseCategoryDto));
+    public ResponseEntity<ExpenseCategoryDto> updateExpenseCategoryById(String expenseId, ExpenseCategoryDto expenseCategoryDto){
+        return (ResponseEntity<ExpenseCategoryDto>) execute(updateExpenseCategoryCommand, UpdateExpenseCategoryCommand.request(expenseId, expenseCategoryDto));
     }
 
     @Override
     public ResponseEntity<Void> deleteExpenseCategoryById(String id){
         return (ResponseEntity<Void>) execute(deleteExpenseCategoryCommand, DeleteExpenseCategoryCommand.request(id));
     }
-
 }

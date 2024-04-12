@@ -2,7 +2,7 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
+import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
 import com.elpidoroun.financialportfolio.service.expenseCategory.GetExpenseCategoryService;
 import lombok.AllArgsConstructor;
@@ -16,14 +16,14 @@ import static com.elpidoroun.financialportfolio.controller.command.Operations.GE
 
 @AllArgsConstructor
 @Component
-public class GetAllExpenseCategoriesCommand implements Command<GetAllExpenseCategoriesCommand.GetExpenseCategoriesRequest, List<ExpenseCategoryResponseDto>> {
+public class GetAllExpenseCategoriesCommand implements Command<GetAllExpenseCategoriesCommand.GetExpenseCategoriesRequest, List<ExpenseCategoryDto>> {
 
     @NonNull GetExpenseCategoryService getExpenseCategoryService;
     @NonNull ExpenseCategoryMapper expenseCategoryMapper;
     @Override
-    public List<ExpenseCategoryResponseDto> execute(GetExpenseCategoriesRequest request) {
+    public List<ExpenseCategoryDto> execute(GetExpenseCategoriesRequest request) {
         return getExpenseCategoryService.getAllExpenseCategories()
-                .stream().map(expenseCategoryMapper::convertToResponseDto)
+                .stream().map(expenseCategoryMapper::convertToDto)
                 .collect(Collectors.toList());
     }
 

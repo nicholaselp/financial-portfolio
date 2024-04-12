@@ -34,5 +34,5 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     void deleteExpenseById(@NonNull Long id);
 
     @Query(value = "SELECT e FROM Expense e WHERE e.expenseCategory.id = ?1 AND e.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
-    List<Expense> findByExpenseCategoryIdAndStatusNot(Long expenseCategoryId);
+    List<Expense> findByExpenseCategoryId(Long expenseCategoryId);
 }

@@ -3,7 +3,6 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
 import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
@@ -17,21 +16,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.UPDATE_EXPENSE;
-import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
 
 @AllArgsConstructor
 @Component
-public class UpdateExpenseCategoryCommand implements Command<UpdateExpenseCategoryCommand.UpdateExpenseCategoryRequest, ExpenseCategoryResponseDto> {
+public class UpdateExpenseCategoryCommand implements Command<UpdateExpenseCategoryCommand.UpdateExpenseCategoryRequest, ExpenseCategoryDto> {
 
     @NonNull private final UpdateExpenseCategoryService updateExpenseCategoryService;
     @NonNull private final ExpenseCategoryMapper expenseCategoryMapper;
     @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
 
     @Override
-    public ExpenseCategoryResponseDto execute(UpdateExpenseCategoryRequest request){
-        return expenseCategoryMapper.convertToResponseDto(
+    public ExpenseCategoryDto execute(UpdateExpenseCategoryRequest request){
+        return expenseCategoryMapper.convertToDto(
                 updateExpenseCategoryService.execute(buildContext(request)));
     }
 
@@ -82,9 +79,9 @@ public class UpdateExpenseCategoryCommand implements Command<UpdateExpenseCatego
         private final String expenseCategoryId;
         private final ExpenseCategoryDto expenseCategoryDto;
 
-        private UpdateExpenseCategoryRequest(String expenseCategoryId, ExpenseCategoryDto expenseCategoryDto){
-            this.expenseCategoryId = requireNonBlank(expenseCategoryId, "expenseCategoryId is missing");
-            this.expenseCategoryDto = requireNonNull(expenseCategoryDto, "ExpenseCategoryDto is missing");
+        UpdateExpenseCategoryRequest(String expenseCategoryId, ExpenseCategoryDto expenseCategoryDto){
+            this.expenseCategoryId = expenseCategoryId;
+            this.expenseCategoryDto = expenseCategoryDto;
         }
         public String getExpenseCategoryId(){ return expenseCategoryId; }
         public ExpenseCategoryDto getExpenseCategoryDto(){ return expenseCategoryDto; }

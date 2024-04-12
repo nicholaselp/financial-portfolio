@@ -4,7 +4,9 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expense.UpdateExpenseService;
+import com.elpidoroun.financialportfolio.utilities.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,6 +27,9 @@ public class UpdateExpenseCommandTest {
     @Mock
     private ExpenseMapper expenseMapper;
 
+    @Mock
+    private ExpenseRepositoryOperations expenseRepositoryOperations;
+
     @InjectMocks
     private UpdateExpenseCommand updateExpenseCommand;
 
@@ -38,10 +43,14 @@ public class UpdateExpenseCommandTest {
         String expenseId = "1";
         ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto();
         ExpenseResponseDto expenseResponseDto = new ExpenseResponseDto();
+        var expenseEntity = createExpense("entityExpense");
+        var expenseOriginal = createExpense("originalExpense");
 
-        when(expenseMapper.convertToDomain(expenseDto)).thenReturn(createExpense());
-        when(updateExpenseService.execute(any())).thenReturn(createExpense());
+        when(expenseMapper.convertToDomain(expenseDto)).thenReturn(expenseEntity);
+        when(updateExpenseService.execute(any())).thenReturn(expenseOriginal);
         when(expenseMapper.convertToResponseDto(any())).thenReturn(expenseResponseDto);
+        when(expenseRepositoryOperations.getById(any())).thenReturn(Result.success(expenseEntity));
+        when(expenseMapper.convertToDomain(any(), any())).thenReturn(expenseEntity);
 
         UpdateExpenseCommand.UpdateExpenseRequest request = new UpdateExpenseCommand.UpdateExpenseRequest(expenseId, expenseDto);
 

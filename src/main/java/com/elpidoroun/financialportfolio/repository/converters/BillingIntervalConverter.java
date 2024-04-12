@@ -20,12 +20,12 @@ public class BillingIntervalConverter implements AttributeConverter<BillingInter
     }
 
     @Override
-    public BillingInterval convertToEntityAttribute(String dbPaymentType) {
-        if(nonNull(dbPaymentType)){
+    public BillingInterval convertToEntityAttribute(String dbBillingInterval) {
+        if(nonNull(dbBillingInterval)){
             return Arrays.stream(BillingInterval.values())
                     .filter(Objects::nonNull)
-                    .filter(paymentType -> paymentType.getValue().equals(dbPaymentType))
-                    .findFirst().orElseThrow(() -> new DatabaseOperationException("No PaymentType found for value: " + dbPaymentType));
+                    .filter(paymentType -> paymentType.getValue().equals(dbBillingInterval))
+                    .findFirst().orElseThrow(() -> new DatabaseOperationException("No BillingInterval found for value: " + dbBillingInterval));
         }
 
         return null;

@@ -78,9 +78,6 @@ public class Expense {
     }
 
     private void validateAmounts(BigDecimal monthlyAllocatedAmount, BigDecimal yearlyAllocatedAmount) {
-        if(isNull(monthlyAllocatedAmount) && isNull(yearlyAllocatedAmount)){
-            throw new ValidationException("");
-        }
 
         if((isNull(monthlyAllocatedAmount) || monthlyAllocatedAmount.equals(BigDecimal.ZERO))
                 && (isNull(yearlyAllocatedAmount) || yearlyAllocatedAmount.equals(BigDecimal.ZERO))){
@@ -140,13 +137,13 @@ public class Expense {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Expense expense1 = (Expense) o;
-        return Objects.equals(id, expense1.id) && Objects.equals(expenseName, expense1.expenseName) && Objects.equals(monthlyAllocatedAmount, expense1.monthlyAllocatedAmount) && Objects.equals(yearlyAllocatedAmount, expense1.yearlyAllocatedAmount) && Objects.equals(note, expense1.note) && Objects.equals(createdAt, expense1.createdAt);
+        Expense expense = (Expense) o;
+        return Objects.equals(id, expense.id) && Objects.equals(expenseName, expense.expenseName) && Objects.equals(monthlyAllocatedAmount, expense.monthlyAllocatedAmount) && Objects.equals(yearlyAllocatedAmount, expense.yearlyAllocatedAmount) && Objects.equals(note, expense.note) && Objects.equals(paymentList, expense.paymentList) && Objects.equals(expenseCategory, expense.expenseCategory) && status == expense.status && Objects.equals(createdAt, expense.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, createdAt);
+        return Objects.hash(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, paymentList, expenseCategory, status, createdAt);
     }
 
     public static class Builder {

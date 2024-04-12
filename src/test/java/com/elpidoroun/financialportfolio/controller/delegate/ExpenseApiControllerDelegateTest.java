@@ -43,7 +43,7 @@ public class ExpenseApiControllerDelegateTest extends SpringTests{
 
     @Test
     public void update_expense_api_call() throws Exception {
-        var storedExpense = expenseRepository.save(ExpenseTestFactory.createExpense());
+        var storedExpense = expenseRepository.save(ExpenseTestFactory.createExpense("rent"));
 
         assertThat(expenseRepository.findById(storedExpense.getId())).isPresent()
                 .hasValueSatisfying(exp -> {
@@ -66,7 +66,7 @@ public class ExpenseApiControllerDelegateTest extends SpringTests{
 
     @Test
     public void get_expense_by_id_api_call() throws Exception {
-        var storedExpense = expenseRepository.save(ExpenseTestFactory.createExpense());
+        var storedExpense = expenseRepository.save(ExpenseTestFactory.createExpense("rent"));
 
         var result = mockMvc.perform(MockMvcRequestBuilders.get("/v1/expenses/"+storedExpense.getId())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -80,7 +80,7 @@ public class ExpenseApiControllerDelegateTest extends SpringTests{
 
     @Test
     public void delete_expense_by_id_api_call() throws Exception {
-        var storedExpense = expenseRepository.save(ExpenseTestFactory.createExpense());
+        var storedExpense = expenseRepository.save(ExpenseTestFactory.createExpense("rent"));
 
         var result = mockMvc.perform(MockMvcRequestBuilders.delete("/v1/expenses/"+storedExpense.getId())
                         .contentType(MediaType.APPLICATION_JSON))

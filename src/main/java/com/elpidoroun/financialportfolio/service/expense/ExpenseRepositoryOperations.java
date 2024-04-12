@@ -69,7 +69,7 @@ public class ExpenseRepositoryOperations {
     }
 
     public boolean expenseExistWithCategoryId(String categoryId){
-        return !expenseRepository.findByExpenseCategoryIdAndStatusNot(Long.valueOf(categoryId))
+        return !expenseRepository.findByExpenseCategoryId(Long.valueOf(categoryId))
                 .isEmpty();
     }
 }

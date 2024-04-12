@@ -2,7 +2,7 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryResponseDto;
+import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
 import com.elpidoroun.financialportfolio.service.expenseCategory.GetExpenseCategoryService;
 import lombok.AllArgsConstructor;
@@ -21,20 +21,13 @@ import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Component
-public class GetExpenseCategoryByIdCommand implements Command<GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest, List<ExpenseCategoryResponseDto>> {
+public class GetExpenseCategoryByIdCommand implements Command<GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest, ExpenseCategoryDto> {
 
-    @NonNull GetExpenseCategoryService getExpenseCategoryService;
-    @NonNull ExpenseCategoryMapper expenseCategoryMapper;
+    @NonNull private final GetExpenseCategoryService getExpenseCategoryService;
+    @NonNull private final ExpenseCategoryMapper expenseCategoryMapper;
     @Override
-    public List<ExpenseCategoryResponseDto> execute(GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request) {
-
-        return request.getExpenseCategoryId()
-                .map(expenseCategoryId -> List.of(getExpenseCategoryService.getById(expenseCategoryId)))
-                .orElseGet(() -> getExpenseCategoryService.getAllExpenseCategories())
-                .stream()
-                .map(expenseCategory -> expenseCategoryMapper.convertToResponseDto(expenseCategory))
-                .collect(Collectors.toList());
-
+    public ExpenseCategoryDto execute(GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request) {
+        return expenseCategoryMapper.convertToDto(getExpenseCategoryService.getById(request.getExpenseCategoryId()));
     }
 
     @Override
@@ -67,6 +60,6 @@ public class GetExpenseCategoryByIdCommand implements Command<GetExpenseCategory
             this.expenseCategoryId = nullIfBlank(expenseCategoryId);
         }
 
-        public Optional<String> getExpenseCategoryId(){ return Optional.ofNullable(expenseCategoryId); }
+        public String getExpenseCategoryId(){ return expenseCategoryId; }
     }
 }
