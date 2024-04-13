@@ -18,8 +18,8 @@ import static com.elpidoroun.financialportfolio.controller.command.Operations.GE
 @Component
 public class GetAllExpensesCommand  implements Command<GetAllExpensesCommand.GetAllExpensesRequest, List<ExpenseResponseDto>> {
 
-    @NonNull GetExpenseService getExpenseService;
-    @NonNull ExpenseMapper expenseMapper;
+    @NonNull private final GetExpenseService getExpenseService;
+    @NonNull private final ExpenseMapper expenseMapper;
     @Override
     public List<ExpenseResponseDto> execute(GetAllExpensesCommand.GetAllExpensesRequest request) {
         return getExpenseService.getAllExpenses()

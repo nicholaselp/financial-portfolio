@@ -29,9 +29,10 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     @Query(value = "SELECT CASE WHEN COUNT(e) > 0 THEN TRUE ELSE FALSE END FROM Expense e WHERE e.id = ?1 AND e.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
     boolean existsById(@NonNull Long id);
 
+    @Override
     @Modifying
     @Query(value = "UPDATE Expense SET status = com.elpidoroun.financialportfolio.model.Status.DELETED WHERE id = ?1")
-    void deleteExpenseById(@NonNull Long id);
+    void deleteById(@NonNull Long id);
 
     @Query(value = "SELECT e FROM Expense e WHERE e.expenseCategory.id = ?1 AND e.status != com.elpidoroun.financialportfolio.model.Status.DELETED")
     List<Expense> findByExpenseCategoryId(Long expenseCategoryId);

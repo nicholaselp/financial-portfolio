@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.DELETE_EXPENSE_BY_ID;
-import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
 
 @AllArgsConstructor
@@ -62,7 +61,7 @@ public class DeleteExpenseCommand implements Command<DeleteExpenseCommand.Delete
         private final String expenseId;
 
         protected DeleteExpenseRequest(String expenseId){
-            this.expenseId = requireNonBlank(expenseId, "expenseId is missing");
+            this.expenseId = expenseId;
         }
         public String getExpenseId(){ return expenseId; }
 

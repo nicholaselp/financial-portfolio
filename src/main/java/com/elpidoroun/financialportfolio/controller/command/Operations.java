@@ -16,7 +16,7 @@ public enum Operations implements EnumStringValue {
     UPDATE_EXPENSE_CATEGORY("update-expense-category"),
     DELETE_EXPENSE_CATREGORY_BY_ID("delete-expense-category-by-id");
 
-    private String operation;
+    private final String operation;
 
     Operations(String operation){
         this.operation = operation;

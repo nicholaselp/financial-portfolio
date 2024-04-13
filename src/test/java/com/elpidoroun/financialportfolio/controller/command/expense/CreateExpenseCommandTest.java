@@ -1,52 +1,34 @@
 package com.elpidoroun.financialportfolio.controller.command.expense;
 
+import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
+import com.elpidoroun.financialportfolio.model.ExpenseCategory;
+import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
-import com.elpidoroun.financialportfolio.service.expense.CreateExpenseService;
-import org.junit.jupiter.api.BeforeEach;
+import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
-class CreateExpenseCommandTest {
+class CreateExpenseCommandTest extends MainTestConfig {
 
-    @Mock
-    private CreateExpenseService createExpenseService;
-    @Mock
-    private ExpenseMapper expenseMapper;
-    @InjectMocks
-    private CreateExpenseCommand createExpenseCommand;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private final CreateExpenseCommand createExpenseCommand = getExpenseTestConfig().getCreateExpenseCommand();
+    private final ExpenseMapper expenseMapper = getExpenseTestConfig().getExpenseMapper();
+    private final ExpenseCategoryRepository expenseCategoryRepository = getExpenseTestConfig().getExpenseCategoryRepository();
 
     @Test
     public void success_create_expense() {
-        ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto();
-        ExpenseResponseDto expenseResponseDto = new ExpenseResponseDto();
+        ExpenseCategory expenseCategory = ExpenseCategoryTestFactory.createExpenseCategoryWithId();
+        expenseCategoryRepository.save(expenseCategory);
 
-        when(expenseMapper.convertToDomain(expenseDto)).thenReturn(ExpenseTestFactory.createExpense("rent"));
-        when(createExpenseService.execute(any())).thenReturn(ExpenseTestFactory.createExpense("rent"));
-        when(expenseMapper.convertToResponseDto(any())).thenReturn(expenseResponseDto);
+        ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto(expenseCategory.getId());
 
         ExpenseResponseDto result = createExpenseCommand.execute(new CreateExpenseCommand.CreateExpenseRequest(expenseDto));
 
-        assertThat(result).isNotNull().isEqualTo(expenseResponseDto);
-
-        verify(expenseMapper).convertToDomain(expenseDto);
-        verify(createExpenseService).execute(any());
-        verify(expenseMapper).convertToResponseDto(any());
+        assertThat(result.getExpense()).isNotNull().isEqualTo(expenseDto);
     }
 
     @Test

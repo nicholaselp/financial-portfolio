@@ -9,7 +9,7 @@ public enum ExpenseType implements EnumStringValue {
     FIXED("fixed"),
     NOT_FIXED("not-fixed");
 
-    private String value;
+    private final String value;
 
     ExpenseType(String value){ this.value = requireNonBlank(value, "ExpenseType is missing"); }
 

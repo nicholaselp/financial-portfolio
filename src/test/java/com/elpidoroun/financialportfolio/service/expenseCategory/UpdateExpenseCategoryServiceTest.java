@@ -14,8 +14,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class UpdateExpenseCategoryServiceTest extends MainTestConfig {
 
-    private UpdateExpenseCategoryService service = getExpenseCategoryTestConfig().getUpdateExpenseCategoryService();
-    private ExpenseCategoryRepository repo = getExpenseCategoryTestConfig().getExpenseCategoryRepository();
+    private final UpdateExpenseCategoryService service = getExpenseCategoryTestConfig().getUpdateExpenseCategoryService();
+    private final ExpenseCategoryRepository repo = getExpenseCategoryTestConfig().getExpenseCategoryRepository();
 
     @Test
     public void success_update(){

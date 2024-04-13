@@ -1,6 +1,7 @@
 package com.elpidoroun.financialportfolio.repository;
 
 import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.model.Status;
 import lombok.NonNull;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -19,16 +20,6 @@ import static java.util.Objects.nonNull;
 
 public class ExpenseRepositoryStub implements ExpenseRepository {
     private final List<Expense> expenseList = new ArrayList<>();
-
-    @Override
-    public Optional<Expense> findById(Long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public List<Expense> findByExpenseName(String expense) {
-        return null;
-    }
 
     @Override
     public Expense save(Expense entity) {
@@ -66,6 +57,29 @@ public class ExpenseRepositoryStub implements ExpenseRepository {
         return entityToSave;
     }
 
+    @Override
+    public Optional<Expense> findById(Long id) {
+        return expenseList.stream()
+                .filter(expense -> id.equals(expense.getId()))
+                .filter(expense -> expense.getStatus() != Status.DELETED)
+                .findFirst();
+    }
+
+    @Override
+    public List<Expense> findByExpenseName(String expenseName) {
+        return expenseList.stream()
+                .filter(expense -> expense.getExpenseName().equals(expenseName))
+                .filter(expense -> expense.getStatus() != Status.DELETED)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public @NonNull List<Expense> findAll() {
+        return expenseList.stream()
+                .filter(expense -> expense.getStatus() != Status.DELETED)
+                .collect(Collectors.toList());
+    }
+
     public static long generateUniqueId() {
         return ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
     }
@@ -80,14 +94,22 @@ public class ExpenseRepositoryStub implements ExpenseRepository {
     }
 
     @Override
+    public boolean existsById(@NonNull Long id) {
+        return expenseList.stream()
+                .anyMatch(expense -> id.equals(expense.getId()));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        expenseList.removeIf(expense -> expense.getId().equals(id) && expense.getStatus() != Status.DELETED);
+    }
+
+    @Override
     public <S extends Expense> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
-    @Override
-    public @NonNull List<Expense> findAll() {
-        return null;
-    }
+
 
     @Override
     public List<Expense> findAllById(Iterable<Long> longs) {
@@ -99,10 +121,7 @@ public class ExpenseRepositoryStub implements ExpenseRepository {
         return 0;
     }
 
-    @Override
-    public void deleteById(Long aLong) {
 
-    }
 
     @Override
     public void delete(Expense entity) {
@@ -123,18 +142,6 @@ public class ExpenseRepositoryStub implements ExpenseRepository {
     public void deleteAll() {
 
     }
-
-    @Override
-    public boolean existsById(@NonNull Long id) {
-        return false;
-    }
-
-    @Override
-    public void deleteExpenseById(@NonNull Long id) {
-
-    }
-
-
 
     @Override
     public void flush() {

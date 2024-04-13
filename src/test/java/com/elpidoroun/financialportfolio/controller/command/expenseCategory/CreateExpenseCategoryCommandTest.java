@@ -10,8 +10,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateExpenseCategoryCommandTest extends MainTestConfig {
 
-    private CreateExpenseCategoryCommand command = getExpenseCategoryTestConfig().getCreateExpenseCategoryCommand();
-    private ExpenseCategoryRepository repository = getExpenseCategoryTestConfig().getExpenseCategoryRepository();
+    private final CreateExpenseCategoryCommand command = getExpenseCategoryTestConfig().getCreateExpenseCategoryCommand();
+    private final ExpenseCategoryRepository repository = getExpenseCategoryTestConfig().getExpenseCategoryRepository();
     @Test
     public void success_create_expenseCategory(){
         var expenseCategoryDto = command.execute(

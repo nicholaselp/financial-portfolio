@@ -1,8 +1,8 @@
-package com.elpidoroun.financialportfolio.validation.expense;
+package com.elpidoroun.financialportfolio.service.validation.expense;
+
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
-import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseUniquenessValidator;
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ public class ExpenseUniquenessValidatorTest {
     @Test
     public void priority_and_method_name(){
         assertThat(expenseUniquenessValidator.priority()).isEqualTo(0);
-        assertThat(expenseUniquenessValidator.name()).isEqualTo("UniquenessValidator");
+        assertThat(expenseUniquenessValidator.name()).isEqualTo("ExpenseUniquenessValidator");
 
     }
 }

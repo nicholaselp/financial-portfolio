@@ -1,19 +1,18 @@
-package com.elpidoroun.financialportfolio.validation.expenseCategory;
+package com.elpidoroun.financialportfolio.service.validation.expenseCategory;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
-import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryUniquenessValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExpenseCategoryUniquenessValidatorTest extends MainTestConfig {
 
-    private ExpenseCategoryRepositoryOperations operations = getExpenseCategoryTestConfig().getExpenseCategoryRepositoryOperations();
-    private ExpenseCategoryRepository repo = getExpenseCategoryTestConfig().getExpenseCategoryRepository();
-    private ExpenseCategoryUniquenessValidator validator = new ExpenseCategoryUniquenessValidator(operations);
+    private final ExpenseCategoryRepositoryOperations operations = getExpenseCategoryTestConfig().getExpenseCategoryRepositoryOperations();
+    private final ExpenseCategoryRepository repo = getExpenseCategoryTestConfig().getExpenseCategoryRepository();
+    private final ExpenseCategoryUniquenessValidator validator = new ExpenseCategoryUniquenessValidator(operations);
 
     @Test
     public void success(){

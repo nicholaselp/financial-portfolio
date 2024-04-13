@@ -76,9 +76,9 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
 
     @Test
     public void success_update(){
-        var expense = repository.save(ExpenseCategoryTestFactory.createExpenseCategory());
+        var expenseCategoryStored = repository.save(ExpenseCategoryTestFactory.createExpenseCategory());
 
-        var updated = expense.clone().withExpenseType(ExpenseType.FIXED).build();
+        var updated = expenseCategoryStored.clone().withExpenseType(ExpenseType.FIXED).build();
 
         operations.update(updated);
 
@@ -101,7 +101,7 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
     }
 
     @Test
-    public void fail_to_update_expense_to_update_not_found(){
+    public void fail_to_update_expense_not_found(){
         assertThatThrownBy(() -> operations.update(ExpenseCategoryTestFactory.createExpenseCategoryWithId()))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Expense Category with ID: 1 not found");

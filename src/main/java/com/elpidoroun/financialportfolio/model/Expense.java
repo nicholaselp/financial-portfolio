@@ -1,9 +1,11 @@
 package com.elpidoroun.financialportfolio.model;
 
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
+import com.elpidoroun.financialportfolio.repository.converters.StatusConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -55,6 +57,7 @@ public class Expense {
     @JoinColumn(name = "expense_category_id")
     private ExpenseCategory expenseCategory;
 
+    @Convert(converter = StatusConverter.class)
     @Column(name = "status")
     private Status status;
 

@@ -44,7 +44,11 @@ public class ExpenseRepositoryOperations {
 
     public Expense update(Expense expense){
         if(expenseRepository.existsById(expense.getId())){
-            return expenseRepository.save(expense);
+            try {
+                return expenseRepository.save(expense);
+            } catch (Exception e){
+                throw new DatabaseOperationException("Exception occurred while updating expense");
+            }
         } else {
             throw new EntityNotFoundException("Expense with ID: " + expense.getId() + " not found");
         }
@@ -56,7 +60,7 @@ public class ExpenseRepositoryOperations {
         }
 
         try {
-            expenseRepository.deleteExpenseById(Long.valueOf(id));
+            expenseRepository.deleteById(Long.valueOf(id));
             return Result.success();
         } catch (Exception exception){
             logger.error(exception.getMessage());

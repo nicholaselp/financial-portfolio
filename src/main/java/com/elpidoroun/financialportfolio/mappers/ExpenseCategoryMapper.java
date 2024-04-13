@@ -22,7 +22,9 @@ public class ExpenseCategoryMapper {
     }
 
     public ExpenseCategory convertToDomain(ExpenseCategoryDto expenseCategoryDto){
-        return ExpenseCategory.builder()
+        var builder = isNull(expenseCategoryDto.getId()) ? ExpenseCategory.builder() : ExpenseCategory.builder(expenseCategoryDto.getId());
+
+        return builder
                 .withCategoryName(expenseCategoryDto.getCategoryName())
                 .withExpenseType(ExpenseTypeMapper.toDomain(expenseCategoryDto.getExpenseType()))
                 .withBillingInterval(BillingIntervalMapper.toDomain(expenseCategoryDto.getBillingInterval()))

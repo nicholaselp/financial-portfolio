@@ -1,47 +1,25 @@
 package com.elpidoroun.financialportfolio.controller.command.expense;
 
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
-import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
+import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
-import com.elpidoroun.financialportfolio.service.expense.GetExpenseService;
-import org.junit.jupiter.api.BeforeEach;
+import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-public class GetExpenseByIdCommandTest {
-    @Mock
-    private GetExpenseService getExpenseService;
-    @Mock
-    private ExpenseMapper expenseMapper;
-    @InjectMocks
-    private GetExpenseByIdCommand getExpenseByIdCommand;
+public class GetExpenseByIdCommandTest extends MainTestConfig {
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private final GetExpenseByIdCommand getExpenseByIdCommand = getExpenseTestConfig().getGetExpenseByIdCommand();
+    private final ExpenseRepository repo = getExpenseTestConfig().getExpenseRepository();
 
     @Test
     public void success_get_expense_by_id() {
-        String expenseId = "expense-123";
-        var expense = ExpenseTestFactory.createExpense("rent");
-        var expenseResponseDto = ExpenseTestFactory.createExpenseResponseDto();
+        var expense = repo.save(ExpenseTestFactory.createExpense());
 
-        when(getExpenseService.execute(expenseId)).thenReturn(expense);
-        when(expenseMapper.convertToResponseDto(expense)).thenReturn(ExpenseTestFactory.createExpenseResponseDto());
+        var dto = getExpenseByIdCommand.execute(new GetExpenseByIdCommand.GetExpenseByIdRequest(expense.getId().toString()));
 
-        ExpenseResponseDto result = getExpenseByIdCommand.execute(new GetExpenseByIdCommand.GetExpenseByIdRequest(expenseId));
-
-        assertThat(result.getExpense()).isNotNull().isEqualTo(expenseResponseDto.getExpense());
-
-        verify(getExpenseService).execute(expenseId);
-        verify(expenseMapper).convertToResponseDto(expense);
+        assertThat(dto).isNotNull();
+        assertThat(dto.getExpense().getExpenseName()).isEqualTo(expense.getExpenseName());
     }
 
     @Test

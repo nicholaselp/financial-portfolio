@@ -31,7 +31,7 @@ public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
     @Test
     public void failed_to_delete_active_expenses_using_category(){
         var expenseCategory = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
-        expenseRepository.save(ExpenseTestFactory.createExpenseWithCategory(expenseCategory));
+        expenseRepository.save(ExpenseTestFactory.createExpense(expenseCategory));
 
         assertThatThrownBy(() -> command.execute(
                             new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(

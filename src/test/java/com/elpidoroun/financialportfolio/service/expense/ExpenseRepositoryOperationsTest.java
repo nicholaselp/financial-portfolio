@@ -1,127 +1,153 @@
 package com.elpidoroun.financialportfolio.service.expense;
 
-import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
-import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
-import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.config.MainTestConfig;
+import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Optional;
 
 import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ExpenseRepositoryOperationsTest {
+public class ExpenseRepositoryOperationsTest extends MainTestConfig {
 
-    @Mock
-    private ExpenseRepository expenseRepository;
+    private final ExpenseRepository repo = getExpenseTestConfig().getExpenseRepository();
+    private final ExpenseRepositoryOperations operations = getExpenseTestConfig().getExpenseRepositoryOperations();
+    
+    @Test
+    public void create_save() {
+        var expense = operations.save(createExpense());
 
-    @InjectMocks
-    private ExpenseRepositoryOperations expenseRepositoryOperations;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
+        assertThat(repo.findAll()).hasSize(1)
+                .containsExactlyInAnyOrder(expense);
     }
 
     @Test
-    public void create_new_expense() {
-        Expense expense = createExpense("rent");
-        when(expenseRepository.save(any())).thenReturn(Expense.builder(1L).build());
+    public void failed_save_exception_thrown(){
+        ExpenseRepository repo = mock(ExpenseRepository.class);
+        ExpenseRepositoryOperations operations = new ExpenseRepositoryOperations(repo);
 
-        Expense savedExpense = expenseRepositoryOperations.save(expense);
+        when(repo.save(any())).thenThrow(new RuntimeException("Forced Exception.."));
 
-        assertThat(savedExpense).isNotNull();
-        assertThat(savedExpense.getId()).isNotNull();
-        verify(expenseRepository, times(1)).save(any());
+        assertThatThrownBy(() -> operations.save(ExpenseTestFactory.createExpense()))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Exception occurred while saving expense");
     }
 
     @Test
-    public void fail_create_new_expense() {
-        Expense expense = createExpense("rent");
-        when(expenseRepository.save(any())).thenReturn(Expense.builder(1L));
-
-        assertThatThrownBy(() -> expenseRepositoryOperations.save(expense))
-                .isInstanceOf(DatabaseOperationException.class)
-                        .hasMessage("Exception occurred while saving expense");
-        verify(expenseRepository, times(1)).save(any());
-    }
-
-    @Test
-    public void get_expense_by_id_found() {
-        Expense expense = createExpense("rent");
-        when(expenseRepository.findById(any())).thenReturn(Optional.of(expense));
-
-        var result = expenseRepositoryOperations.getById("1");
+    public void success_getById(){
+        var expense = repo.save(ExpenseTestFactory.createExpense());
+        var result = operations.getById(expense.getId().toString());
 
         assertThat(result.isSuccess()).isTrue();
-        assertThat(result.getSuccessValue().getId()).isEqualTo(expense.getId());
-        verify(expenseRepository, times(1)).findById(any());
+        assertThat(result.getSuccessValue()).isEqualTo(expense);
     }
 
     @Test
-    public void get_expense_by_id_not_found() {
-        when(expenseRepository.findById(any())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> expenseRepositoryOperations.getById("1"))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Expense with ID: 1 not found");
-        verify(expenseRepository, times(1)).findById(any());
+    public void fail_getById_not_found(){
+        var result = operations.getById("1");
+        assertThat(result.isFail()).isTrue();
+        assertThat(result.getError()).isPresent().hasValue("Expense with ID: 1 not found");
     }
 
     @Test
-    public void delete_expense_by_id_found() {
-        when(expenseRepository.existsById(any())).thenReturn(true);
+    public void success_findAll(){
+        repo.save(ExpenseTestFactory.createExpense());
+        repo.save(ExpenseTestFactory.createExpense());
 
-        expenseRepositoryOperations.deleteById("1");
-
-        verify(expenseRepository, times(1)).existsById(any());
-        verify(expenseRepository, times(1)).deleteById(any());
+        assertThat(operations.findAll()).isNotEmpty().hasSize(2);
     }
 
     @Test
-    public void delete_expense_by_id_not_found() {
-        when(expenseRepository.existsById(any())).thenReturn(false);
-
-        assertThatThrownBy(() -> expenseRepositoryOperations.deleteById("1"))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Expense with ID: 1 not found. Nothing will be deleted");
-        verify(expenseRepository, times(1)).existsById(any());
-        verify(expenseRepository, never()).deleteById(any());
+    public void success_findAll_none(){
+        assertThat(operations.findAll()).isEmpty();
     }
 
     @Test
-    public void update_expense_found() {
-        Expense expense = createExpense("rent");
-        when(expenseRepository.existsById(any())).thenReturn(true);
-        when(expenseRepository.save(any())).thenReturn(expense);
+    public void success_update(){
+        var storedExpense = repo.save(ExpenseTestFactory.createExpense());
+        var updated = storedExpense.clone().withNote("Adding a note to updated Expense").build();
 
-        Expense updatedExpense = expenseRepositoryOperations.update(expense);
+        operations.update(updated);
 
-        assertThat(updatedExpense).isNotNull();
-        verify(expenseRepository, times(1)).existsById(any());
-        verify(expenseRepository, times(1)).save(any());
+        assertThat(repo.findByExpenseName(updated.getExpenseName())).isNotEmpty().hasSize(1)
+                .containsExactlyInAnyOrder(updated);
     }
 
     @Test
-    public void update_expense_not_found() {
-        Expense expense = createExpense("rent");
-        when(expenseRepository.existsById(any())).thenReturn(false);
+    public void fail_to_update_db_error(){
+        ExpenseRepository repo = mock(ExpenseRepository.class);
+        ExpenseRepositoryOperations operations = new ExpenseRepositoryOperations(repo);
 
-        assertThatThrownBy(() -> expenseRepositoryOperations.update(expense))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Expense with ID: null not found");
-        verify(expenseRepository, times(1)).existsById(any());
-        verify(expenseRepository, never()).save(any());
+        when(repo.save(any())).thenThrow(new RuntimeException("Forced Exception.."));
+        when(repo.existsById(any())).thenReturn(true);
+
+        assertThatThrownBy(() -> operations.update(ExpenseTestFactory.createExpense()))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Exception occurred while updating expense");
+    }
+
+    @Test
+    public void fail_to_update_expense_not_found(){
+        assertThatThrownBy(() -> operations.update(ExpenseTestFactory.createExpenseWithId()))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Expense with ID: 1 not found");
+    }
+
+    @Test
+    public void success_deleteById(){
+        var expense = repo.save(ExpenseTestFactory.createExpenseWithId());
+
+        operations.deleteById(expense.getId().toString());
+        assertThat(repo.findAll()).isEmpty();
+    }
+
+    @Test
+    public void failed_deleteById_db_error(){
+        ExpenseRepository repo = mock(ExpenseRepository.class);
+        ExpenseRepositoryOperations operations = new ExpenseRepositoryOperations(repo);
+
+        doThrow(new RuntimeException("Forced Exception")).when(repo).deleteById(any());
+        when(repo.existsById(any())).thenReturn(true);
+
+        assertThatThrownBy(() -> operations.deleteById("1"))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Exception occurred while deleting an Expense");
+    }
+
+    @Test
+    public void failed_deleteById_not_found(){
+        var result = operations.deleteById("1");
+
+        assertThat(result.isFail()).isTrue();
+        assertThat(result.getError()).isPresent().hasValue("Expense with ID: 1 not found. Nothing will be deleted");
+
+    }
+
+    @Test
+    public void success_find_by_name(){
+        var expense = ExpenseTestFactory.createExpense();
+        repo.save(expense);
+
+        assertThat(operations.findByName(expense.getExpenseName()))
+                .isPresent()
+                .hasValueSatisfying(foundExpense -> assertThat(foundExpense.getExpenseName()).isEqualTo(expense.getExpenseName()));
+    }
+
+    @Test
+    public void findByName_return_empty(){ assertThat(operations.findByName("random")).isEmpty(); }
+
+    @Test
+    public void true_expense_exists_with_expenseCategoryId(){
+        var expense = ExpenseTestFactory.createExpense();
+
+        repo.save(expense);
+
+        assertThat(operations.expenseExistWithCategoryId(expense.getExpenseCategory().getId().toString()))
+                .isTrue();
     }
 }

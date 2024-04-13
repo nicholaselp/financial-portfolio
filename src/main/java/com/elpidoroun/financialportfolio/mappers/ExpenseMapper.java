@@ -29,7 +29,7 @@ public class ExpenseMapper {
         return expenseResponseDto;
     }
 
-    private ExpenseDto convertToDto(Expense expense){
+    public ExpenseDto convertToDto(Expense expense){
         ExpenseDto expenseDto = new ExpenseDto();
         expenseDto.setExpenseName(expense.getExpenseName());
         expenseDto.setMonthlyAllocatedAmount(expense.getMonthlyAllocatedAmount());

@@ -24,18 +24,18 @@ import java.util.List;
 
 @Getter
 public class ExpenseCategoryTestConfig {
-    private ExpenseCategoryRepository expenseCategoryRepository = new ExpenseCategoryRepositoryStub();
-    private ExpenseRepository expenseRepository = new ExpenseRepositoryStub();
-    private ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
-    private ExpenseRepositoryOperations expenseRepositoryOperations;
-    private CreateExpenseCategoryService createExpenseCategoryService;
-    private UpdateExpenseCategoryService updateExpenseCategoryService;
-    private GetExpenseCategoryService getExpenseCategoryService;
-    private CreateExpenseCategoryCommand createExpenseCategoryCommand;
-    private UpdateExpenseCategoryCommand updateExpenseCategoryCommand;
-    private GetAllExpenseCategoriesCommand getAllExpenseCategoriesCommand;
-    private GetExpenseCategoryByIdCommand getExpenseCategoryByIdCommand;
-    private DeleteExpenseCategoryCommand deleteExpenseCategoryCommand;
+    private final ExpenseCategoryRepository expenseCategoryRepository = new ExpenseCategoryRepositoryStub();
+    private final ExpenseRepository expenseRepository = new ExpenseRepositoryStub();
+    private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
+    private final ExpenseRepositoryOperations expenseRepositoryOperations;
+    private final CreateExpenseCategoryService createExpenseCategoryService;
+    private final UpdateExpenseCategoryService updateExpenseCategoryService;
+    private final GetExpenseCategoryService getExpenseCategoryService;
+    private final CreateExpenseCategoryCommand createExpenseCategoryCommand;
+    private final UpdateExpenseCategoryCommand updateExpenseCategoryCommand;
+    private final GetAllExpenseCategoriesCommand getAllExpenseCategoriesCommand;
+    private final GetExpenseCategoryByIdCommand getExpenseCategoryByIdCommand;
+    private final DeleteExpenseCategoryCommand deleteExpenseCategoryCommand;
 
     protected ExpenseCategoryTestConfig(){
         expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(expenseCategoryRepository);

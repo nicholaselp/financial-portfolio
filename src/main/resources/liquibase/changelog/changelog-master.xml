@@ -68,8 +68,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addUniqueConstraint constraintName="unique_category_name" tableName="expense_category"
-                             columnNames="category_name, status"/>
         <addForeignKeyConstraint baseTableName="payments" baseColumnNames="expense_id"
                                  constraintName="fk_payments_expense_id"
                                  referencedTableName="expenses" referencedColumnNames="id"
@@ -78,6 +76,10 @@
                                  constraintName="fk_expenses_expense_category_id"
                                  referencedTableName="expense_category" referencedColumnNames="id"
                                  onDelete="CASCADE" onUpdate="CASCADE"/>
+        <addUniqueConstraint constraintName="unique_expense_category_name" tableName="expense_category"
+                             columnNames="category_name, status"/>
+        <addUniqueConstraint constraintName="unique_expense_name" tableName="expenses"
+                             columnNames="expense_name, status"/>
     </changeSet>
     <changeSet id="2" author="nicholaselp">
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Loan', 'monthly', 'fixed', 'active');</sql>

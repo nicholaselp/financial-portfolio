@@ -40,10 +40,10 @@ public class ExpenseCategoryRepositoryTest {
 
     @Test
     public void success_same_name_but_first_is_deleted(){
-        var deletedExpense = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createDeletedExpenseCategory("expenseName"));
-        var activeExpense = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory("expenseName"));
+        var deletedExpense = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createDeletedExpenseCategory("expenseCategory"));
+        var activeExpense = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory("expenseCategory"));
 
-        assertThat(expenseCategoryRepository.findByCategoryName("expenseName"))
+        assertThat(expenseCategoryRepository.findByCategoryName("expenseCategory"))
                 .isPresent().hasValueSatisfying(expenseCategory -> {
                     assertThat(expenseCategory.getId()).isEqualTo(activeExpense.getId());
                     assertThat(expenseCategory.getId()).isNotEqualTo(deletedExpense.getId());

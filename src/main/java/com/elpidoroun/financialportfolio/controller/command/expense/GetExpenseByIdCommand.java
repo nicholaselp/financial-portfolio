@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.GET_EXPENSE_BY_ID;
-import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
 
 @AllArgsConstructor
@@ -52,7 +51,7 @@ public class GetExpenseByIdCommand implements Command<GetExpenseByIdCommand.GetE
     protected static class GetExpenseByIdRequest extends AbstractRequest {
         private final String expenseId;
         protected GetExpenseByIdRequest(String expenseId){
-            this.expenseId = requireNonBlank(expenseId, "expenseId is missing");
+            this.expenseId = expenseId;
         }
 
         public String getExpenseId(){ return expenseId; }

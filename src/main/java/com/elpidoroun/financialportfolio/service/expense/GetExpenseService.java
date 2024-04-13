@@ -1,5 +1,6 @@
 package com.elpidoroun.financialportfolio.service.expense;
 
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.model.Expense;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -17,7 +18,7 @@ public class GetExpenseService {
         var result = expenseRepositoryOperations.getById(id);
 
         if(result.isFail()){
-            throw new IllegalArgumentException(result.getError().orElse("Error while Updating Expense"));
+            throw new EntityNotFoundException(result.getError().orElse("Error while Updating Expense"));
         }
 
         return result.getSuccessValue();
