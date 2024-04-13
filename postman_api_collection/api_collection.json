@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"expenseName\": \"expenshjgfesd100a\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 6,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
+							"raw": "{\r\n  \"expenseName\": \"First Expense 3\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 1,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -41,7 +41,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"expenseName\": \"expenssdfsfdfdse100\",\r\n        \"monthlyAllocatedAmount\": 100,\r\n        \"yearlyAllocatedAmount\": 1200,\r\n        \"note\": \"string\",\r\n        \"expenseCategory\": {\r\n            \"id\": 1,\r\n            \"categoryName\": \"Loan\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
+							"raw": "{\r\n        \"expenseName\": \"First Expense 4\",\r\n        \"monthlyAllocatedAmount\": 50.00,\r\n        \"yearlyAllocatedAmount\": 600.00,\r\n        \"note\": \"NEW NOTE\",\r\n        \"expenseCategory\": {\r\n            \"id\": 1,\r\n            \"categoryName\": \"Loan\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -130,14 +130,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoryName\": \"Gas Bill\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"not-fixed\"\r\n}",
+							"raw": "{\r\n  \"categoryName\": \"Gas Billa\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"not-fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/6"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/5"
 					},
 					"response": []
 				},
@@ -150,7 +150,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/6"
 					},
 					"response": []
 				},
