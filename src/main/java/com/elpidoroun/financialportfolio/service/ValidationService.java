@@ -2,7 +2,7 @@ package com.elpidoroun.financialportfolio.service;
 
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
-import com.elpidoroun.financialportfolio.validation.EntityValidator;
+import com.elpidoroun.financialportfolio.service.validation.EntityValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;

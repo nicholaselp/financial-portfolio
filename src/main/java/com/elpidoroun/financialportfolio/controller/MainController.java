@@ -4,7 +4,7 @@ package com.elpidoroun.financialportfolio.controller;
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
 import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
-import com.elpidoroun.financialportfolio.exceptions.ExpenseNotFoundException;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.google.common.collect.ImmutableMap;
@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Objects.requireNonNull;
+import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -31,7 +31,7 @@ public class MainController {
 
     private static final Map<Class<?>, HttpStatus> exceptionStatuses = new ImmutableMap.Builder<Class<?>, HttpStatus>()
             .put(ValidationException.class, BAD_REQUEST)
-            .put(ExpenseNotFoundException.class, CONFLICT)
+            .put(EntityNotFoundException.class, CONFLICT)
             .put(IllegalArgumentException.class, BAD_REQUEST)
             .put(DatabaseOperationException.class, BAD_REQUEST)
             .build();
@@ -78,8 +78,8 @@ public class MainController {
 
     public record ErrorResponse(String message, String errorType) {
             public ErrorResponse(String message, String errorType) {
-                this.message = requireNonNull(message, "Message is missing");
-                this.errorType = requireNonNull(errorType, "ErrorType is missing");
+                this.message = requireNonBlank(message, "Message is missing");
+                this.errorType = requireNonBlank(errorType, "ErrorType is missing");
             }
         }
 }

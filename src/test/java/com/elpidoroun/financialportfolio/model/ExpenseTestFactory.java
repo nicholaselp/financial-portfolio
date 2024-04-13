@@ -1,10 +1,9 @@
 package com.elpidoroun.financialportfolio.model;
 
-import com.elpidoroun.financialportfolio.generated.dto.CurrencyDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
-import com.elpidoroun.financialportfolio.generated.dto.ExpenseEntityDto;
+import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.generated.dto.MetadataDto;
-import com.elpidoroun.financialportfolio.generated.dto.PaymentTypeDto;
+import com.elpidoroun.financialportfolio.generated.dto.StatusDto;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -13,31 +12,88 @@ public class ExpenseTestFactory {
 
     public static Expense createExpense(){
         return Expense.builder()
-                .withExpense("rent")
-                .withPaymentType(PaymentType.MONTHLY)
-                .withCurrency(Currency.EURO)
-                .withYearlyAmount(BigDecimal.valueOf(100L))
+                .withExpenseName("expenseName")
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryWithId())
+                .withYearlyAllocatedAmount(new BigDecimal("120.00"))
+                .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
+                .withStatus(Status.ACTIVE)
+                .build();
+    }
+
+    public static Expense createExpense(String expenseName){
+        return Expense.builder()
+                .withExpenseName(expenseName)
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryWithId())
+                .withYearlyAllocatedAmount(new BigDecimal("120.00"))
+                .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
+                .withStatus(Status.ACTIVE)
+                .build();
+    }
+
+    public static Expense createExpenseWithId(){
+        return Expense.builder(1L)
+                .withExpenseName("expenseName")
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryWithId())
+                .withYearlyAllocatedAmount(new BigDecimal("120.00"))
+                .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
+                .withStatus(Status.ACTIVE)
+                .build();
+    }
+
+    public static Expense createDeletedExpense(){
+        return Expense.builder()
+                .withExpenseName("expenseName")
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory())
+                .withYearlyAllocatedAmount(new BigDecimal("120.00"))
+                .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
+                .withStatus(Status.DELETED)
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryWithId())
+                .build();
+    }
+
+    public static Expense createExpense(ExpenseCategory category){
+        return Expense.builder()
+                .withExpenseName("expenseName")
+                .withExpenseCategory(category)
+                .withYearlyAllocatedAmount(new BigDecimal("120.00"))
+                .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
+                .withStatus(Status.ACTIVE)
                 .build();
     }
 
     public static ExpenseDto createExpenseDto(){
         ExpenseDto expenseDto = new ExpenseDto();
-        expenseDto.setExpense("rent");
-        expenseDto.setCurrency(CurrencyDto.EURO);
-        expenseDto.setPaymentType(PaymentTypeDto.MONTHLY);
+        expenseDto.setExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryDto());
+        expenseDto.setExpenseName("rent");
         expenseDto.setNote("expense note");
-        expenseDto.setMonthlyAmount(BigDecimal.valueOf(100L));
+        expenseDto.setMonthlyAllocatedAmount(new BigDecimal("100.00"));
+        expenseDto.setYearlyAllocatedAmount(new BigDecimal("1200.00"));
+        expenseDto.setStatus(StatusDto.ACTIVE);
         return expenseDto;
     }
 
-    public static ExpenseEntityDto createExpenseEntityDto(){
-        ExpenseEntityDto expenseEntityDto = new ExpenseEntityDto();
+    public static ExpenseDto createExpenseDto(Long expenseCategoryId){
+        ExpenseDto expenseDto = new ExpenseDto();
+        expenseDto.setExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryDto());
+        expenseDto.setExpenseName("rent");
+        expenseDto.setNote("expense note");
+        expenseDto.setMonthlyAllocatedAmount(new BigDecimal("100.00"));
+        expenseDto.setYearlyAllocatedAmount(new BigDecimal("1200.00"));
+        expenseDto.setStatus(StatusDto.ACTIVE);
+        expenseDto.setExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryDtoWithId(expenseCategoryId));
+        return expenseDto;
+    }
+
+
+
+    public static ExpenseResponseDto createExpenseResponseDto(){
+        ExpenseResponseDto expenseResponseDto = new ExpenseResponseDto();
         MetadataDto metadataDto = new MetadataDto();
         metadataDto.setId(1L);
         metadataDto.setCreatedAt(OffsetDateTime.now());
 
-        expenseEntityDto.setMeta(metadataDto);
-        expenseEntityDto.setExpense(createExpenseDto());
-        return expenseEntityDto;
+        expenseResponseDto.setMeta(metadataDto);
+        expenseResponseDto.setExpense(createExpenseDto());
+        return expenseResponseDto;
     }
 }

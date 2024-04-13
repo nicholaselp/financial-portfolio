@@ -5,7 +5,11 @@ info:
   version: 1.0.0
 paths:
   /v1/expenses:
-    $ref: 'financial-portfolio-paths.yaml#/operations/expense-operations'
+    $ref: 'expense-paths.yaml#/operations/expense-operations'
   /v1/expenses/{id}:
-    $ref: 'financial-portfolio-paths.yaml#/operations/expense-operations-by-id'
-  
+    $ref: 'expense-paths.yaml#/operations/expense-operations-by-id'
+
+  /v1/expense-category:
+    $ref: 'expense-category-paths.yaml#/operations/expense-category-operations'
+  /v1/expense-category/{id}:
+    $ref: 'expense-category-paths.yaml#/operations/expense-category-operations-by-id'
