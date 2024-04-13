@@ -4,7 +4,9 @@ import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
+import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +16,13 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
 
     private final UpdateExpenseCommand command = getExpenseTestConfig().getUpdateExpenseCommand();
     private final ExpenseRepository repo = getExpenseTestConfig().getExpenseRepository();
+    private final ExpenseCategoryRepository expenseCategoryRepository = getExpenseTestConfig().getExpenseCategoryRepository();
     private final ExpenseMapper expenseMapper = getExpenseTestConfig().getExpenseMapper();
 
     @Test
     public void success_update_expense() {
-        var originalEntity = repo.save(ExpenseTestFactory.createExpense());
+        var expenseCategory = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
+        var originalEntity = repo.save(ExpenseTestFactory.createExpense(expenseCategory));
         var dtoToUpdate = expenseMapper.convertToDto(originalEntity);
         dtoToUpdate.setNote("new note");
 

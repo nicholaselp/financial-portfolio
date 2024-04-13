@@ -49,6 +49,11 @@ public class ExpenseUniquenessValidatorTest {
     }
 
     @Test
+    public void success_on_update_name_unchanged(){
+
+    }
+
+    @Test
     public void priority_and_method_name(){
         assertThat(expenseUniquenessValidator.priority()).isEqualTo(0);
         assertThat(expenseUniquenessValidator.name()).isEqualTo("ExpenseUniquenessValidator");

@@ -11,6 +11,8 @@ import org.springframework.lang.Nullable;
 
 import javax.validation.ValidationException;
 
+import static java.util.Objects.nonNull;
+
 @AllArgsConstructor
 public class ExpenseUniquenessValidator implements EntityValidator<Expense> {
 
@@ -18,10 +20,13 @@ public class ExpenseUniquenessValidator implements EntityValidator<Expense> {
 
     @Override
     public Result<Nothing, String> validate(@Nullable Expense original, @NonNull Expense entity) throws ValidationException {
-         if(expenseRepositoryOperations.findByName(entity.getExpenseName()).isPresent()){
-             return Result.fail("Expense with name: " + entity.getExpenseName() + " already exists");
-         }
-         return Result.success();
+        var expenseWithSameName = expenseRepositoryOperations.findByName(entity.getExpenseName());
+
+        if (expenseWithSameName.isPresent() && !(nonNull(original) && original.equals(expenseWithSameName.get()))) {
+            return Result.fail("Expense with name: " + entity.getExpenseName() + " already exists");
+        }
+
+        return Result.success();
     }
 
     @Override

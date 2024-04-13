@@ -47,7 +47,7 @@ public class ExpenseTestConfig {
         var validations = new ValidationService<>(List.of(new ExpenseUniquenessValidator(expenseRepositoryOperations)));
         var normalizer = new ExpenseCategoryNormalizer(expenseCategoryRepositoryOperations);
         createExpenseService = new CreateExpenseService(expenseRepositoryOperations, validations, normalizer);
-        updateExpenseService = new UpdateExpenseService(expenseRepositoryOperations);
+        updateExpenseService = new UpdateExpenseService(expenseRepositoryOperations, validations, normalizer);
         getExpenseService = new GetExpenseService(expenseRepositoryOperations);
         expenseCategoryMapper = new ExpenseCategoryMapper();
         expenseMapper = new ExpenseMapper(expenseCategoryMapper);
