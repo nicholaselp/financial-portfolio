@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"expenseName\": \"First Expense 3\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 1,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
+							"raw": "{\r\n  \"expenseName\": \"First Expense 4\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 1,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -41,14 +41,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"expenseName\": \"First Expense 4\",\r\n        \"monthlyAllocatedAmount\": 50.00,\r\n        \"yearlyAllocatedAmount\": 600.00,\r\n        \"note\": \"NEW NOTE\",\r\n        \"expenseCategory\": {\r\n            \"id\": 1,\r\n            \"categoryName\": \"Loan\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
+							"raw": "{\r\n        \"expenseName\": \"First Expense\",\r\n        \"monthlyAllocatedAmount\": 50.00,\r\n        \"yearlyAllocatedAmount\": 600.00,\r\n        \"note\": \"new note\",\r\n        \"expenseCategory\": {\r\n            \"id\": 11,\r\n            \"categoryName\": \"Gas Bill\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"not-fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/3"
+						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
 					},
 					"response": []
 				},
@@ -61,7 +61,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/16"
+						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
 					},
 					"response": []
 				},
@@ -87,7 +87,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/3"
+						"url": "http://localhost:8080/financial-portfolio/v1/expenses/2"
 					},
 					"response": []
 				}
@@ -150,7 +150,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/6"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
 					},
 					"response": []
 				},
