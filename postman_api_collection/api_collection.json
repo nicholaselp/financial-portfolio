@@ -108,7 +108,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoryName\": \"Gas Billaaasdasda\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
+							"raw": "{\r\n  \"categoryName\": \"Gas Bill\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -130,14 +130,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoryName\": \"aaasdfggdfsss\",\r\n  \"billingInterval\": \"yearly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
+							"raw": "{\r\n  \"categoryName\": \"Gas Bill\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"not-fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/7"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/6"
 					},
 					"response": []
 				},
@@ -150,7 +150,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/111"
+						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
 					},
 					"response": []
 				},
