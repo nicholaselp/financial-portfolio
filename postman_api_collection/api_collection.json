@@ -41,7 +41,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"expenseName\": \"First Expense 4\",\r\n        \"monthlyAllocatedAmount\": 50.00,\r\n        \"yearlyAllocatedAmount\": 600.00,\r\n        \"note\": \"new note\",\r\n        \"expenseCategory\": {\r\n            \"id\": 1,\r\n            \"categoryName\": \"Gas Bill\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"not-fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
+							"raw": "{\r\n        \"expenseName\": \"First Expense 4\",\r\n        \"monthlyAllocatedAmount\": 50.00,\r\n        \"yearlyAllocatedAmount\": 600.00,\r\n        \"note\": \"new notea\",\r\n        \"expenseCategory\": {\r\n            \"id\": 1,\r\n            \"categoryName\": \"Gas Bill\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"not-fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
