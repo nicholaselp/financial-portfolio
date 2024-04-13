@@ -9,6 +9,6 @@ public class CurrencyTest {
 
     @Test
     public void get_value_test(){
-        assertThat(EURO.getValue()).isEqualTo("euro");
+        assertThat(EURO.getValue()).isEqualTo("EUR");
     }
 }

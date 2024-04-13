@@ -5,108 +5,81 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static com.elpidoroun.financialportfolio.model.Currency.EURO;
-import static com.elpidoroun.financialportfolio.model.Currency.USD;
-import static com.elpidoroun.financialportfolio.model.PaymentType.MONTHLY;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class ExpenseTest {
     @Test
     public void expense_creation() {
-        var expense = Expense.builder()
-                .withExpense("Groceries")
-                .withPaymentType(MONTHLY)
-                .withCurrency(USD)
-                .withMonthlyAmount(BigDecimal.valueOf(200))
-                .build();
+        var expense = ExpenseTestFactory.createExpense("Groceries");
 
-        assertThat(expense.getExpense()).isEqualTo("Groceries");
-        assertThat(expense.getpaymentType()).isEqualTo(MONTHLY);
-        assertThat(expense.getCurrency()).isEqualTo(USD);
-        assertThat(expense.getYearlyAmount()).isEmpty();
-        assertThat(expense.getMonthlyAmount()).isPresent().hasValue(BigDecimal.valueOf(200));
+        assertThat(expense.getExpenseName()).isEqualTo("Groceries");
+        assertThat(expense.getYearlyAllocatedAmount()).isEqualTo(new BigDecimal("120.00"));
+        assertThat(expense.getMonthlyAllocatedAmount()).isEqualTo(new BigDecimal("10.00"));
         assertThat(expense.getNote()).isEmpty();
         assertThat(expense.getCreatedAt()).isNotNull();
     }
 
     @Test
     public void expense_creation_with_id() {
-        var sampleExpense = Expense.builder()
-                .withExpense("Groceries")
-                .withPaymentType(MONTHLY)
-                .withCurrency(USD)
-                .withMonthlyAmount(BigDecimal.valueOf(200))
-                .build();
-
-        var expense = Expense.createExpenseWithId(1L, sampleExpense)
-                .withExpense("Groceries")
-                .withPaymentType(MONTHLY)
-                .withCurrency(USD)
-                .withMonthlyAmount(BigDecimal.valueOf(200))
+        var expense = Expense.builder(1L)
+                .withExpenseName("Groceries")
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory("expenseCategory"))
+                .withYearlyAllocatedAmount(new BigDecimal("120.00"))
+                .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
+                .withStatus(Status.ACTIVE)
                 .build();
 
         assertThat(expense.getId()).isEqualTo(1L);
-        assertThat(expense.getExpense()).isEqualTo("Groceries");
-        assertThat(expense.getpaymentType()).isEqualTo(MONTHLY);
-        assertThat(expense.getCurrency()).isEqualTo(USD);
-        assertThat(expense.getYearlyAmount()).isEmpty();
-        assertThat(expense.getMonthlyAmount()).isPresent().hasValue(BigDecimal.valueOf(200));
+        assertThat(expense.getExpenseName()).isEqualTo("Groceries");
+        assertThat(expense.getYearlyAllocatedAmount()).isNotNull().isEqualTo(new BigDecimal("120.00"));
+        assertThat(expense.getMonthlyAllocatedAmount()).isNotNull().isEqualTo(new BigDecimal("10.00"));
         assertThat(expense.getNote()).isEmpty();
         assertThat(expense.getCreatedAt()).isNotNull();
     }
 
     @Test
-    public void create_expense_with_yearly_amount() {
-        Expense expenseWithYearlyAmount = Expense.builder()
-                .withExpense("Rent")
-                .withPaymentType(MONTHLY)
-                .withCurrency(EURO)
-                .withYearlyAmount(BigDecimal.valueOf(12000))
-                .build();
-
-        assertThat(expenseWithYearlyAmount.getYearlyAmount()).isPresent().hasValue(BigDecimal.valueOf(12000));
-        assertThat(expenseWithYearlyAmount.getMonthlyAmount()).isEmpty();
-    }
-
-    @Test
-    public void expense_creation_with_null_amounts() {
-        assertThatThrownBy(() -> Expense.builder()
-                .withExpense("Phone Bill")
-                .withPaymentType(MONTHLY)
-                .withCurrency(USD)
+    public void expense_creation_monthly_and_yearly_are_missing(){
+        assertThatThrownBy(() -> Expense.builder(1L)
+                .withExpenseName("Groceries")
+                .withStatus(Status.ACTIVE)
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory("expenseCategory"))
                 .build())
                 .isInstanceOf(ValidationException.class)
-                .hasMessage("Monthly and yearly amount are null");
+                .hasMessage("Monthly and yearly amount are empty");
     }
 
     @Test
-    public void expense_hash_code_and_equals() {
-        Expense expense = Expense.builder()
-                .withExpense("Groceries")
-                .withPaymentType(MONTHLY)
-                .withCurrency(USD)
-                .withMonthlyAmount(BigDecimal.valueOf(200))
-                .build();
-
-        Expense sameExpense = Expense.builder()
-                .withExpense("Groceries")
-                .withPaymentType(MONTHLY)
-                .withCurrency(USD)
-                .withMonthlyAmount(BigDecimal.valueOf(200))
-                .build();
-
-        assertThat(sameExpense).isEqualTo(expense);
-        assertThat(expense.hashCode()).isEqualTo(sameExpense.hashCode());
-
-        Expense differentExpense = Expense.builder()
-                .withExpense("Utilities")
-                .withPaymentType(MONTHLY)
-                .withCurrency(EURO)
-                .withMonthlyAmount(BigDecimal.valueOf(100))
-                .build();
-
-        assertThat(expense).isNotEqualTo(differentExpense);
-
+    public void expense_creation_monthly_and_yearly_are_incorrect(){
+        assertThatThrownBy(() -> Expense.builder(1L)
+                .withExpenseName("Groceries")
+                .withStatus(Status.ACTIVE)
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory("expenseCategory"))
+                .withYearlyAllocatedAmount(new BigDecimal("100"))
+                .withMonthlyAllocatedAmount(new BigDecimal("2000"))
+                .build())
+                .isInstanceOf(ValidationException.class)
+                .hasMessage("Amounts provided are not correct. Monthly amount is: 2000 and yearly is: 100");
     }
+
+    @Test
+    public void clone_method_test(){
+        var expense = ExpenseTestFactory.createExpense("expense");
+        var expense2 = expense.clone().build();
+        assertThat(expense).isEqualTo(expense2);
+    }
+
+    @Test
+    public void test_equals_and_hashCode(){
+        var expense = ExpenseTestFactory.createExpense("expense");
+        var expense2 = ExpenseTestFactory.createExpense("expense");
+        var expense3 = ExpenseTestFactory.createExpense("expense2");
+
+        assertThat(expense).isEqualTo(expense2);
+        assertThat(expense.hashCode()).isEqualTo(expense2.hashCode());
+
+        assertThat(expense3).isNotEqualTo(expense2);
+        assertThat(expense3.hashCode()).isNotEqualTo(expense2.hashCode());
+    }
+
 }

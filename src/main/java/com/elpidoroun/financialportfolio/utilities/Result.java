@@ -54,7 +54,7 @@ public class Result<ResultT, ErrorT> {
 
     /** Executes some action on an error if there is one. Returns itself. This method is supposed
      *  to be used in result handling pipeline. Example, result.ifSuccess(...).ifError(...) **/
-    public void isError(BiConsumer<ErrorT, ResultT> errorFlow){
+    public void ifError(BiConsumer<ErrorT, ResultT> errorFlow){
         if(!success){
             errorFlow.accept(error, value);
         }
