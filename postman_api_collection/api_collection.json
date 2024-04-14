@@ -196,17 +196,20 @@
 			"name": "auth",
 			"item": [
 				{
-					"name": "Authenticate",
+					"name": "Authenticate Admin",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"id": "5ee414a1-c3f4-4a60-87ee-c7ad1e438209",
 								"exec": [
+									"tests[\"response code is 200\"] = responseCode.code === 200;\r",
+									"tests[\"Body contains token\"] = responseBody.has(\"token\");\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
 									"const jwt = responseJson.token\r",
 									"\r",
-									"pm.globals.set('jwt_token', 'BEARER' + jwt);"
+									"pm.globals.set('jwt_token', 'Bearer ' + jwt);"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -223,6 +226,47 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"email\": \"nicholaselpdev@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/financial-portfolio/v1/auth/authenticate"
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5ee414a1-c3f4-4a60-87ee-c7ad1e438209",
+								"exec": [
+									"tests[\"response code is 200\"] = responseCode.code === 200;\r",
+									"tests[\"Body contains token\"] = responseBody.has(\"token\");\r",
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"const jwt = responseJson.token\r",
+									"\r",
+									"pm.globals.set('jwt_token', 'Bearer ' + jwt);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "e8f997d1-2837-4ab0-8bee-dbb74263b5e9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"nikolas.elpidorou@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
