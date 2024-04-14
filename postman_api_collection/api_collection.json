@@ -117,7 +117,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoryName\": \"Gas Bill\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
+							"raw": "{\r\n  \"categoryName\": \"Gas Billa\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -158,8 +158,14 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expense-category/1"
 					},
 					"response": []
 				},
@@ -171,8 +177,14 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expense-category"
 					},
 					"response": []
 				},
@@ -191,7 +203,7 @@
 								"type": "text"
 							}
 						],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
+						"url": "{{url}}/v1/expense-category/7"
 					},
 					"response": []
 				}
