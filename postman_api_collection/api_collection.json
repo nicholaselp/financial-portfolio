@@ -104,11 +104,14 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{jwt_token}}",
 								"type": "text"
 							}
 						],
@@ -200,10 +203,13 @@
 							"script": {
 								"id": "5ee414a1-c3f4-4a60-87ee-c7ad1e438209",
 								"exec": [
+									"tests[\"response code is 200\"] = responseCode.code === 200;\r",
+									"tests[\"Body contains token\"] = responseBody.has(\"token\");\r",
+									"\r",
 									"var jsonData = pm.response.json();\r",
 									"var token = jsonData.token;\r",
 									"\r",
-									"pm.globals.set(\"token\", token);"
+									"pm.globals.set(\"jwt_token\", token);"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -241,7 +247,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Nicholas Elpidorou\",\r\n    \"email\": \"nicholaselpdev@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"raw": "{\r\n    \"fullName\": \"Nicholas Elpidorou\",\r\n    \"email\": \"nicholaselpdev@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"role\": \"ADMIN\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
