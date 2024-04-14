@@ -16,7 +16,13 @@
 					},
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"expenseName\": \"First Expense 4\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 1,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
@@ -26,7 +32,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses"
+						"url": "{{url}}/v1/expenses"
 					},
 					"response": []
 				},
@@ -38,17 +44,23 @@
 					},
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"expenseName\": \"First Expense\",\r\n        \"monthlyAllocatedAmount\": 50.00,\r\n        \"yearlyAllocatedAmount\": 600.00,\r\n        \"note\": \"new note\",\r\n        \"expenseCategory\": {\r\n            \"id\": 11,\r\n            \"categoryName\": \"Gas Bill\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"not-fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
+							"raw": "{\r\n        \"expenseName\": \"First Expense 4\",\r\n        \"monthlyAllocatedAmount\": 50.00,\r\n        \"yearlyAllocatedAmount\": 600.00,\r\n        \"note\": \"new notea\",\r\n        \"expenseCategory\": {\r\n            \"id\": 1,\r\n            \"categoryName\": \"Gas Bill\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"not-fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+						"url": "{{url}}/v1/expenses/2"
 					},
 					"response": []
 				},
@@ -60,8 +72,14 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expenses/1"
 					},
 					"response": []
 				},
@@ -73,8 +91,14 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expenses"
 					},
 					"response": []
 				},
@@ -86,8 +110,14 @@
 					},
 					"request": {
 						"method": "DELETE",
-						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/2"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expenses/1"
 					},
 					"response": []
 				}
@@ -104,18 +134,27 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoryName\": \"Gas Bill\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
+							"raw": "{\r\n  \"categoryName\": \"Gas Billa\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category"
+						"url": "{{url}}/v1/expense-category"
 					},
 					"response": []
 				},
@@ -127,17 +166,23 @@
 					},
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoryName\": \"Gas Billa\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"not-fixed\"\r\n}",
+							"raw": "{\r\n    \"categoryName\": \"Gas Billa\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"not-fixed\",\r\n    \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/5"
+						"url": "{{url}}/v1/expense-category/7"
 					},
 					"response": []
 				},
@@ -149,8 +194,14 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expense-category/1"
 					},
 					"response": []
 				},
@@ -162,8 +213,14 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expense-category"
 					},
 					"response": []
 				},
@@ -175,13 +232,129 @@
 					},
 					"request": {
 						"method": "DELETE",
-						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/1"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expense-category/7"
 					},
 					"response": []
 				}
 			],
 			"id": "08d0615a-aebb-47e0-bd33-b2b794e4f46e"
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Authenticate Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5ee414a1-c3f4-4a60-87ee-c7ad1e438209",
+								"exec": [
+									"tests[\"response code is 200\"] = responseCode.code === 200;\r",
+									"tests[\"Body contains token\"] = responseBody.has(\"token\");\r",
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"const jwt = responseJson.token\r",
+									"\r",
+									"pm.globals.set('jwt_token', 'Bearer ' + jwt);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "2a31fe46-3168-483c-9d7d-ac1664890df9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"nicholaselpdev@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/financial-portfolio/v1/auth/authenticate"
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5ee414a1-c3f4-4a60-87ee-c7ad1e438209",
+								"exec": [
+									"tests[\"response code is 200\"] = responseCode.code === 200;\r",
+									"tests[\"Body contains token\"] = responseBody.has(\"token\");\r",
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"const jwt = responseJson.token\r",
+									"\r",
+									"pm.globals.set('jwt_token', 'Bearer ' + jwt);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "e8f997d1-2837-4ab0-8bee-dbb74263b5e9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"nikolas.elpidorou@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/financial-portfolio/v1/auth/authenticate"
+					},
+					"response": []
+				},
+				{
+					"name": "Register user",
+					"id": "948cc0c6-0706-42c6-9698-6623fd3f3901",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Nicholas Elpidorou\",\r\n    \"email\": \"nicholaselpdev@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"role\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/financial-portfolio/v1/auth/register"
+					},
+					"response": []
+				}
+			],
+			"id": "3841f688-1b01-4962-b405-45a4963f3ed4"
 		}
 	]
 }
