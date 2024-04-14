@@ -187,7 +187,7 @@
 			"name": "auth",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "Authenticate",
 					"id": "2a31fe46-3168-483c-9d7d-ac1664890df9",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -209,7 +209,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Register user",
 					"id": "948cc0c6-0706-42c6-9698-6623fd3f3901",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
