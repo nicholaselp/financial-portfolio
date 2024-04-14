@@ -105,7 +105,13 @@
 					},
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"categoryName\": \"Gas Bill\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"fixed\"\r\n}",
@@ -188,6 +194,22 @@
 			"item": [
 				{
 					"name": "Authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5ee414a1-c3f4-4a60-87ee-c7ad1e438209",
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"const jwt = responseJson.token\r",
+									"\r",
+									"pm.environment.set('token', 'BEARER ${jwt}');"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"id": "2a31fe46-3168-483c-9d7d-ac1664890df9",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
