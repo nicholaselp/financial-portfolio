@@ -115,7 +115,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category"
+						"url": "{{url}}/v1/expense-category"
 					},
 					"response": []
 				},
@@ -189,6 +189,28 @@
 				{
 					"name": "New Request",
 					"id": "2a31fe46-3168-483c-9d7d-ac1664890df9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"nicholaselpdev@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/financial-portfolio/v1/auth/authenticate"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "948cc0c6-0706-42c6-9698-6623fd3f3901",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
