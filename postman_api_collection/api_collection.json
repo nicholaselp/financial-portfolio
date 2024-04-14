@@ -16,7 +16,13 @@
 					},
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"expenseName\": \"First Expense 4\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 1,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
@@ -38,7 +44,13 @@
 					},
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n        \"expenseName\": \"First Expense 4\",\r\n        \"monthlyAllocatedAmount\": 50.00,\r\n        \"yearlyAllocatedAmount\": 600.00,\r\n        \"note\": \"new notea\",\r\n        \"expenseCategory\": {\r\n            \"id\": 1,\r\n            \"categoryName\": \"Gas Bill\",\r\n            \"billingInterval\": \"monthly\",\r\n            \"expenseType\": \"not-fixed\",\r\n            \"status\": \"active\"\r\n        },\r\n        \"status\": \"active\",\r\n        \"payments\": null\r\n    }",
@@ -48,7 +60,7 @@
 								}
 							}
 						},
-						"url": "{{url}}/v1/expenses/1"
+						"url": "{{url}}/v1/expenses/2"
 					},
 					"response": []
 				},
@@ -60,7 +72,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"url": "{{url}}/v1/expenses/1"
 					},
 					"response": []
@@ -73,7 +91,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"url": "{{url}}/v1/expenses"
 					},
 					"response": []
@@ -86,8 +110,14 @@
 					},
 					"request": {
 						"method": "DELETE",
-						"header": [],
-						"url": "{{url}}/v1/expenses/2"
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expenses/1"
 					},
 					"response": []
 				}
@@ -287,13 +317,7 @@
 					},
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{jwt_token}}",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"email\": \"nikolas.elpidorou@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
