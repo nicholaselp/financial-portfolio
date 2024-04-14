@@ -206,7 +206,7 @@
 									"const responseJson = pm.response.json();\r",
 									"const jwt = responseJson.token\r",
 									"\r",
-									"pm.globals.set('token', 'BEARER ${jwt}');"
+									"pm.globals.set('jwt_token', 'BEARER' + jwt);"
 								],
 								"type": "text/javascript",
 								"packages": {}
