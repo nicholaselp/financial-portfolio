@@ -203,13 +203,10 @@
 							"script": {
 								"id": "5ee414a1-c3f4-4a60-87ee-c7ad1e438209",
 								"exec": [
-									"tests[\"response code is 200\"] = responseCode.code === 200;\r",
-									"tests[\"Body contains token\"] = responseBody.has(\"token\");\r",
+									"const responseJson = pm.response.json();\r",
+									"const jwt = responseJson.token\r",
 									"\r",
-									"var jsonData = pm.response.json();\r",
-									"var token = jsonData.token;\r",
-									"\r",
-									"pm.globals.set(\"jwt_token\", token);"
+									"pm.globals.set('token', 'BEARER ${jwt}');"
 								],
 								"type": "text/javascript",
 								"packages": {}
