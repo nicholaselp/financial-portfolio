@@ -26,7 +26,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses"
+						"url": "{{url}}/v1/expenses"
 					},
 					"response": []
 				},
@@ -48,7 +48,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+						"url": "{{url}}/v1/expenses/1"
 					},
 					"response": []
 				},
@@ -61,7 +61,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/1"
+						"url": "{{url}}/v1/expenses/1"
 					},
 					"response": []
 				},
@@ -74,7 +74,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses"
+						"url": "{{url}}/v1/expenses"
 					},
 					"response": []
 				},
@@ -87,7 +87,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:8080/financial-portfolio/v1/expenses/2"
+						"url": "{{url}}/v1/expenses/2"
 					},
 					"response": []
 				}
@@ -136,17 +136,23 @@
 					},
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoryName\": \"Gas Billa\",\r\n  \"billingInterval\": \"monthly\",\r\n  \"expenseType\": \"not-fixed\"\r\n}",
+							"raw": "{\r\n    \"categoryName\": \"Gas Billa\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"not-fixed\",\r\n    \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/expense-category/5"
+						"url": "{{url}}/v1/expense-category/7"
 					},
 					"response": []
 				},
