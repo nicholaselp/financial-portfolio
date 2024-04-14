@@ -18,6 +18,7 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -40,52 +41,62 @@ public class ExpenseApiControllerDelegate extends MainController implements Fina
     @NonNull private final DeleteExpenseCategoryCommand deleteExpenseCategoryCommand;
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CREATE.value)")
     public ResponseEntity<ExpenseResponseDto> createExpense(ExpenseDto expenseDto) {
         return (ResponseEntity<ExpenseResponseDto>) execute(createExpenseCommand, CreateExpenseCommand.request(expenseDto));
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_READ.value)")
     public ResponseEntity<ExpenseResponseDto> getExpenseById(String id){
         return (ResponseEntity<ExpenseResponseDto>) execute(getExpenseByIdCommand, GetExpenseByIdCommand.request(id));
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_READ.value)")
     public ResponseEntity<List<ExpenseResponseDto>> getExpenses(){
         return (ResponseEntity<List<ExpenseResponseDto>>) execute(getAllExpensesCommand, GetAllExpensesCommand.request());
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_UPDATE.value)")
     public ResponseEntity<ExpenseResponseDto> updateExpenseById(String expenseId, ExpenseDto expenseDto){
         return (ResponseEntity<ExpenseResponseDto>) execute(updateExpenseCommand, UpdateExpenseCommand.request(expenseId, expenseDto));
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_DELETE.value)")
     public ResponseEntity<Void> deleteExpenseById(String id){
         return (ResponseEntity<Void>) execute(deleteExpenseCommand, DeleteExpenseCommand.request(id));
     }
 
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_CREATE.value)")
     public ResponseEntity<ExpenseCategoryDto> createExpenseCategory(ExpenseCategoryDto expenseCategoryDto) {
         return (ResponseEntity<ExpenseCategoryDto>) execute(createExpenseCategoryCommand, CreateExpenseCategoryCommand.request(expenseCategoryDto));
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_READ.value)")
     public ResponseEntity<ExpenseCategoryDto> getExpenseCategoryById(String id){
         return (ResponseEntity<ExpenseCategoryDto>) execute(getExpenseCategoryByIdCommand, GetExpenseCategoryByIdCommand.request(id));
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_READ.value)")
     public ResponseEntity<List<ExpenseCategoryDto>> getExpenseCategories(){
         return (ResponseEntity<List<ExpenseCategoryDto>>) execute(getAllExpenseCategoriesCommand, GetAllExpenseCategoriesCommand.request());
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_UPDATE.value)")
     public ResponseEntity<ExpenseCategoryDto> updateExpenseCategoryById(String expenseId, ExpenseCategoryDto expenseCategoryDto){
         return (ResponseEntity<ExpenseCategoryDto>) execute(updateExpenseCategoryCommand, UpdateExpenseCategoryCommand.request(expenseId, expenseCategoryDto));
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_DELETE.value)")
     public ResponseEntity<Void> deleteExpenseCategoryById(String id){
         return (ResponseEntity<Void>) execute(deleteExpenseCategoryCommand, DeleteExpenseCategoryCommand.request(id));
     }

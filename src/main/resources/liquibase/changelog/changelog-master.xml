@@ -3,6 +3,23 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd">
     <changeSet id="1" author="nicholaselp">
+        <createTable tableName="_user" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
         <createTable tableName="expenses" schemaName="public">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" nullable="false"/>
@@ -80,6 +97,8 @@
                              columnNames="category_name, status"/>
         <addUniqueConstraint constraintName="unique_expense_name" tableName="expenses"
                              columnNames="expense_name, status"/>
+        <addUniqueConstraint columnNames="full_name, email" constraintName="unique_email" tableName="_user"/>
+
     </changeSet>
     <changeSet id="2" author="nicholaselp">
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Loan', 'monthly', 'fixed', 'active');</sql>
@@ -87,5 +106,8 @@
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Water Utility', 'quarterly', 'not-fixed', 'active');</sql>
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Deleted Category 1', 'quarterly', 'not-fixed', 'deleted');</sql>
         <sql>INSERT INTO expense_category (category_name, billing_interval, expense_type, status) VALUES ('Deleted Category 2', 'quarterly', 'not-fixed', 'deleted');</sql>
+        <sql>INSERT INTO _user (full_name, email, password, role) VALUES ('Nicholas Elpidorou', 'nicholaselpdev@gmail.com', '$2a$10$kS3Vwdg.Qr9ili.sNqoxLOA1kXSi6460NO0vEi1FyoP17PWlSmp5O', 'ADMIN');</sql>
+        <sql>INSERT INTO _user (full_name, email, password, role) VALUES ('App User', 'nikolas.elpidorou@gmail.com', '$2a$10$BDCy7mep9ooSVdAO5X4IDOailwsAv1r4zklAhqWgpGNTW4cmkJo9m', 'USER');</sql>
+
     </changeSet>
 </databaseChangeLog>
