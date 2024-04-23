@@ -141,12 +141,12 @@ public class Expense {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense = (Expense) o;
-        return Objects.equals(id, expense.id) && Objects.equals(expenseName, expense.expenseName) && Objects.equals(monthlyAllocatedAmount, expense.monthlyAllocatedAmount) && Objects.equals(yearlyAllocatedAmount, expense.yearlyAllocatedAmount) && Objects.equals(note, expense.note) && Objects.equals(paymentList, expense.paymentList) && Objects.equals(expenseCategory, expense.expenseCategory) && status == expense.status && Objects.equals(createdAt, expense.createdAt);
+        return Objects.equals(id, expense.id) && Objects.equals(expenseName, expense.expenseName) && Objects.equals(monthlyAllocatedAmount, expense.monthlyAllocatedAmount) && Objects.equals(yearlyAllocatedAmount, expense.yearlyAllocatedAmount) && Objects.equals(note, expense.note) && Objects.equals(paymentList, expense.paymentList) && Objects.equals(expenseCategory, expense.expenseCategory) && status == expense.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, paymentList, expenseCategory, status, createdAt);
+        return Objects.hash(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, paymentList, expenseCategory, status);
     }
 
     public static class Builder {
