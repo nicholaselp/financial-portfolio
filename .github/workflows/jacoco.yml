@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths: [ '**.java', '.github/workflows/jacoco.yml', 'pom.xml' ]
   pull_request:
     branches: [ master ]
