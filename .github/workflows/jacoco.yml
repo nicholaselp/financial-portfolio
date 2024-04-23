@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths: [ '**.java', '.github/workflows/jacoco.yml', 'pom.xml' ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
