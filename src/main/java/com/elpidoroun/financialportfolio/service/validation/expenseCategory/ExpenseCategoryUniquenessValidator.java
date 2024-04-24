@@ -19,8 +19,8 @@ public class ExpenseCategoryUniquenessValidator  implements EntityValidator<Expe
     @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
     @Override
     public Result<Nothing, String> validate(@Nullable ExpenseCategory original, @NonNull ExpenseCategory entity) throws ValidationException {
-        if(isNull(original) && expenseCategoryRepositoryOperations.findByName(entity.getExpenseCategoryName()).isPresent()){
-            return Result.fail("Expense Category with name: " + entity.getExpenseCategoryName() + " already exists");
+        if(isNull(original) && expenseCategoryRepositoryOperations.findByName(entity.getCategoryName()).isPresent()){
+            return Result.fail("Expense Category with name: " + entity.getCategoryName() + " already exists");
         }
         return Result.success();
     }

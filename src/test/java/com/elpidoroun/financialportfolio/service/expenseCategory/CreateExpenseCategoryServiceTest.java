@@ -21,7 +21,7 @@ public class CreateExpenseCategoryServiceTest extends MainTestConfig {
 
         var result = service.execute(expenseCategory);
 
-        assertThat(result.getExpenseCategoryName()).isEqualTo(expenseCategory.getExpenseCategoryName());
+        assertThat(result.getCategoryName()).isEqualTo(expenseCategory.getCategoryName());
     }
 
     @Test

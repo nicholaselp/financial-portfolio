@@ -3,6 +3,7 @@ version: '3.7'
 volumes:
   postgres:
   pgadmin:
+  redis:
 
 services:
   postgresql:
@@ -35,3 +36,11 @@ services:
       - "/bin/sh"
       - "-c"
       - "/bin/echo 'postgres:5432:*:nicholaselp:password' > /tmp/pgpassfile && chmod 600 /tmp/pgpassfile && /entrypoint.sh"
+  redis:
+    container_name: redis_container
+    image: redis:latest
+    volumes:
+      - redis:/data/redis
+    ports:
+      - '6379:6379'
+    restart: unless-stopped

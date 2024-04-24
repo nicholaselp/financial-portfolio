@@ -20,7 +20,7 @@ public class GetExpenseCategoryByIdCommandTest extends MainTestConfig {
 
         var result = command.execute(GetExpenseCategoryByIdCommand.request(expenseCategory.getId().toString()));
 
-        assertThat(result.getCategoryName()).isEqualTo(expenseCategory.getExpenseCategoryName());
+        assertThat(result.getCategoryName()).isEqualTo(expenseCategory.getCategoryName());
 
     }
 

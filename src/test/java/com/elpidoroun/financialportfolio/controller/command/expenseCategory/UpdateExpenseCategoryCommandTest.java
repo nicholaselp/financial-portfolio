@@ -24,7 +24,7 @@ public class UpdateExpenseCategoryCommandTest extends MainTestConfig {
     public void success_update(){
         var original = repo.save(ExpenseCategoryTestFactory.createExpenseCategory());
         var dto = new ExpenseCategoryDto();
-        dto.setCategoryName(original.getExpenseCategoryName());
+        dto.setCategoryName(original.getCategoryName());
         dto.setBillingInterval(BillingIntervalDto.BI_MONTHLY);
         dto.setStatus(StatusDto.ACTIVE);
         dto.setExpenseType(ExpenseTypeDto.NOT_FIXED); //the update from the original

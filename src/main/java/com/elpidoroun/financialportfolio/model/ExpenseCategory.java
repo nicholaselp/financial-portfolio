@@ -53,7 +53,7 @@ public class ExpenseCategory {
     }
 
     public Long getId() { return id; }
-    public String getExpenseCategoryName() { return categoryName; }
+    public String getCategoryName() { return categoryName; }
     public BillingInterval getBillingInterval() { return billingInterval; }
     public ExpenseType getExpenseType() { return expenseType; }
     public Status getStatus(){ return status; }

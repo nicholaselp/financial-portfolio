@@ -31,7 +31,7 @@ public class ExpenseCategoryRepositoryStub implements ExpenseCategoryRepository 
             entityToSave = ExpenseCategory.builder(generateUniqueId())
                     .withExpenseType(entity.getExpenseType())
                     .withStatus(entity.getStatus())
-                    .withCategoryName(entity.getExpenseCategoryName())
+                    .withCategoryName(entity.getCategoryName())
                     .withBillingInterval(entity.getBillingInterval())
                     .build();
         } else {
@@ -65,7 +65,7 @@ public class ExpenseCategoryRepositoryStub implements ExpenseCategoryRepository 
     @Override
     public Optional<ExpenseCategory> findByCategoryName(String categoryName) {
         return expenseCategories.stream()
-                .filter(expenseCategory -> categoryName.equals(expenseCategory.getExpenseCategoryName()))
+                .filter(expenseCategory -> categoryName.equals(expenseCategory.getCategoryName()))
                 .filter(expenseCategory -> expenseCategory.getStatus() != Status.DELETED)
                 .findFirst();
     }

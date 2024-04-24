@@ -14,7 +14,7 @@ public class ExpenseCategoryMapperTest {
 
         var expenseCategoryDto = expenseCategoryMapper.convertToDto(expense);
 
-        assertThat(expenseCategoryDto.getCategoryName()).isEqualTo(expense.getExpenseCategoryName());
+        assertThat(expenseCategoryDto.getCategoryName()).isEqualTo(expense.getCategoryName());
         assertThat(expenseCategoryDto.getId()).isEqualTo(expense.getId());
         assertThat(expenseCategoryDto.getExpenseType()).isEqualTo(ExpenseTypeMapper.toDto(expense.getExpenseType()));
         assertThat(expenseCategoryDto.getStatus()).isEqualTo(StatusMapper.toDto(expense.getStatus()));
@@ -29,7 +29,7 @@ public class ExpenseCategoryMapperTest {
 
         assertThat(expenseCategory.getId()).isEqualTo(expenseCategoryDto.getId());
         assertThat(expenseCategory.getExpenseType()).isEqualTo(ExpenseTypeMapper.toDomain(expenseCategoryDto.getExpenseType()));
-        assertThat(expenseCategory.getExpenseCategoryName()).isEqualTo(expenseCategoryDto.getCategoryName());
+        assertThat(expenseCategory.getCategoryName()).isEqualTo(expenseCategoryDto.getCategoryName());
         assertThat(expenseCategory.getStatus()).isEqualTo(StatusMapper.toDomain(expenseCategoryDto.getStatus()));
         assertThat(expenseCategory.getBillingInterval()).isEqualTo(BillingIntervalMapper.toDomain(expenseCategoryDto.getBillingInterval()));
     }
@@ -42,7 +42,7 @@ public class ExpenseCategoryMapperTest {
 
         assertThat(expenseCategory.getId()).isEqualTo(Long.valueOf("1"));
         assertThat(expenseCategory.getExpenseType()).isEqualTo(ExpenseTypeMapper.toDomain(expenseCategoryDto.getExpenseType()));
-        assertThat(expenseCategory.getExpenseCategoryName()).isEqualTo(expenseCategoryDto.getCategoryName());
+        assertThat(expenseCategory.getCategoryName()).isEqualTo(expenseCategoryDto.getCategoryName());
         assertThat(expenseCategory.getStatus()).isEqualTo(StatusMapper.toDomain(expenseCategoryDto.getStatus()));
         assertThat(expenseCategory.getBillingInterval()).isEqualTo(BillingIntervalMapper.toDomain(expenseCategoryDto.getBillingInterval()));
     }

@@ -17,7 +17,7 @@ public class ExpenseCategoryTest {
                 .withExpenseType(ExpenseType.FIXED)
                 .build();
 
-        assertThat(category.getExpenseCategoryName()).isEqualTo("CategoryName");
+        assertThat(category.getCategoryName()).isEqualTo("CategoryName");
         assertThat(category.getStatus()).isEqualTo(Status.ACTIVE);
         assertThat(category.getBillingInterval()).isEqualTo(BillingInterval.BI_MONTHLY);
         assertThat(category.getExpenseType()).isEqualTo(ExpenseType.FIXED);
@@ -28,7 +28,7 @@ public class ExpenseCategoryTest {
         var category = ExpenseCategoryTestFactory.createExpenseCategoryWithId();
 
         assertThat(category.getId()).isNotNull();
-        assertThat(category.getExpenseCategoryName()).isEqualTo("categoryName");
+        assertThat(category.getCategoryName()).isEqualTo("categoryName");
         assertThat(category.getStatus()).isEqualTo(Status.ACTIVE);
         assertThat(category.getBillingInterval()).isEqualTo(BillingInterval.BI_MONTHLY);
         assertThat(category.getExpenseType()).isEqualTo(ExpenseType.FIXED);

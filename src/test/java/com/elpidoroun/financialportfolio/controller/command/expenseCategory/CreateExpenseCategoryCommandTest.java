@@ -21,7 +21,7 @@ public class CreateExpenseCategoryCommandTest extends MainTestConfig {
         assertThat(expenseCategoryEntities).isNotEmpty().hasSize(1);
         
         var expenseCategoryEntity = expenseCategoryEntities.get(0);
-        assertThat(expenseCategoryEntity.getExpenseCategoryName()).isEqualTo(expenseCategoryDto.getCategoryName());
+        assertThat(expenseCategoryEntity.getCategoryName()).isEqualTo(expenseCategoryDto.getCategoryName());
          
     }
 
