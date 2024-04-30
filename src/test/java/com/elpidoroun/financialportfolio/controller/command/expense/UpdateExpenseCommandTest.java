@@ -26,6 +26,8 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
         var dtoToUpdate = expenseMapper.convertToDto(originalEntity);
         dtoToUpdate.setNote("new note");
 
+        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
+
         ExpenseResponseDto result = command.execute(new UpdateExpenseCommand.UpdateExpenseRequest(originalEntity.getId().toString(), dtoToUpdate));
 
         assertThat(result).isNotNull();

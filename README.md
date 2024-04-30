@@ -31,6 +31,13 @@
 ### Database:
 - Hibernate/PostGresql/Liquibase
 
+### Cache:
+- Redis is used for caching mechanism
+- During application startup expenseCategories are read from the database and stored in a redisTemplate
+  - See file [RedisCachingService.java](src/main/java/com/elpidoroun/financialportfolio/service/cache/RedisCachingService.java)
+- Cache is used by normalizer to check/validate the expenseCategory from cache instead of going straight to the database each time
+  - see file [ExpenseCategoryNormalizer.java](src/main/java/com/elpidoroun/financialportfolio/service/normalize/ExpenseCategoryNormalizer.java)
+- On create/update/delete of ExpenseCategory through the repository [ExpenseCategoryRepository.java](src/main/java/com/elpidoroun/financialportfolio/repository/ExpenseCategoryRepository.java) the cache is updated through the annotations to make sure cached data are up to date
 ### Docker
 - Application uses docker-compose file to start 2 containers for postgres and pgadmin
 

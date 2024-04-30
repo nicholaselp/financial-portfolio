@@ -27,6 +27,6 @@ public class ExpenseCategoryNormalizer extends AbstractCacheService<ExpenseCateg
         return get(EXPENSE_CATEGORY_CACHE + "::" +expenseCategoryId)
                 .<Result<Expense, String>>map(expenseCategory ->
                         Result.success(expense.clone().withExpenseCategory(expenseCategory).build()))
-                .orElseGet(() -> Result.fail("ExpenseCategory with ID: " + expenseCategoryId + " not found during normalization"));
+                .orElseGet(() -> Result.fail("Expense Category with ID: " + expenseCategoryId + " not found during normalization"));
     }
 }
