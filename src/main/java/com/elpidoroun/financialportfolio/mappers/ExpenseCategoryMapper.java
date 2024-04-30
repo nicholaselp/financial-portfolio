@@ -14,7 +14,7 @@ public class ExpenseCategoryMapper {
     public ExpenseCategoryDto convertToDto(ExpenseCategory expenseCategory){
         ExpenseCategoryDto expenseCategoryDto = new ExpenseCategoryDto();
         expenseCategoryDto.setId(expenseCategory.getId());
-        expenseCategoryDto.setCategoryName(expenseCategory.getExpenseCategoryName());
+        expenseCategoryDto.setCategoryName(expenseCategory.getCategoryName());
         expenseCategoryDto.setExpenseType(ExpenseTypeMapper.toDto(expenseCategory.getExpenseType()));
         expenseCategoryDto.setBillingInterval(BillingIntervalMapper.toDto(expenseCategory.getBillingInterval()));
         expenseCategoryDto.setStatus(StatusMapper.toDto(expenseCategory.getStatus()));

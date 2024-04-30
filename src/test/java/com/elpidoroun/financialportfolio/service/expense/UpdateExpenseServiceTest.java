@@ -24,6 +24,8 @@ public class UpdateExpenseServiceTest extends MainTestConfig {
         var original = repo.save(ExpenseTestFactory.createExpense(expenseCategory));
         var toUpdate = original.clone().withNote("a note").build();
 
+        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
+
         service.execute(new UpdateExpenseContext(original, toUpdate));
 
         assertThat(repo.findAll()).isNotEmpty().hasSize(1)
@@ -46,8 +48,10 @@ public class UpdateExpenseServiceTest extends MainTestConfig {
         var original = repo.save(ExpenseTestFactory.createExpense());
         var toUpdate = original.clone().withNote("a note").build();
 
+        getExpenseTestConfig().mockNormalizerReturnNull();
+
         assertThatThrownBy(() -> service.execute(new UpdateExpenseContext(original, toUpdate)))
                 .isInstanceOf(ValidationException.class)
-                        .hasMessage("Expense Category with ID: 1 not found");
+                        .hasMessage("Expense Category with ID: 1 not found during normalization");
     }
 }

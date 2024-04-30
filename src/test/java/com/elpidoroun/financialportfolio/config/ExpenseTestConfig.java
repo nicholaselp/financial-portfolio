@@ -7,6 +7,7 @@ import com.elpidoroun.financialportfolio.controller.command.expense.GetExpenseBy
 import com.elpidoroun.financialportfolio.controller.command.expense.UpdateExpenseCommand;
 import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
 import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
+import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepositoryStub;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
@@ -20,8 +21,14 @@ import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategory
 import com.elpidoroun.financialportfolio.service.normalize.ExpenseCategoryNormalizer;
 import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseUniquenessValidator;
 import lombok.Getter;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Getter
 public class ExpenseTestConfig {
@@ -40,12 +47,14 @@ public class ExpenseTestConfig {
     DeleteExpenseCommand deleteExpenseCommand;
     ExpenseMapper expenseMapper;
     ExpenseCategoryMapper expenseCategoryMapper;
+    RedisTemplate<String, ExpenseCategory> expenseCategoryRedisTemplate;
 
     public ExpenseTestConfig(){
         expenseRepositoryOperations = new ExpenseRepositoryOperations(expenseRepository);
         expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(expenseCategoryRepository);
         var validations = new ValidationService<>(List.of(new ExpenseUniquenessValidator(expenseRepositoryOperations)));
-        var normalizer = new ExpenseCategoryNormalizer(expenseCategoryRepositoryOperations);
+        expenseCategoryRedisTemplate = mock(RedisTemplate.class);
+        var normalizer = new ExpenseCategoryNormalizer(expenseCategoryRedisTemplate);
         createExpenseService = new CreateExpenseService(expenseRepositoryOperations, validations, normalizer);
         updateExpenseService = new UpdateExpenseService(expenseRepositoryOperations, validations, normalizer);
         getExpenseService = new GetExpenseService(expenseRepositoryOperations);
@@ -58,5 +67,18 @@ public class ExpenseTestConfig {
         deleteExpenseCommand = new DeleteExpenseCommand(expenseRepositoryOperations);
     }
 
+    public void mockNormalizerResponse(ExpenseCategory expenseCategory){
+        ValueOperations<String, ExpenseCategory> valueOperationsMock = mock(ValueOperations.class);
+        when(expenseCategoryRedisTemplate.opsForValue()).thenReturn(valueOperationsMock);
+
+        when(expenseCategoryRedisTemplate.opsForValue().get(any())).thenReturn(expenseCategory);
+    }
+
+    public void mockNormalizerReturnNull(){
+        ValueOperations<String, ExpenseCategory> valueOperationsMock = mock(ValueOperations.class);
+        when(expenseCategoryRedisTemplate.opsForValue()).thenReturn(valueOperationsMock);
+
+        when(expenseCategoryRedisTemplate.opsForValue().get(any())).thenReturn(null);
+    }
 
 }

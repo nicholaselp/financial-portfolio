@@ -3,7 +3,6 @@ package com.elpidoroun.financialportfolio.controller.command.expense;
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
-import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
@@ -16,13 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CreateExpenseCommandTest extends MainTestConfig {
 
     private final CreateExpenseCommand createExpenseCommand = getExpenseTestConfig().getCreateExpenseCommand();
-    private final ExpenseMapper expenseMapper = getExpenseTestConfig().getExpenseMapper();
     private final ExpenseCategoryRepository expenseCategoryRepository = getExpenseTestConfig().getExpenseCategoryRepository();
 
     @Test
     public void success_create_expense() {
         ExpenseCategory expenseCategory = ExpenseCategoryTestFactory.createExpenseCategoryWithId();
         expenseCategoryRepository.save(expenseCategory);
+
+        getExpenseTestConfig().mockNormalizerResponse(ExpenseCategoryTestFactory.createExpenseCategoryWithId());
 
         ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto(expenseCategory.getId());
 

@@ -26,7 +26,7 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
 
         operations.save(expenseCategory);
 
-        assertThat(repository.findByCategoryName(expenseCategory.getExpenseCategoryName()))
+        assertThat(repository.findByCategoryName(expenseCategory.getCategoryName()))
                 .hasValueSatisfying(fromRepo -> {
                     assertEquals(fromRepo, expenseCategory);
         });
@@ -82,7 +82,7 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
 
         operations.update(updated);
 
-        assertThat(repository.findByCategoryName(updated.getExpenseCategoryName()))
+        assertThat(repository.findByCategoryName(updated.getCategoryName()))
                 .isPresent()
                 .hasValueSatisfying(expenseCategory -> assertThat(expenseCategory.getExpenseType()).isEqualTo(updated.getExpenseType()));
     }
@@ -140,10 +140,10 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
         var expenseCategory = ExpenseCategoryTestFactory.createExpenseCategory();
         repository.save(expenseCategory);
 
-        assertThat(operations.findByName(expenseCategory.getExpenseCategoryName()))
+        assertThat(operations.findByName(expenseCategory.getCategoryName()))
                 .isPresent()
                 .hasValueSatisfying(expCategory ->
-                        assertThat(expCategory.getExpenseCategoryName()).isEqualTo(expenseCategory.getExpenseCategoryName()));
+                        assertThat(expCategory.getCategoryName()).isEqualTo(expenseCategory.getCategoryName()));
     }
 
     @Test
@@ -155,7 +155,7 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
     private void assertEquals(ExpenseCategory category1, ExpenseCategory category2){
         assertThat(category1.getBillingInterval()).isEqualTo(category2.getBillingInterval());
         assertThat(category1.getExpenseType()).isEqualTo(category2.getExpenseType());
-        assertThat(category1.getExpenseCategoryName()).isEqualTo(category2.getExpenseCategoryName());
+        assertThat(category1.getCategoryName()).isEqualTo(category2.getCategoryName());
         assertThat(category1.getStatus()).isEqualTo(category2.getStatus());
     }
 }

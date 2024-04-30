@@ -23,6 +23,8 @@ public class CreateExpenseServiceTest extends MainTestConfig {
 
         var expense = ExpenseTestFactory.createExpense(expenseCategory);
 
+        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
+
         var result = service.execute(expense);
 
         assertThat(result.getExpenseName()).isEqualTo(expense.getExpenseName());
@@ -45,9 +47,11 @@ public class CreateExpenseServiceTest extends MainTestConfig {
     public void failed_normalization_failed(){
         var expense = ExpenseTestFactory.createExpense();
 
+        getExpenseTestConfig().mockNormalizerReturnNull();
+
         assertThatThrownBy(() -> service.execute(expense))
                 .isInstanceOf(ValidationException.class)
-                .hasMessage("Expense Category with ID: 1 not found");
+                .hasMessage("Expense Category with ID: 1 not found during normalization");
     }
 
 
