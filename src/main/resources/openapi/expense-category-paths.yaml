@@ -2,7 +2,7 @@ operations:
   expense-category-operations:
     post:
       tags:
-        - financial-portfolio
+        - expense-category
       summary: Create an expense category
       operationId: create-expense-category
       requestBody:
@@ -23,7 +23,7 @@ operations:
           $ref: 'common.yaml#/errors/internal-error'
     get:
       tags:
-        - financial-portfolio
+        - expense-category
       summary: Get all expense Categories
       operationId: get-expense-categories
       responses:
@@ -38,7 +38,7 @@ operations:
   expense-category-operations-by-id:
     get:
       tags:
-        - financial-portfolio
+        - expense-category
       summary: Get expense category by ID
       operationId: get-expense-category-by-id
       parameters:
@@ -62,7 +62,7 @@ operations:
           $ref: 'common.yaml#/errors/internal-error'
     delete:
       tags:
-        - financial-portfolio
+        - expense-category
       summary: Delete expense category by ID
       operationId: delete-expense-category-by-id
       parameters:
@@ -81,7 +81,7 @@ operations:
           $ref: 'common.yaml#/errors/internal-error'
     put:
       tags:
-        - financial-portfolio
+        - expense-category
       summary: Update expense category by ID
       operationId: update-expense-category-by-id
       parameters:

@@ -2,7 +2,7 @@ operations:
   expense-operations:
     post:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Create an expense
       operationId: create-expense
       requestBody:
@@ -23,7 +23,7 @@ operations:
           $ref: 'common.yaml#/errors/internal-error'
     get:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Get all expenses
       operationId: get-expenses
       responses:
@@ -38,7 +38,7 @@ operations:
   expense-operations-by-id:
     get:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Get expense by ID
       operationId: get-expense-by-id
       parameters:
@@ -62,7 +62,7 @@ operations:
           $ref: 'common.yaml#/errors/internal-error'
     delete:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Delete expense by ID
       operationId: delete-expense-by-id
       parameters:
@@ -81,7 +81,7 @@ operations:
           $ref: 'common.yaml#/errors/internal-error'
     put:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Update expense by ID
       operationId: update-expense-by-id
       parameters:
