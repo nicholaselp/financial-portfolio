@@ -23,3 +23,9 @@ errors:
   not-found:
     description: Not found
     content: { }
+  unauthorized:
+    description: UnAuthorized
+    content: { }
+  forbidden:
+    description: Forbidden
+    content: { }
