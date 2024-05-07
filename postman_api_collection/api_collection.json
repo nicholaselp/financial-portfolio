@@ -32,7 +32,7 @@
 								}
 							}
 						},
-						"url": "{{url}}/v1/expenses"
+						"url": "{{url}}/v1/expense"
 					},
 					"response": []
 				},
@@ -60,7 +60,7 @@
 								}
 							}
 						},
-						"url": "{{url}}/v1/expenses"
+						"url": "{{url}}/v1/expense"
 					},
 					"response": []
 				},
@@ -88,7 +88,7 @@
 								}
 							}
 						},
-						"url": "{{url}}/v1/expenses/2"
+						"url": "{{url}}/v1/expense/2"
 					},
 					"response": []
 				},
@@ -107,7 +107,7 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expenses/1"
+						"url": "{{url}}/v1/expense/1"
 					},
 					"response": []
 				},
@@ -126,7 +126,7 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expenses"
+						"url": "{{url}}/v1/expense"
 					},
 					"response": []
 				},
@@ -145,7 +145,7 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expenses/10"
+						"url": "{{url}}/v1/expense/10"
 					},
 					"response": []
 				}
@@ -170,7 +170,8 @@
 							{
 								"key": "Authorization",
 								"value": "{{jwt_token}}",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
