@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -57,6 +59,13 @@ public class CustomExceptionHandler {
         String errorMessage = "Unauthorized access.";
         return ResponseEntity.status(UNAUTHORIZED)
                 .body(new MainController.ErrorResponse(errorMessage, FORBIDDEN_MESSAGE));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
+        logger.error(ex.getMessage());
+        return ResponseEntity.status(FORBIDDEN)
+                .body(new MainController.ErrorResponse("You do not have Permission to access this API", FORBIDDEN_MESSAGE));
     }
 
     @ExceptionHandler(BadCredentialsException.class)

@@ -44,13 +44,13 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
 
         return new UpdateExpenseContext(
                 result.getSuccessValue(),
-                expenseMapper.convertToDomain(request.getExpenseDto(),
+                expenseMapper.convertToDomainWithId(request.getExpenseDto(),
                         request.getExpenseId()));
     }
 
     @Override
     public boolean isRequestIncomplete(UpdateExpenseRequest request) {
-        return isNull(request) || isNull(request.getExpenseDto()) || isNull(request.getExpenseId());
+        return isNull(request) || isNull(request.getExpenseDto()) || isNull(request.getExpenseId()) || isNull(request.getExpenseDto().getExpenseName());
     }
 
     @Override

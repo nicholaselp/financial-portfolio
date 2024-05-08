@@ -29,7 +29,6 @@ public class ExpenseRepositoryStub implements ExpenseRepository {
         if (entity.getId() == null) {
             entityToSave = Expense.builder(generateUniqueId())
                     .withExpenseName(entity.getExpenseName())
-                    .withPayments(entity.getPayments())
                     .withMonthlyAllocatedAmount(entity.getMonthlyAllocatedAmount())
                     .withYearlyAllocatedAmount(entity.getYearlyAllocatedAmount())
                     .withExpenseCategory(entity.getExpenseCategory())
@@ -96,6 +95,7 @@ public class ExpenseRepositoryStub implements ExpenseRepository {
     @Override
     public boolean existsById(@NonNull Long id) {
         return expenseList.stream()
+                .filter(expense -> !expense.getStatus().equals(Status.DELETED))
                 .anyMatch(expense -> id.equals(expense.getId()));
     }
 

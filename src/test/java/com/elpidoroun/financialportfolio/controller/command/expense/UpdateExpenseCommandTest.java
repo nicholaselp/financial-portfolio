@@ -41,7 +41,10 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
 
     @Test
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
-        assertThat(command.isRequestIncomplete(new UpdateExpenseCommand.UpdateExpenseRequest("1", new ExpenseDto()))).isFalse();
+        assertThat(command.isRequestIncomplete(
+                new UpdateExpenseCommand.UpdateExpenseRequest(
+                        "1", new ExpenseDto().expenseName("name"))))
+                .isFalse();
     }
 
     @Test

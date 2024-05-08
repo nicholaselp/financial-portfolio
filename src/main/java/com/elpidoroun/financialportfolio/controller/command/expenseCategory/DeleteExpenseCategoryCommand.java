@@ -2,6 +2,7 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.DELETE_EXPENSE_CATREGORY_BY_ID;
-import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
 
 @AllArgsConstructor
@@ -29,7 +29,7 @@ public class DeleteExpenseCategoryCommand implements Command<DeleteExpenseCatego
     @Override
     public Void execute(DeleteExpenseCategoryRequest request) {
         if(expenseRepositoryOperations.expenseExistWithCategoryId(request.getExpenseCategoryId())){
-            throw new IllegalArgumentException("Cannot delete Expense Category. Expenses found that use expense category with ID: " + request.getExpenseCategoryId());
+            throw new EntityNotFoundException("Cannot delete Expense Category. Expenses found that use expense category with ID: " + request.getExpenseCategoryId());
         }
         Result<Nothing, String> result = expenseCategoryRepositoryOperations.deleteById(request.getExpenseCategoryId());
         if(result.isFail()){

@@ -17,11 +17,6 @@ public class ExpenseCategoryRepositoryTest {
     private ExpenseCategoryRepository expenseCategoryRepository;
 
     @Test
-    public void liquibase_entities_persisted(){
-        assertThat(expenseCategoryRepository.findAll()).isNotEmpty().hasSize(3);
-    }
-
-    @Test
     public void success_create_expense_category(){
         var storedInDb = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
         var fromDb = expenseCategoryRepository.findById(storedInDb.getId());

@@ -7,7 +7,6 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.model.Status;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import static java.util.Objects.isNull;
@@ -40,14 +39,31 @@ public class ExpenseMapper {
         return expenseDto;
     }
 
-    public Expense convertToDomain(ExpenseDto expenseDto){
-        return convertToDomain(expenseDto, null);
+    public Expense convertToDomain(ExpenseResponseDto expenseResponseDto){
+        return Expense.builder(expenseResponseDto.getMeta().getId())
+                .withCreatedAt(expenseResponseDto.getMeta().getCreatedAt())
+                .withExpenseName(expenseResponseDto.getExpense().getExpenseName())
+                .withMonthlyAllocatedAmount(expenseResponseDto.getExpense().getMonthlyAllocatedAmount())
+                .withYearlyAllocatedAmount(expenseResponseDto.getExpense().getYearlyAllocatedAmount())
+                .withNote(expenseResponseDto.getExpense().getNote())
+                .withStatus(StatusMapper.toDomain(expenseResponseDto.getExpense().getStatus()))
+                .withExpenseCategory(expenseCategoryMapper.convertToDomain(expenseResponseDto.getExpense().getExpenseCategory()))
+                .build();
     }
 
-    public Expense convertToDomain(ExpenseDto expenseDto, @Nullable String expenseId){
-        var builder = isNull(expenseId) ? Expense.builder() : Expense.builder(Long.valueOf(expenseId));
+    public Expense convertToDomain(ExpenseDto expenseDto){
+        return Expense.builder()
+                .withExpenseName(expenseDto.getExpenseName())
+                .withMonthlyAllocatedAmount(expenseDto.getMonthlyAllocatedAmount())
+                .withYearlyAllocatedAmount(expenseDto.getYearlyAllocatedAmount())
+                .withNote(expenseDto.getNote())
+                .withStatus(isNull(expenseDto.getStatus()) ? Status.ACTIVE : StatusMapper.toDomain(expenseDto.getStatus()))
+                .withExpenseCategory(expenseCategoryMapper.convertToDomain(expenseDto.getExpenseCategory()))
+                .build();
+    }
 
-        return builder
+    public Expense convertToDomainWithId(ExpenseDto expenseDto, String id){
+        return Expense.builder(Long.valueOf(id))
                 .withExpenseName(expenseDto.getExpenseName())
                 .withMonthlyAllocatedAmount(expenseDto.getMonthlyAllocatedAmount())
                 .withYearlyAllocatedAmount(expenseDto.getYearlyAllocatedAmount())

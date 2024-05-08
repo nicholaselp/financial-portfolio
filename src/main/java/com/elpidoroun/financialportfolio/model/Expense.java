@@ -2,8 +2,6 @@ package com.elpidoroun.financialportfolio.model;
 
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.elpidoroun.financialportfolio.repository.converters.StatusConverter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -12,14 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -48,11 +43,6 @@ public class Expense {
     @Column(name = "note")
     private String note;
 
-    @OneToMany(mappedBy = "expense",
-    cascade = {CascadeType.ALL})
-    @JsonIgnore
-    private List<Payment> paymentList = new ArrayList<>();
-
     @ManyToOne()
     @JoinColumn(name = "expense_category_id")
     private ExpenseCategory expenseCategory;
@@ -68,14 +58,13 @@ public class Expense {
 
     private Expense(Long id, String expenseName, BigDecimal monthlyAllocatedAmount,
                     BigDecimal yearlyAllocatedAmount, String note, OffsetDateTime createdAt,
-                    List<Payment> paymentList, ExpenseCategory expenseCategory, Status status){
+                    ExpenseCategory expenseCategory, Status status){
         this.id = id;
         this.expenseName = requireNonBlank(expenseName, "expenseName is missing");
         validateAmounts(monthlyAllocatedAmount, yearlyAllocatedAmount);
         updateAmounts(monthlyAllocatedAmount, yearlyAllocatedAmount);
         this.note = note;
         this.createdAt = isNull(createdAt) ? OffsetDateTime.now() : createdAt;
-        this.paymentList = paymentList;
         this.expenseCategory = requireNonNull(expenseCategory, "ExpenseCategory is missing");
         this.status = requireNonNull(status, "Status is missing");
     }
@@ -117,7 +106,6 @@ public class Expense {
     public Optional<String> getNote() {
         return Optional.ofNullable(note);
     }
-    public List<Payment> getPayments(){ return paymentList; }
     public ExpenseCategory getExpenseCategory(){ return expenseCategory; }
     public Status getStatus(){ return status; }
     public OffsetDateTime getCreatedAt(){ return createdAt; }
@@ -141,12 +129,12 @@ public class Expense {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense = (Expense) o;
-        return Objects.equals(id, expense.id) && Objects.equals(expenseName, expense.expenseName) && Objects.equals(monthlyAllocatedAmount, expense.monthlyAllocatedAmount) && Objects.equals(yearlyAllocatedAmount, expense.yearlyAllocatedAmount) && Objects.equals(note, expense.note) && Objects.equals(paymentList, expense.paymentList) && Objects.equals(expenseCategory, expense.expenseCategory) && status == expense.status;
+        return Objects.equals(id, expense.id) && Objects.equals(expenseName, expense.expenseName) && Objects.equals(monthlyAllocatedAmount, expense.monthlyAllocatedAmount) && Objects.equals(yearlyAllocatedAmount, expense.yearlyAllocatedAmount) && Objects.equals(note, expense.note) && Objects.equals(expenseCategory, expense.expenseCategory) && status == expense.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, paymentList, expenseCategory, status);
+        return Objects.hash(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, expenseCategory, status);
     }
 
     public static class Builder {
@@ -156,7 +144,6 @@ public class Expense {
         private BigDecimal yearlyAllocatedAmount;
         private String note;
         private OffsetDateTime createdAt;
-        private List<Payment> paymentList;
         private ExpenseCategory expenseCategory;
         private Status status;
 
@@ -188,11 +175,6 @@ public class Expense {
             return this;
         }
 
-        public Builder withPayments(List<Payment> paymentList){
-            this.paymentList = paymentList;
-            return this;
-        }
-
         public Builder withExpenseCategory(ExpenseCategory expenseCategory){
             this.expenseCategory = expenseCategory;
             return this;
@@ -204,7 +186,7 @@ public class Expense {
         }
 
         public Expense build(){
-            return new Expense(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, createdAt, paymentList, expenseCategory, status);
+            return new Expense(id, expenseName, monthlyAllocatedAmount, yearlyAllocatedAmount, note, createdAt, expenseCategory, status);
         }
     }
 }

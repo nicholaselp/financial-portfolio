@@ -4,9 +4,9 @@ info:
   description: Financial Portfolio
   version: 1.0.0
 paths:
-  /v1/expenses:
+  /v1/expense:
     $ref: 'expense-paths.yaml#/operations/expense-operations'
-  /v1/expenses/{id}:
+  /v1/expense/{id}:
     $ref: 'expense-paths.yaml#/operations/expense-operations-by-id'
 
   /v1/expense-category:

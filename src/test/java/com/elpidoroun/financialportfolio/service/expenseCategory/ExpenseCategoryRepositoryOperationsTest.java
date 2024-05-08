@@ -7,6 +7,7 @@ import com.elpidoroun.financialportfolio.model.ExpenseType;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import org.junit.jupiter.api.Test;
 
+import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategoryWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -102,14 +103,15 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
 
     @Test
     public void fail_to_update_expense_not_found(){
-        assertThatThrownBy(() -> operations.update(ExpenseCategoryTestFactory.createExpenseCategoryWithId()))
+        var expenseCategory = createExpenseCategoryWithId();
+        assertThatThrownBy(() -> operations.update(expenseCategory))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("Expense Category with ID: 1 not found");
+                .hasMessage("Expense Category with ID: " +  expenseCategory.getId() + " not found");
     }
 
     @Test
     public void success_deleteById(){
-        var expenseCategory = repository.save(ExpenseCategoryTestFactory.createExpenseCategoryWithId());
+        var expenseCategory = repository.save(createExpenseCategoryWithId());
 
         operations.deleteById(expenseCategory.getId().toString());
         assertThat(repository.findAll()).isEmpty();

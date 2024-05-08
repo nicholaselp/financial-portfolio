@@ -22,7 +22,7 @@ class CreateExpenseCommandTest extends MainTestConfig {
         ExpenseCategory expenseCategory = ExpenseCategoryTestFactory.createExpenseCategoryWithId();
         expenseCategoryRepository.save(expenseCategory);
 
-        getExpenseTestConfig().mockNormalizerResponse(ExpenseCategoryTestFactory.createExpenseCategoryWithId());
+        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
 
         ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto(expenseCategory.getId());
 

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd">
+    <changeSet id="1" author="nicholaselp">
+        <createTable tableName="_user" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="expenses" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="expense_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="monthly_allocated_amount" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="yearly_allocated_amount" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_at" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expense_category_id" type="SERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="expense_category" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="category_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billing_interval" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expense_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="payments" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="payment_amount" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_difference" type="numeric">
+                <constraints nullable="true"/>
+            </column>
+            <column name="note" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="expense_id" type="SERIAL">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="payments" baseColumnNames="expense_id"
+                                 constraintName="fk_payments_expense_id"
+                                 referencedTableName="expenses" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="expenses" baseColumnNames="expense_category_id"
+                                 constraintName="fk_expenses_expense_category_id"
+                                 referencedTableName="expense_category" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="CASCADE"/>
+        <addUniqueConstraint constraintName="unique_expense_category_name" tableName="expense_category"
+                             columnNames="category_name, status"/>
+        <addUniqueConstraint constraintName="unique_expense_name" tableName="expenses"
+                             columnNames="expense_name, status"/>
+        <addUniqueConstraint columnNames="full_name, email" constraintName="unique_email" tableName="_user"/>
+
+    </changeSet>
+</databaseChangeLog>

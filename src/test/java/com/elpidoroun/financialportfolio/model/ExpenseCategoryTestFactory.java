@@ -5,6 +5,8 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseTypeDto;
 import com.elpidoroun.financialportfolio.generated.dto.StatusDto;
 
+import static com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepositoryStub.generateUniqueId;
+
 public class ExpenseCategoryTestFactory {
     public static ExpenseCategory createExpenseCategory(){
         return ExpenseCategory.builder()
@@ -16,7 +18,7 @@ public class ExpenseCategoryTestFactory {
     }
 
     public static ExpenseCategory createExpenseCategoryWithId(){
-        return ExpenseCategory.builder(1L)
+        return ExpenseCategory.builder(generateUniqueId())
                 .withCategoryName("categoryName")
                 .withStatus(Status.ACTIVE)
                 .withBillingInterval(BillingInterval.BI_MONTHLY)
@@ -55,6 +57,16 @@ public class ExpenseCategoryTestFactory {
         ExpenseCategoryDto dto = new ExpenseCategoryDto();
         dto.setId(1L);
         dto.setCategoryName("categoryName");
+        dto.setExpenseType(ExpenseTypeDto.FIXED);
+        dto.setStatus(StatusDto.ACTIVE);
+        dto.setBillingInterval(BillingIntervalDto.BI_MONTHLY);
+        return dto;
+    }
+
+    public static ExpenseCategoryDto createExpenseCategoryDto(String expenseCategory){
+        ExpenseCategoryDto dto = new ExpenseCategoryDto();
+        dto.setId(1L);
+        dto.setCategoryName(expenseCategory);
         dto.setExpenseType(ExpenseTypeDto.FIXED);
         dto.setStatus(StatusDto.ACTIVE);
         dto.setBillingInterval(BillingIntervalDto.BI_MONTHLY);

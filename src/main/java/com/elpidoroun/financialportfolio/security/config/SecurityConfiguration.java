@@ -1,5 +1,6 @@
 package com.elpidoroun.financialportfolio.security.config;
 
+import com.elpidoroun.financialportfolio.security.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

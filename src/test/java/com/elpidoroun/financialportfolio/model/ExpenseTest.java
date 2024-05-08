@@ -72,7 +72,7 @@ public class ExpenseTest {
     @Test
     public void test_equals_and_hashCode(){
         var expense = ExpenseTestFactory.createExpense("expense");
-        var expense2 = ExpenseTestFactory.createExpense("expense");
+        var expense2 = expense.clone().build();
         var expense3 = ExpenseTestFactory.createExpense("expense2");
 
         assertThat(expense).isEqualTo(expense2);

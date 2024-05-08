@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd">
+    <changeSet id="insert-users-changeSet" author="nicholaselp">
+        <sql>INSERT INTO _user (full_name, email, password, role) VALUES ('test admin', 'test_admin@gmail.com', '$2a$10$kS3Vwdg.Qr9ili.sNqoxLOA1kXSi6460NO0vEi1FyoP17PWlSmp5O', 'ADMIN');</sql>
+        <sql>INSERT INTO _user (full_name, email, password, role) VALUES ('test user', 'test_user@gmail.com', '$2a$10$BDCy7mep9ooSVdAO5X4IDOailwsAv1r4zklAhqWgpGNTW4cmkJo9m', 'USER');</sql>
+    </changeSet>
+</databaseChangeLog>

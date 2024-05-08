@@ -1,4 +1,4 @@
-package com.elpidoroun.financialportfolio.security.config;
+package com.elpidoroun.financialportfolio.security.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

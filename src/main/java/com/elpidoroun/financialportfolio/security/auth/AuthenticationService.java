@@ -1,6 +1,5 @@
 package com.elpidoroun.financialportfolio.security.auth;
 
-import com.elpidoroun.financialportfolio.security.config.JwtService;
 import com.elpidoroun.financialportfolio.security.user.User;
 import com.elpidoroun.financialportfolio.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,7 @@
 package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
+import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
@@ -36,7 +37,7 @@ public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
         assertThatThrownBy(() -> command.execute(
                             new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(
                                     expenseCategory.getId().toString())))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Cannot delete Expense Category. Expenses found that use expense category with ID: " + expenseCategory.getId());
     }
 

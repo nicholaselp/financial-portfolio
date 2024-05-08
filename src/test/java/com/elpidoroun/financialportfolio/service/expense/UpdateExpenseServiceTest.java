@@ -9,6 +9,7 @@ import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
+import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategoryWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -45,13 +46,14 @@ public class UpdateExpenseServiceTest extends MainTestConfig {
 
     @Test
     public void fail_normalization_error(){
-        var original = repo.save(ExpenseTestFactory.createExpense());
+        var expenseCategory = createExpenseCategoryWithId();
+        var original = repo.save(ExpenseTestFactory.createExpense("name", expenseCategory));
         var toUpdate = original.clone().withNote("a note").build();
 
         getExpenseTestConfig().mockNormalizerReturnNull();
 
         assertThatThrownBy(() -> service.execute(new UpdateExpenseContext(original, toUpdate)))
                 .isInstanceOf(ValidationException.class)
-                        .hasMessage("Expense Category with ID: 1 not found during normalization");
+                        .hasMessage("Expense Category with ID: " + expenseCategory.getId() + " not found during normalization");
     }
 }
