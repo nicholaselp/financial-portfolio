@@ -54,7 +54,7 @@ public class Expense {
     @Column(name = "created_at")
     protected OffsetDateTime createdAt;
 
-    private Expense(){} //used for hibernate. Do not delete
+    protected Expense(){} //used for hibernate. Do not delete
 
     private Expense(Long id, String expenseName, BigDecimal monthlyAllocatedAmount,
                     BigDecimal yearlyAllocatedAmount, String note, OffsetDateTime createdAt,

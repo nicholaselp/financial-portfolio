@@ -41,7 +41,7 @@ public class ExpenseCategory {
     @Column(name = "status")
     private Status status;
 
-    private ExpenseCategory(){}
+    protected ExpenseCategory(){}
 
     private ExpenseCategory(Long id, String categoryName, BillingInterval billingInterval,
                             ExpenseType expenseType, Status status){

@@ -5,7 +5,6 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.StatusDto;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 
 public class ExpenseTestFactory {
 
