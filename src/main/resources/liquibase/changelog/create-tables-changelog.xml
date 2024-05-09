@@ -20,7 +20,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable tableName="expenses" schemaName="public">
+        <createTable tableName="expense" schemaName="public">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -36,17 +36,16 @@
             <column name="note" type="varchar(50)">
                 <constraints nullable="true"/>
             </column>
-            <column name="created_at" type="timestamp with time zone">
-                <constraints nullable="false"/>
-            </column>
             <column name="expense_category_id" type="SERIAL">
                 <constraints nullable="false"/>
             </column>
             <column name="status" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="created_at" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
-
         <createTable tableName="expense_category" schemaName="public">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" nullable="false"/>
@@ -60,42 +59,39 @@
             <column name="expense_type" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
 
-        <createTable tableName="payments" schemaName="public">
-            <column name="id" type="SERIAL">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="payment_amount" type="numeric">
-                <constraints nullable="false"/>
-            </column>
-            <column name="currency" type="timestamp with time zone">
-                <constraints nullable="false"/>
-            </column>
-            <column name="amount_difference" type="numeric">
-                <constraints nullable="true"/>
-            </column>
-            <column name="note" type="varchar(50)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="expense_id" type="SERIAL">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <addForeignKeyConstraint baseTableName="payments" baseColumnNames="expense_id"
-                                 constraintName="fk_payments_expense_id"
-                                 referencedTableName="expenses" referencedColumnNames="id"
-                                 onDelete="CASCADE" onUpdate="CASCADE"/>
-        <addForeignKeyConstraint baseTableName="expenses" baseColumnNames="expense_category_id"
-                                 constraintName="fk_expenses_expense_category_id"
+<!--        <createTable tableName="payments" schemaName="public">-->
+<!--            <column name="id" type="SERIAL">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="payment_amount" type="numeric">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="currency" type="timestamp with time zone">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="amount_difference" type="numeric">-->
+<!--                <constraints nullable="true"/>-->
+<!--            </column>-->
+<!--            <column name="note" type="varchar(50)">-->
+<!--                <constraints nullable="true"/>-->
+<!--            </column>-->
+<!--            <column name="expense_id" type="SERIAL">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--        <addForeignKeyConstraint baseTableName="payments" baseColumnNames="expense_id"-->
+<!--                                 constraintName="fk_payments_expense_id"-->
+<!--                                 referencedTableName="expense" referencedColumnNames="id"-->
+<!--                                 onDelete="CASCADE" onUpdate="CASCADE"/>-->
+        <addForeignKeyConstraint baseTableName="expense" baseColumnNames="expense_category_id"
+                                 constraintName="fk_expense_expense_category_id"
                                  referencedTableName="expense_category" referencedColumnNames="id"
                                  onDelete="CASCADE" onUpdate="CASCADE"/>
         <addUniqueConstraint constraintName="unique_expense_category_name" tableName="expense_category"
-                             columnNames="category_name, status"/>
-        <addUniqueConstraint constraintName="unique_expense_name" tableName="expenses"
+                             columnNames="category_name"/>
+        <addUniqueConstraint constraintName="unique_expense_name" tableName="expense"
                              columnNames="expense_name, status"/>
         <addUniqueConstraint columnNames="full_name, email" constraintName="unique_email" tableName="_user"/>
 

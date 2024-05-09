@@ -1,16 +1,19 @@
 package com.elpidoroun.financialportfolio.controller.delegate;
 
 import com.elpidoroun.financialportfolio.controller.MainController;
+import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.security.user.Permissions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -38,8 +41,16 @@ public abstract class SpringTestsHelper {
     @Autowired
     protected ObjectMapper objectMapper;
 
+    @Autowired
+    private RedisTemplate<String, ExpenseCategory> redisTemplate;
+
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
+
+    @AfterEach
+    public void cleanup(){
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
+    }
 
     public <T> T extractResponse(MvcResult result, Class<T> clazz) throws Exception {
         return objectMapper.readValue(result.getResponse().getContentAsString(), clazz);

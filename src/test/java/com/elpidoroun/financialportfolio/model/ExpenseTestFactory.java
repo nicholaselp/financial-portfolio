@@ -11,7 +11,7 @@ public class ExpenseTestFactory {
     public static Expense createExpense(){
         return Expense.builder()
                 .withExpenseName("expenseName")
-                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryWithId())
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory())
                 .withYearlyAllocatedAmount(new BigDecimal("120.00"))
                 .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
                 .withStatus(Status.ACTIVE)
@@ -21,7 +21,7 @@ public class ExpenseTestFactory {
     public static Expense createExpense(String expenseName){
         return Expense.builder()
                 .withExpenseName(expenseName)
-                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryWithId())
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory())
                 .withYearlyAllocatedAmount(new BigDecimal("120.00"))
                 .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
                 .withStatus(Status.ACTIVE)
@@ -41,7 +41,7 @@ public class ExpenseTestFactory {
     public static Expense createExpenseWithId(){
         return Expense.builder(1L)
                 .withExpenseName("expenseName")
-                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryWithId())
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory())
                 .withYearlyAllocatedAmount(new BigDecimal("120.00"))
                 .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
                 .withStatus(Status.ACTIVE)
@@ -55,7 +55,7 @@ public class ExpenseTestFactory {
                 .withYearlyAllocatedAmount(new BigDecimal("120.00"))
                 .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
                 .withStatus(Status.DELETED)
-                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryWithId())
+                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory())
                 .build();
     }
 
@@ -120,7 +120,7 @@ public class ExpenseTestFactory {
         expenseDto.setMonthlyAllocatedAmount(new BigDecimal("100.00"));
         expenseDto.setYearlyAllocatedAmount(new BigDecimal("1200.00"));
         expenseDto.setStatus(StatusDto.ACTIVE);
-        expenseDto.setExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryDtoWithId(expenseCategoryId));
+        expenseDto.setExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategoryDto(expenseCategoryId));
         return expenseDto;
     }
 

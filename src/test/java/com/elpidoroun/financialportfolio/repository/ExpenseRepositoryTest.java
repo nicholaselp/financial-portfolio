@@ -1,11 +1,11 @@
 package com.elpidoroun.financialportfolio.repository;
 
+import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategoryWithId;
 import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createDeletedExpense;
 import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +19,7 @@ public class ExpenseRepositoryTest {
     @Test
     public void success_create_expense(){
         
-        var storedInDb = expenseRepository.save(createExpense("name", expenseCategoryRepository.save(createExpenseCategory())));
+        var storedInDb = expenseRepository.save(createExpense("name", expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory())));
         var fromDb = expenseRepository.findById(storedInDb.getId());
 
         assertThat(fromDb).isPresent();
@@ -27,7 +27,7 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void success_create_expense_with_same_name_first_is_deleted(){
-        var expenseCategory = expenseCategoryRepository.save(createExpenseCategoryWithId());
+        var expenseCategory = expenseCategoryRepository.save(createExpenseCategory());
         var active = expenseRepository.save(createExpense("name", expenseCategory));
         expenseRepository.save(createDeletedExpense(expenseCategory));
 
@@ -37,7 +37,7 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void success_findById(){
-        var expense = expenseRepository.save(createExpense("name", expenseCategoryRepository.save(createExpenseCategory())));
+        var expense = expenseRepository.save(createExpense("name", expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory())));
 
         assertThat(expenseRepository.findById(expense.getId()))
                 .isPresent()
@@ -46,7 +46,7 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void failed_findById_already_deleted(){
-        var deleted = expenseRepository.save(createDeletedExpense(expenseCategoryRepository.save(createExpenseCategory())));
+        var deleted = expenseRepository.save(createDeletedExpense(expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory())));
 
         assertThat(expenseRepository.findById(deleted.getId()))
                 .isNotPresent();
@@ -54,7 +54,7 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void success_findAll_doesnt_show_deleted(){
-        var expenseCategory = expenseCategoryRepository.save(createExpenseCategoryWithId());
+        var expenseCategory = expenseCategoryRepository.save(createExpenseCategory());
         var deleted = expenseRepository.save(createDeletedExpense(expenseCategory));
         var active1 = expenseRepository.save(createExpense("name1", expenseCategory));
         var active2 = expenseRepository.save(createExpense("name2", expenseCategory));
@@ -65,19 +65,19 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void success_existsById(){
-        var activeExpense = expenseRepository.save(createExpense("name", expenseCategoryRepository.save(createExpenseCategory())));
+        var activeExpense = expenseRepository.save(createExpense("name", expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory())));
         assertThat(expenseRepository.existsById(activeExpense.getId())).isTrue();
     }
 
     @Test
     public void failed_existsById_because_its_deleted(){
-        var deleted = expenseRepository.save(createDeletedExpense(expenseCategoryRepository.save(createExpenseCategory())));
+        var deleted = expenseRepository.save(createDeletedExpense(expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory())));
         assertThat(expenseRepository.existsById(deleted.getId())).isFalse();
     }
 
     @Test
     public void success_deleteById(){
-        var expense = expenseRepository.save(createExpense("name", expenseCategoryRepository.save(createExpenseCategory())));
+        var expense = expenseRepository.save(createExpense("name", expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory())));
         assertThat(expenseRepository.findAll()).hasSize(1);
         expenseRepository.deleteById(expense.getId());
         assertThat(expenseRepository.findAll()).hasSize(0);

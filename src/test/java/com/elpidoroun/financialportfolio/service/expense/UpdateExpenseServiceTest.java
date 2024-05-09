@@ -9,7 +9,7 @@ import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategoryWithId;
+import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -25,7 +25,7 @@ public class UpdateExpenseServiceTest extends MainTestConfig {
         var original = repo.save(ExpenseTestFactory.createExpense(expenseCategory));
         var toUpdate = original.clone().withNote("a note").build();
 
-        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
+//        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
 
         service.execute(new UpdateExpenseContext(original, toUpdate));
 
@@ -46,11 +46,9 @@ public class UpdateExpenseServiceTest extends MainTestConfig {
 
     @Test
     public void fail_normalization_error(){
-        var expenseCategory = createExpenseCategoryWithId();
+        var expenseCategory = createExpenseCategory();
         var original = repo.save(ExpenseTestFactory.createExpense("name", expenseCategory));
         var toUpdate = original.clone().withNote("a note").build();
-
-        getExpenseTestConfig().mockNormalizerReturnNull();
 
         assertThatThrownBy(() -> service.execute(new UpdateExpenseContext(original, toUpdate)))
                 .isInstanceOf(ValidationException.class)

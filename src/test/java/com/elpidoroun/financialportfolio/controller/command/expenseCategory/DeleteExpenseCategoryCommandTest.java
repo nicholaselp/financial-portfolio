@@ -22,7 +22,7 @@ public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
     public void success_delete_expense() {
         var expenseCategory = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
         assertThat(expenseCategoryRepository.findAll()).hasSize(1);
-        var request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(expenseCategory.getId().toString());
+        var request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(expenseCategory.getId());
 
         command.execute(request);
 
@@ -36,14 +36,14 @@ public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
 
         assertThatThrownBy(() -> command.execute(
                             new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(
-                                    expenseCategory.getId().toString())))
+                                    expenseCategory.getId())))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Cannot delete Expense Category. Expenses found that use expense category with ID: " + expenseCategory.getId());
     }
 
     @Test
     public void failed_to_delete_nothing_to_delete(){
-        var request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest("1");
+        var request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(1L);
 
         assertThatThrownBy(() -> command.execute(request))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -58,13 +58,13 @@ public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
 
     @Test
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
-        DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest("id-to-delete");
+        DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(1L);
         assertThat(command.isRequestIncomplete(request)).isFalse();
     }
 
     @Test
     public void missing_params_returns_empty(){
-        DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest("id-to-delete");
+        DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(1L);
         assertThat(command.missingParams(request)).isEqualTo("");
     }
 

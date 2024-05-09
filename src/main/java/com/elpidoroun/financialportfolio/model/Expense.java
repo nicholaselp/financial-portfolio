@@ -23,7 +23,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 @Entity
-@Table(name = "expenses")
+@Table(name = "expense")
 public class Expense {
 
     @Id

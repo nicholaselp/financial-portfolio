@@ -9,41 +9,25 @@ public class ExpenseCategoryMapperTest {
     ExpenseCategoryMapper expenseCategoryMapper = new ExpenseCategoryMapper();
 
     @Test
-    public void convert_to_response_dto(){
-        var expense = ExpenseCategoryTestFactory.createExpenseCategory("expenseCategory");
-
-        var expenseCategoryDto = expenseCategoryMapper.convertToDto(expense);
-
-        assertThat(expenseCategoryDto.getCategoryName()).isEqualTo(expense.getCategoryName());
-        assertThat(expenseCategoryDto.getId()).isEqualTo(expense.getId());
-        assertThat(expenseCategoryDto.getExpenseType()).isEqualTo(ExpenseTypeMapper.toDto(expense.getExpenseType()));
-        assertThat(expenseCategoryDto.getStatus()).isEqualTo(StatusMapper.toDto(expense.getStatus()));
-        assertThat(expenseCategoryDto.getBillingInterval()).isEqualTo(BillingIntervalMapper.toDto(expense.getBillingInterval()));
-    }
-
-    @Test
     public void convert_to_domain(){
         var expenseCategoryDto = ExpenseCategoryTestFactory.createExpenseCategoryDto();
 
         var expenseCategory = expenseCategoryMapper.convertToDomain(expenseCategoryDto);
 
-        assertThat(expenseCategory.getId()).isEqualTo(expenseCategoryDto.getId());
         assertThat(expenseCategory.getExpenseType()).isEqualTo(ExpenseTypeMapper.toDomain(expenseCategoryDto.getExpenseType()));
         assertThat(expenseCategory.getCategoryName()).isEqualTo(expenseCategoryDto.getCategoryName());
-        assertThat(expenseCategory.getStatus()).isEqualTo(StatusMapper.toDomain(expenseCategoryDto.getStatus()));
         assertThat(expenseCategory.getBillingInterval()).isEqualTo(BillingIntervalMapper.toDomain(expenseCategoryDto.getBillingInterval()));
     }
 
     @Test
     public void convert_to_domain_with_id(){
-        var expenseCategoryDto = ExpenseCategoryTestFactory.createExpenseCategoryDto();
+        var expenseCategoryDto = ExpenseCategoryTestFactory.createExpenseCategoryDto(1L);
 
-        var expenseCategory = expenseCategoryMapper.convertToDomain(expenseCategoryDto, "1");
+        var expenseCategory = expenseCategoryMapper.convertToDomain(expenseCategoryDto);
 
-        assertThat(expenseCategory.getId()).isEqualTo(Long.valueOf("1"));
+        assertThat(expenseCategory.getId()).isEqualTo(1L);
         assertThat(expenseCategory.getExpenseType()).isEqualTo(ExpenseTypeMapper.toDomain(expenseCategoryDto.getExpenseType()));
         assertThat(expenseCategory.getCategoryName()).isEqualTo(expenseCategoryDto.getCategoryName());
-        assertThat(expenseCategory.getStatus()).isEqualTo(StatusMapper.toDomain(expenseCategoryDto.getStatus()));
         assertThat(expenseCategory.getBillingInterval()).isEqualTo(BillingIntervalMapper.toDomain(expenseCategoryDto.getBillingInterval()));
     }
 

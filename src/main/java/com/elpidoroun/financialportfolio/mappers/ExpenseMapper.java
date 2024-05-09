@@ -62,8 +62,8 @@ public class ExpenseMapper {
                 .build();
     }
 
-    public Expense convertToDomainWithId(ExpenseDto expenseDto, String id){
-        return Expense.builder(Long.valueOf(id))
+    public Expense convertToDomainWithId(ExpenseDto expenseDto, Long id){
+        return Expense.builder(id)
                 .withExpenseName(expenseDto.getExpenseName())
                 .withMonthlyAllocatedAmount(expenseDto.getMonthlyAllocatedAmount())
                 .withYearlyAllocatedAmount(expenseDto.getYearlyAllocatedAmount())

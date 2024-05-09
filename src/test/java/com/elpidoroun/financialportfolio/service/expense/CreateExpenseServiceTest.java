@@ -7,7 +7,7 @@ import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategoryWithId;
+import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,12 +18,12 @@ public class CreateExpenseServiceTest extends MainTestConfig {
     private final ExpenseCategoryRepository expenseCategoryRepository = getExpenseTestConfig().getExpenseCategoryRepository();
     @Test
     public void success_create_expense(){
-        var expenseCategory = createExpenseCategoryWithId();
+        var expenseCategory = createExpenseCategory();
         expenseCategoryRepository.save(expenseCategory);
 
         var expense = ExpenseTestFactory.createExpense(expenseCategory);
 
-        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
+//        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
 
         var result = service.execute(expense);
 
@@ -32,7 +32,7 @@ public class CreateExpenseServiceTest extends MainTestConfig {
 
     @Test
     public void failed_create_expense_uniqueness_violation(){
-        var expenseCategory = createExpenseCategoryWithId();
+        var expenseCategory = createExpenseCategory();
         expenseCategoryRepository.save(expenseCategory);
 
         var expense = ExpenseTestFactory.createExpense(expenseCategory);
@@ -45,17 +45,11 @@ public class CreateExpenseServiceTest extends MainTestConfig {
 
     @Test
     public void failed_normalization_failed(){
-        var expenseCategory = createExpenseCategoryWithId();
+        var expenseCategory = createExpenseCategory();
         var expense = ExpenseTestFactory.createExpense("name", expenseCategory);
-
-        getExpenseTestConfig().mockNormalizerReturnNull();
 
         assertThatThrownBy(() -> service.execute(expense))
                 .isInstanceOf(ValidationException.class)
                 .hasMessage("Expense Category with ID: " + expenseCategory.getId() + " not found during normalization");
     }
-
-
-
-
 }

@@ -19,10 +19,10 @@ class CreateExpenseCommandTest extends MainTestConfig {
 
     @Test
     public void success_create_expense() {
-        ExpenseCategory expenseCategory = ExpenseCategoryTestFactory.createExpenseCategoryWithId();
+        ExpenseCategory expenseCategory = ExpenseCategoryTestFactory.createExpenseCategory();
         expenseCategoryRepository.save(expenseCategory);
 
-        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
+//        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
 
         ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto(expenseCategory.getId());
 

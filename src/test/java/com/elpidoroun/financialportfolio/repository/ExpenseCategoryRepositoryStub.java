@@ -1,7 +1,6 @@
 package com.elpidoroun.financialportfolio.repository;
 
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
-import com.elpidoroun.financialportfolio.model.Status;
 import lombok.NonNull;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -28,9 +27,9 @@ public class ExpenseCategoryRepositoryStub implements ExpenseCategoryRepository 
         ExpenseCategory entityToSave;
 
         if (entity.getId() == null) {
-            entityToSave = ExpenseCategory.builder(generateUniqueId())
+            entityToSave = ExpenseCategory.builder()
+                    .withId(generateUniqueId())
                     .withExpenseType(entity.getExpenseType())
-                    .withStatus(entity.getStatus())
                     .withCategoryName(entity.getCategoryName())
                     .withBillingInterval(entity.getBillingInterval())
                     .build();
@@ -58,7 +57,6 @@ public class ExpenseCategoryRepositoryStub implements ExpenseCategoryRepository 
     public @NonNull Optional<ExpenseCategory> findById(@NonNull Long id) {
         return expenseCategories.stream()
                 .filter(expenseCategory -> id.equals(expenseCategory.getId()))
-                .filter(expenseCategory -> expenseCategory.getStatus() != Status.DELETED)
                 .findFirst();
     }
 
@@ -66,7 +64,6 @@ public class ExpenseCategoryRepositoryStub implements ExpenseCategoryRepository 
     public Optional<ExpenseCategory> findByCategoryName(String categoryName) {
         return expenseCategories.stream()
                 .filter(expenseCategory -> categoryName.equals(expenseCategory.getCategoryName()))
-                .filter(expenseCategory -> expenseCategory.getStatus() != Status.DELETED)
                 .findFirst();
     }
 
@@ -74,7 +71,6 @@ public class ExpenseCategoryRepositoryStub implements ExpenseCategoryRepository 
     public @NonNull List<ExpenseCategory> findAll() {
         return expenseCategories
                 .stream()
-                .filter(expenseCategory -> expenseCategory.getStatus() != Status.DELETED)
                 .collect(Collectors.toList());
     }
 
@@ -86,7 +82,7 @@ public class ExpenseCategoryRepositoryStub implements ExpenseCategoryRepository 
 
     @Override
     public void deleteById(@NonNull Long id) {
-        expenseCategories.removeIf(expenseCategory -> id.equals(expenseCategory.getId()) && expenseCategory.getStatus() != Status.DELETED);
+        expenseCategories.removeIf(expenseCategory -> id.equals(expenseCategory.getId()));
     }
 
     public static long generateUniqueId() {

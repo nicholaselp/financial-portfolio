@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
@@ -24,7 +25,7 @@ public class ExpenseTest {
     public void expense_creation_with_id() {
         var expense = Expense.builder(1L)
                 .withExpenseName("Groceries")
-                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory("expenseCategory"))
+                .withExpenseCategory(createExpenseCategory("expenseCategory"))
                 .withYearlyAllocatedAmount(new BigDecimal("120.00"))
                 .withMonthlyAllocatedAmount(new BigDecimal("10.00"))
                 .withStatus(Status.ACTIVE)
@@ -43,7 +44,7 @@ public class ExpenseTest {
         assertThatThrownBy(() -> Expense.builder(1L)
                 .withExpenseName("Groceries")
                 .withStatus(Status.ACTIVE)
-                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory("expenseCategory"))
+                .withExpenseCategory(createExpenseCategory("expenseCategory"))
                 .build())
                 .isInstanceOf(ValidationException.class)
                 .hasMessage("Monthly and yearly amount are empty");
@@ -54,7 +55,7 @@ public class ExpenseTest {
         assertThatThrownBy(() -> Expense.builder(1L)
                 .withExpenseName("Groceries")
                 .withStatus(Status.ACTIVE)
-                .withExpenseCategory(ExpenseCategoryTestFactory.createExpenseCategory("expenseCategory"))
+                .withExpenseCategory(createExpenseCategory("expenseCategory"))
                 .withYearlyAllocatedAmount(new BigDecimal("100"))
                 .withMonthlyAllocatedAmount(new BigDecimal("2000"))
                 .build())

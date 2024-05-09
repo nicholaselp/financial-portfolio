@@ -33,8 +33,8 @@ public class ExpenseRepositoryOperations {
             throw new DatabaseOperationException("Exception occurred while saving expense");
         }
     }
-    public Result<Expense, String> getById(String id){
-        return expenseRepository.findById(Long.valueOf(id)).<Result<Expense, String>>map(Result::success)
+    public Result<Expense, String> findById(Long id){
+        return expenseRepository.findById(id).<Result<Expense, String>>map(Result::success)
                 .orElseGet(() -> Result.fail("Expense with ID: " + id + " not found"));
     }
 
@@ -54,13 +54,13 @@ public class ExpenseRepositoryOperations {
         }
     }
 
-    public Result<Nothing, String> deleteById(String id){
-        if(!expenseRepository.existsById(Long.valueOf(id))){
+    public Result<Nothing, String> deleteById(Long id){
+        if(!expenseRepository.existsById(id)){
             return Result.fail("Expense with ID: " + id + " not found. Nothing will be deleted");
         }
 
         try {
-            expenseRepository.deleteById(Long.valueOf(id));
+            expenseRepository.deleteById(id);
             return Result.success();
         } catch (Exception exception){
             logger.error(exception.getMessage());
@@ -72,8 +72,8 @@ public class ExpenseRepositoryOperations {
                 .stream().findFirst();
     }
 
-    public boolean expenseExistWithCategoryId(String categoryId){
-        return !expenseRepository.findByExpenseCategoryId(Long.valueOf(categoryId))
+    public boolean expenseExistWithCategoryId(Long categoryId){
+        return !expenseRepository.findByExpenseCategoryId(categoryId)
                 .isEmpty();
     }
 }

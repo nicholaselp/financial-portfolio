@@ -5,8 +5,9 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
 import com.elpidoroun.financialportfolio.model.Expense;
-import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
-import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
+import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
+import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,7 +23,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
 import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
 import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpenseDto;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,8 +34,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
 
-    @Autowired private ExpenseRepository expenseRepository;
-    @Autowired private ExpenseCategoryRepository expenseCategoryRepository;
+    @Autowired private ExpenseRepositoryOperations expenseRepositoryOperations;
+    @Autowired private ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
     @Autowired private ExpenseMapper expenseMapper;
     @Nested
     class AuthenticationTests {
@@ -69,7 +69,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
         public void success() throws Exception {
             var request = createExpenseDto("expense",
                     expenseCategoryMapper.convertToDto(
-                            expenseCategoryRepository.save(createExpenseCategory())));
+                            expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory())));
 
             MvcResult result = mockMvc().perform(post("/v1/expense")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -80,18 +80,18 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
 
             var extractResponse = extractResponse(result, ExpenseResponseDto.class);
 
-            var domainEntity = expenseRepository.findById(extractResponse.getMeta().getId());
+            var domainEntity = expenseRepositoryOperations.findById(extractResponse.getMeta().getId());
 
-            assertThat(domainEntity).isPresent();
+            assertThat(domainEntity.isSuccess()).isTrue();
             assertRequestResponse(request, extractResponse);
-            assertResponseWithDomain(extractResponse, domainEntity.get());
+            assertResponseWithDomain(extractResponse, domainEntity.getSuccessValue());
         }
 
         @Test
         public void fail() throws Exception {
-            var expenseCategoryDto = expenseCategoryRepository.save(createExpenseCategory());
+            var expenseCategoryDto = expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory());
             var expenseDto = expenseMapper.convertToDto(
-                    expenseRepository.save(createExpense("expenseName", expenseCategoryDto)));
+                    expenseRepositoryOperations.save(createExpense("expenseName", expenseCategoryDto)));
 
             MvcResult result = mockMvc().perform(post("/v1/expense")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -109,16 +109,14 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
     class UpdateExpenseTest {
         @Test
         public void success() throws Exception {
-            var expenseCategory = expenseCategoryRepository.save(createExpenseCategory());
-            var original = expenseRepository.save(createExpense(expenseCategory));
+            var expenseCategory = expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory());
+            var original = expenseRepositoryOperations.save(createExpense(expenseCategory));
             var request = expenseMapper.convertToDto(original);
             request.setExpenseName("updateExpenseName");
             
-            var updated = expenseRepository.findById(original.getId());
-            assertThat(updated).isPresent()
-                    .hasValueSatisfying(Expense -> {
-                        assertThat(Expense.getExpenseName()).isEqualTo(original.getExpenseName());
-                    });
+            var updated = expenseRepositoryOperations.findById(original.getId());
+            assertThat(updated.isSuccess()).isTrue();
+            assertThat(updated.getSuccessValue()).isEqualTo(original);
 
             MvcResult result = mockMvc().perform(put("/v1/expense/" + original.getId())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -129,11 +127,11 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
 
             var extractResponse = extractResponse(result, ExpenseResponseDto.class);
 
-            var domainEntity = expenseRepository.findById(extractResponse.getMeta().getId());
+            var domainEntity = expenseRepositoryOperations.findById(extractResponse.getMeta().getId());
 
-            assertThat(domainEntity).isPresent();
+            assertThat(domainEntity.isSuccess()).isTrue();
             assertRequestResponse(request, extractResponse);
-            assertResponseWithDomain(extractResponse, domainEntity.get());
+            assertResponseWithDomain(extractResponse, domainEntity.getSuccessValue());
         }
 
         @Test
@@ -156,7 +154,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
     class GetExpenseByIdTest {
         @Test
         public void success() throws Exception {
-            var storedExpenseId = expenseRepository.save(createExpense(expenseCategoryRepository.save(createExpenseCategory()))).getId();
+            var storedExpenseId = expenseRepositoryOperations.save(createExpense(expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory()))).getId();
 
             MvcResult result = mockMvc().perform(get("/v1/expense/" + storedExpenseId)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -165,10 +163,10 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
                     .andReturn();
 
             var extractResponse = extractResponse(result, ExpenseResponseDto.class);
-            var domainEntity = expenseRepository.findById(extractResponse.getMeta().getId());
+            var domainEntity = expenseRepositoryOperations.findById(extractResponse.getMeta().getId());
 
-            assertThat(domainEntity).isPresent();
-            assertResponseWithDomain(extractResponse, domainEntity.get());
+            assertThat(domainEntity.isSuccess()).isTrue();
+            assertResponseWithDomain(extractResponse, domainEntity.getSuccessValue());
         }
 
         @Test
@@ -187,10 +185,10 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
     class GetAllExpenses {
         @Test
         public void success() throws Exception {
-            var storedExpenseCategory = expenseCategoryRepository.save(createExpenseCategory());
+            var storedExpenseCategory = expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory());
 
-            expenseRepository.save(createExpense("name1", storedExpenseCategory));
-            expenseRepository.save(createExpense("name2", storedExpenseCategory));
+            expenseRepositoryOperations.save(createExpense("name1", storedExpenseCategory));
+            expenseRepositoryOperations.save(createExpense("name2", storedExpenseCategory));
 
             MvcResult result = mockMvc().perform(get("/v1/expense")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -200,7 +198,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
 
             var response = extractToList(result, ExpenseResponseDto.class);
 
-            List<Expense> domainEntities = expenseRepository.findAll();
+            List<Expense> domainEntities = expenseRepositoryOperations.findAll();
 
             assertThat(domainEntities).isNotEmpty().hasSize(2);
             assertThat(domainEntities).hasSameSizeAs(response);
@@ -228,7 +226,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
     class DeleteExpenseById {
         @Test
         public void success() throws Exception {
-            var storedExpenseId = expenseRepository.save(createExpense(expenseCategoryRepository.save(createExpenseCategory()))).getId();
+            var storedExpenseId = expenseRepositoryOperations.save(createExpense(expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory()))).getId();
 
             MvcResult result = mockMvc().perform(delete("/v1/expense/" + storedExpenseId)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -236,9 +234,10 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
 //                    .andExpect(MockMvcResultMatchers.status().isOk())
                     .andReturn();
 
-            var domainEntity = expenseRepository.findById(storedExpenseId);
+            var domainEntity = expenseRepositoryOperations.findById(storedExpenseId);
 
-            assertThat(domainEntity).isNotPresent();
+            assertThat(domainEntity.isSuccess()).isTrue();
+            assertThat(domainEntity.getSuccessValue()).isNotNull();
         }
 
         @Test

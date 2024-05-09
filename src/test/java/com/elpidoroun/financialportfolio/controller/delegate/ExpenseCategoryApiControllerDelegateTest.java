@@ -5,6 +5,7 @@ import com.elpidoroun.financialportfolio.generated.dto.BillingIntervalDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
+import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ public class ExpenseCategoryApiControllerDelegateTest extends ExpenseCategorySpr
         public static Stream<Arguments> admin_only_api_calls() {
             return Stream.of(
                     Arguments.of(CREATE_EXPENSE_CATEGORY_POST_ENDPOINT, HttpMethod.POST),
-                    Arguments.of(UPDATE_EXPENSE_CATEGORY_PUT_ENDPOINT + "/1", HttpMethod.PUT),
+                    Arguments.of(UPDATE_EXPENSE_CATEGORY_PUT_ENDPOINT, HttpMethod.PUT),
                     Arguments.of(DELETE_EXPENSE_CATEGORY_DELETE_ENDPOINT + "/1", HttpMethod.DELETE)
             );
         }
@@ -123,7 +124,7 @@ public class ExpenseCategoryApiControllerDelegateTest extends ExpenseCategorySpr
     class UpdateExpenseCategoryTest {
         @Test
         public void success() throws Exception {
-            var original = expenseCategoryRepository.save(createExpenseCategory());
+            var original = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
             var request = expenseCategoryMapper.convertToDto(original);
             request.setBillingInterval(BillingIntervalDto.YEARLY);
 
@@ -133,7 +134,7 @@ public class ExpenseCategoryApiControllerDelegateTest extends ExpenseCategorySpr
                         assertThat(expenseCategory.getBillingInterval()).isEqualTo(original.getBillingInterval());
                     });
 
-            MvcResult result = mockMvc().perform(put("/v1/expense-category/" + request.getId())
+            MvcResult result = mockMvc().perform(put("/v1/expense-category")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bearer " + generateAdminToken())
                             .content(objectMapper.writeValueAsString(request)))
@@ -151,7 +152,7 @@ public class ExpenseCategoryApiControllerDelegateTest extends ExpenseCategorySpr
 
         @Test
         public void fail() throws Exception {
-            var original = expenseCategoryRepository.save(createExpenseCategory());
+            var original = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
             var request = expenseCategoryMapper.convertToDto(original);
             request.setCategoryName("updated");
 
@@ -161,7 +162,7 @@ public class ExpenseCategoryApiControllerDelegateTest extends ExpenseCategorySpr
                         assertThat(expenseCategory.getCategoryName()).isEqualTo(original.getCategoryName());
                     });
 
-            MvcResult result = mockMvc().perform(put("/v1/expense-category/" + request.getId())
+            MvcResult result = mockMvc().perform(put("/v1/expense-category")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bearer " + generateAdminToken())
                             .content(objectMapper.writeValueAsString(request)))
@@ -176,7 +177,7 @@ public class ExpenseCategoryApiControllerDelegateTest extends ExpenseCategorySpr
     class GetExpenseCategoryByIdTest {
         @Test
         public void success() throws Exception {
-            var storedExpenseCategoryId = expenseCategoryRepository.save(createExpenseCategory()).getId();
+            var storedExpenseCategoryId = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory()).getId();
 
             MvcResult result = mockMvc().perform(get("/v1/expense-category/" + storedExpenseCategoryId)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -246,7 +247,7 @@ public class ExpenseCategoryApiControllerDelegateTest extends ExpenseCategorySpr
     class DeleteExpenseCategoryById {
         @Test
         public void success() throws Exception {
-            var storedExpenseCategoryId = expenseCategoryRepository.save(createExpenseCategory()).getId();
+            var storedExpenseCategoryId = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory()).getId();
 
             MvcResult result = mockMvc().perform(delete("/v1/expense-category/" + storedExpenseCategoryId)
                             .contentType(MediaType.APPLICATION_JSON)

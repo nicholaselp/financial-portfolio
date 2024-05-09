@@ -24,14 +24,18 @@ public class RedisCachingService {
 
     @PostConstruct
     public void cacheExpenseCategoriesFromDatabase(){
+        flushCache();
         var expenseCategoryList = expenseCategoryRepository.findAll();
 
+        logger.info("==========================================================");
         expenseCategoryList.forEach(expenseCategory -> {
-            String key = EXPENSE_CATEGORY_CACHE+"::" + expenseCategory.getId();
-            expenseCategoryRedis.opsForValue().set(key, expenseCategory);
-                });
+            logger.info("ExpenseCategory with ID: " + expenseCategory.getId() + " name: " + expenseCategory.getCategoryName());
+            expenseCategoryRedis.opsForHash().put(EXPENSE_CATEGORY_CACHE, expenseCategory.getId().toString(), expenseCategory);
+        });
         logger.info("==========================================================");
-        logger.info("Cached ExpenseCategory items: " + expenseCategoryList.size());
-        logger.info("==========================================================");
+    }
+
+    private void flushCache(){
+        expenseCategoryRedis.getConnectionFactory().getConnection().flushAll();
     }
 }

@@ -36,7 +36,7 @@ public class ExpenseApiControllerDelegate extends MainController implements Expe
 
     @Override
     @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_READ.value)")
-    public ResponseEntity<ExpenseResponseDto> getExpenseById(String id){
+    public ResponseEntity<ExpenseResponseDto> getExpenseById(Long id){
         return (ResponseEntity<ExpenseResponseDto>) execute(getExpenseByIdCommand, GetExpenseByIdCommand.request(id));
     }
 
@@ -48,13 +48,13 @@ public class ExpenseApiControllerDelegate extends MainController implements Expe
 
     @Override
     @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_UPDATE.value)")
-    public ResponseEntity<ExpenseResponseDto> updateExpenseById(String expenseId, ExpenseDto expenseDto){
+    public ResponseEntity<ExpenseResponseDto> updateExpenseById(Long expenseId, ExpenseDto expenseDto){
         return (ResponseEntity<ExpenseResponseDto>) execute(updateExpenseCommand, UpdateExpenseCommand.request(expenseId, expenseDto));
     }
 
     @Override
     @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_DELETE.value)")
-    public ResponseEntity<Void> deleteExpenseById(String id){
+    public ResponseEntity<Void> deleteExpenseById(Long id){
         return (ResponseEntity<Void>) execute(deleteExpenseCommand, DeleteExpenseCommand.request(id));
     }
 }

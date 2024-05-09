@@ -57,17 +57,17 @@ public class DeleteExpenseCategoryCommand implements Command<DeleteExpenseCatego
     @Override
     public String getOperation() { return DELETE_EXPENSE_CATREGORY_BY_ID.getValue(); }
 
-    public static DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request(String expenseCategoryId){
+    public static DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request(Long expenseCategoryId){
         return new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(expenseCategoryId);
     }
 
     protected static class DeleteExpenseCategoryRequest extends AbstractRequest {
-        private final String expenseCategoryId;
+        private final Long expenseCategoryId;
 
-        DeleteExpenseCategoryRequest(String expenseCategoryId){
+        DeleteExpenseCategoryRequest(Long expenseCategoryId){
             this.expenseCategoryId = expenseCategoryId;
         }
 
-        public String getExpenseCategoryId(){ return expenseCategoryId; }
+        public Long getExpenseCategoryId(){ return expenseCategoryId; }
     }
 }

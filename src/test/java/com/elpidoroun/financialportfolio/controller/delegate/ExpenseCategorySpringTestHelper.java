@@ -3,7 +3,6 @@ package com.elpidoroun.financialportfolio.controller.delegate;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.mappers.BillingIntervalMapper;
 import com.elpidoroun.financialportfolio.mappers.ExpenseTypeMapper;
-import com.elpidoroun.financialportfolio.mappers.StatusMapper;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -28,17 +27,15 @@ public class ExpenseCategorySpringTestHelper extends SpringTestsHelper {
 
     protected void assertRequestResponse(ExpenseCategoryDto request, ExpenseCategoryDto extractResponse) {
         assertThat(request.getCategoryName()).isEqualTo(extractResponse.getCategoryName());
-        assertThat(request.getStatus()).isEqualTo(extractResponse.getStatus());
         assertThat(request.getExpenseType()).isEqualTo(extractResponse.getExpenseType());
         assertThat(request.getBillingInterval()).isEqualTo(extractResponse.getBillingInterval());
     }
 
-    protected void assertResponseWithDomain(ExpenseCategoryDto extractResponse, ExpenseCategory expenseCategory) {
-        assertThat(extractResponse.getId()).isEqualTo(expenseCategory.getId());
-        assertThat(extractResponse.getCategoryName()).isEqualTo(expenseCategory.getCategoryName());
-        assertThat(extractResponse.getBillingInterval()).isEqualTo(BillingIntervalMapper.toDto(expenseCategory.getBillingInterval()));
-        assertThat(extractResponse.getStatus()).isEqualTo(StatusMapper.toDto(expenseCategory.getStatus()));
-        assertThat(extractResponse.getExpenseType()).isEqualTo(ExpenseTypeMapper.toDto(expenseCategory.getExpenseType()));
+    protected void assertResponseWithDomain(ExpenseCategoryDto response, ExpenseCategory expenseCategory) {
+        assertThat(response.getId()).isEqualTo(expenseCategory.getId());
+        assertThat(response.getCategoryName()).isEqualTo(expenseCategory.getCategoryName());
+        assertThat(response.getBillingInterval()).isEqualTo(BillingIntervalMapper.toDto(expenseCategory.getBillingInterval()));
+        assertThat(response.getExpenseType()).isEqualTo(ExpenseTypeMapper.toDto(expenseCategory.getExpenseType()));
     }
     public MockHttpServletRequestBuilder resolveRequestMethod(HttpMethod httpMethod, String endpointUrl) {
         if (httpMethod.equals(POST)) {

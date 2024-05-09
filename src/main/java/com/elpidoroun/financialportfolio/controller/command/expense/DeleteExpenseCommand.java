@@ -52,18 +52,18 @@ public class DeleteExpenseCommand implements Command<DeleteExpenseCommand.Delete
     @Override
     public String getOperation() { return DELETE_EXPENSE_BY_ID.getValue(); }
 
-    public static DeleteExpenseCommand.DeleteExpenseRequest request(String expenseId){
+    public static DeleteExpenseCommand.DeleteExpenseRequest request(Long expenseId){
         return new DeleteExpenseCommand.DeleteExpenseRequest(expenseId);
     }
 
     protected static class DeleteExpenseRequest extends AbstractRequest {
 
-        private final String expenseId;
+        private final Long expenseId;
 
-        protected DeleteExpenseRequest(String expenseId){
+        protected DeleteExpenseRequest(Long expenseId){
             this.expenseId = expenseId;
         }
-        public String getExpenseId(){ return expenseId; }
+        public Long getExpenseId(){ return expenseId; }
 
     }
 }

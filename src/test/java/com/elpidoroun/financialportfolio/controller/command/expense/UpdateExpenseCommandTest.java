@@ -26,9 +26,9 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
         var dtoToUpdate = expenseMapper.convertToDto(originalEntity);
         dtoToUpdate.setNote("new note");
 
-        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
+//        getExpenseTestConfig().mockNormalizerResponse(expenseCategory);
 
-        ExpenseResponseDto result = command.execute(new UpdateExpenseCommand.UpdateExpenseRequest(originalEntity.getId().toString(), dtoToUpdate));
+        ExpenseResponseDto result = command.execute(new UpdateExpenseCommand.UpdateExpenseRequest(originalEntity.getId(), dtoToUpdate));
 
         assertThat(result).isNotNull();
         assertThat(result.getExpense().getNote()).isEqualTo("new note");
@@ -43,13 +43,13 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
         assertThat(command.isRequestIncomplete(
                 new UpdateExpenseCommand.UpdateExpenseRequest(
-                        "1", new ExpenseDto().expenseName("name"))))
+                        1L, new ExpenseDto().expenseName("name"))))
                 .isFalse();
     }
 
     @Test
     public void missing_params_returns_empty(){
-        UpdateExpenseCommand.UpdateExpenseRequest request = new UpdateExpenseCommand.UpdateExpenseRequest("1", ExpenseTestFactory.createExpenseDto());
+        UpdateExpenseCommand.UpdateExpenseRequest request = new UpdateExpenseCommand.UpdateExpenseRequest(1L, ExpenseTestFactory.createExpenseDto());
         assertThat(command.missingParams(request)).isEqualTo("");
     }
 
@@ -62,7 +62,7 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
     @Test
     public void missing_params_expense_dto_is_missing(){
         assertThat(command
-                .missingParams(new UpdateExpenseCommand.UpdateExpenseRequest("1", null)))
+                .missingParams(new UpdateExpenseCommand.UpdateExpenseRequest(1L, null)))
                 .isEqualTo("ExpenseDto is missing");
     }
     @Test

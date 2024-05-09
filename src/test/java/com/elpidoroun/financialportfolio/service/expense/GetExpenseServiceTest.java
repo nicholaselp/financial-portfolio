@@ -16,12 +16,12 @@ public class GetExpenseServiceTest extends MainTestConfig {
     @Test
     public void success_get_expense_by_id(){
         var expense = repo.save(ExpenseTestFactory.createExpense());
-        assertThat(service.execute(expense.getId().toString())).isEqualTo(expense);
+        assertThat(service.execute(expense.getId())).isEqualTo(expense);
     }
 
     @Test
     public void failed_no_expense_found(){
-        assertThatThrownBy(() ->service.execute("1"))
+        assertThatThrownBy(() ->service.execute(1L))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Expense with ID: 1 not found");
     }

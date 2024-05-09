@@ -26,7 +26,7 @@ public class CreateExpenseCategoryServiceTest extends MainTestConfig {
 
     @Test
     public void failed_uniqueness_violation(){
-        var expenseCategory = ExpenseCategoryTestFactory.createExpenseCategoryWithId();
+        var expenseCategory = ExpenseCategoryTestFactory.createExpenseCategory();
         repo.save(expenseCategory);
 
         assertThatThrownBy(() -> service.execute(expenseCategory))

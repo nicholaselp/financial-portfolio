@@ -14,7 +14,7 @@ public class GetExpenseCategoryService {
 
     @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
 
-    public ExpenseCategory getById(String expenseId){
+    public ExpenseCategory getById(Long expenseId){
         var result = expenseCategoryRepositoryOperations.getById(expenseId);
 
         if(result.isFail()){

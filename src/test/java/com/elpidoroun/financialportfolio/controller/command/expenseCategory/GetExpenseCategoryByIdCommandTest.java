@@ -18,7 +18,7 @@ public class GetExpenseCategoryByIdCommandTest extends MainTestConfig {
         var expenseCategory = repo.save(ExpenseCategoryTestFactory.createExpenseCategory());
         assertThat(repo.findAll()).isNotEmpty().hasSize(1);
 
-        var result = command.execute(GetExpenseCategoryByIdCommand.request(expenseCategory.getId().toString()));
+        var result = command.execute(GetExpenseCategoryByIdCommand.request(expenseCategory.getId()));
 
         assertThat(result.getCategoryName()).isEqualTo(expenseCategory.getCategoryName());
 
@@ -55,7 +55,7 @@ public class GetExpenseCategoryByIdCommandTest extends MainTestConfig {
 
     @Test
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
-        GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request = new GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest("1");
+        GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request = new GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest(1L);
         assertThat(command.isRequestIncomplete(request)).isFalse();
     }
 

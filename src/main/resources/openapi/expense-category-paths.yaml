@@ -39,6 +39,33 @@ operations:
                 type: array
                 items:
                   $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
+    put:
+      tags:
+        - expense-category
+      summary: Update expense category
+      operationId: update-expense-category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
+      responses:
+        200:
+          description: Successfully updated the expense category
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        401:
+          $ref: 'common.yaml#/errors/unauthorized'
+        403:
+          $ref: 'common.yaml#/errors/forbidden'
+        404:
+          $ref: 'common.yaml#/errors/not-found'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'
   expense-category-operations-by-id:
     get:
       tags:
@@ -46,11 +73,7 @@ operations:
       summary: Get expense category by ID
       operationId: get-expense-category-by-id
       parameters:
-        - name: id
-          description: id of expense
-          in: path
-          schema:
-            type: string
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
       responses:
         200:
           description: Successfully return Expense by ID
@@ -74,12 +97,7 @@ operations:
       summary: Delete expense category by ID
       operationId: delete-expense-category-by-id
       parameters:
-        - name: id
-          description: ID of the expense category to delete
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
       responses:
         204:
           description: Expense category deleted successfully
@@ -89,39 +107,5 @@ operations:
           $ref: 'common.yaml#/errors/unauthorized'
         403:
           $ref: 'common.yaml#/errors/forbidden'
-        500:
-          $ref: 'common.yaml#/errors/internal-error'
-    put:
-      tags:
-        - expense-category
-      summary: Update expense category by ID
-      operationId: update-expense-category-by-id
-      parameters:
-        - name: id
-          description: ID of the expense category to update
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
-      responses:
-        200:
-          description: Successfully updated the expense category
-          content:
-            application/json:
-              schema:
-                $ref: 'expense-category-schema.yaml#/components/schemas/ExpenseCategory'
-        400:
-          $ref: 'common.yaml#/errors/invalid-input'
-        401:
-          $ref: 'common.yaml#/errors/unauthorized'
-        403:
-          $ref: 'common.yaml#/errors/forbidden'
-        404:
-          $ref: 'common.yaml#/errors/not-found'
         500:
           $ref: 'common.yaml#/errors/internal-error'

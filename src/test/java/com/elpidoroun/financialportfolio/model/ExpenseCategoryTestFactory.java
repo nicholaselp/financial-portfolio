@@ -3,84 +3,45 @@ package com.elpidoroun.financialportfolio.model;
 import com.elpidoroun.financialportfolio.generated.dto.BillingIntervalDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseTypeDto;
-import com.elpidoroun.financialportfolio.generated.dto.StatusDto;
 
-import static com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepositoryStub.generateUniqueId;
+import static com.elpidoroun.financialportfolio.repository.ExpenseRepositoryStub.generateUniqueId;
 
 public class ExpenseCategoryTestFactory {
     public static ExpenseCategory createExpenseCategory(){
-        return ExpenseCategory.builder()
-                .withCategoryName("categoryName")
-                .withStatus(Status.ACTIVE)
-                .withBillingInterval(BillingInterval.BI_MONTHLY)
-                .withExpenseType(ExpenseType.FIXED)
-                .build();
-    }
-
-    public static ExpenseCategory createExpenseCategoryWithId(){
-        return ExpenseCategory.builder(generateUniqueId())
-                .withCategoryName("categoryName")
-                .withStatus(Status.ACTIVE)
-                .withBillingInterval(BillingInterval.BI_MONTHLY)
-                .withExpenseType(ExpenseType.FIXED)
-                .build();
+        return createExpenseCategory(generateUniqueId(), "name");
     }
 
     public static ExpenseCategory createExpenseCategory(String categoryName){
-        return ExpenseCategory.builder()
-                .withCategoryName(categoryName)
-                .withStatus(Status.ACTIVE)
-                .withBillingInterval(BillingInterval.BI_MONTHLY)
-                .withExpenseType(ExpenseType.FIXED)
-                .build();
+        return createExpenseCategory(generateUniqueId(), categoryName);
     }
 
-    public static ExpenseCategory createDeletedExpenseCategory(String categoryName){
+    public static ExpenseCategory createExpenseCategory(Long id, String name){
         return ExpenseCategory.builder()
-                .withCategoryName(categoryName)
-                .withStatus(Status.DELETED)
-                .withBillingInterval(BillingInterval.BI_MONTHLY)
-                .withExpenseType(ExpenseType.FIXED)
-                .build();
-    }
-
-    public static ExpenseCategory createDeletedExpenseCategory(){
-        return ExpenseCategory.builder()
-                .withCategoryName("categoryName")
-                .withStatus(Status.DELETED)
+                .withId(id)
+                .withCategoryName(name)
                 .withBillingInterval(BillingInterval.BI_MONTHLY)
                 .withExpenseType(ExpenseType.FIXED)
                 .build();
     }
 
     public static ExpenseCategoryDto createExpenseCategoryDto(){
-        ExpenseCategoryDto dto = new ExpenseCategoryDto();
-        dto.setId(1L);
-        dto.setCategoryName("categoryName");
-        dto.setExpenseType(ExpenseTypeDto.FIXED);
-        dto.setStatus(StatusDto.ACTIVE);
-        dto.setBillingInterval(BillingIntervalDto.BI_MONTHLY);
-        return dto;
+        return createExpenseCategoryDto(0L);
+    }
+
+    public static ExpenseCategoryDto createExpenseCategoryDto(Long id){
+        return createExpenseCategoryDto(id, "name");
     }
 
     public static ExpenseCategoryDto createExpenseCategoryDto(String expenseCategory){
-        ExpenseCategoryDto dto = new ExpenseCategoryDto();
-        dto.setId(1L);
-        dto.setCategoryName(expenseCategory);
-        dto.setExpenseType(ExpenseTypeDto.FIXED);
-        dto.setStatus(StatusDto.ACTIVE);
-        dto.setBillingInterval(BillingIntervalDto.BI_MONTHLY);
-        return dto;
+        return createExpenseCategoryDto(generateUniqueId(), expenseCategory);
     }
 
-    public static ExpenseCategoryDto createExpenseCategoryDtoWithId(Long id){
+    public static ExpenseCategoryDto createExpenseCategoryDto(Long id, String name){
         ExpenseCategoryDto dto = new ExpenseCategoryDto();
         dto.setId(id);
-        dto.setCategoryName("categoryName");
+        dto.setCategoryName(name);
         dto.setExpenseType(ExpenseTypeDto.FIXED);
-        dto.setStatus(StatusDto.ACTIVE);
         dto.setBillingInterval(BillingIntervalDto.BI_MONTHLY);
         return dto;
-
     }
 }

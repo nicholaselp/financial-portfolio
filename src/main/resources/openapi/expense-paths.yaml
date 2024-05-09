@@ -46,11 +46,7 @@ operations:
       summary: Get expense by ID
       operationId: get-expense-by-id
       parameters:
-        - name: id
-          description: id of expense
-          in: path
-          schema:
-            type: string
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
       responses:
         200:
           description: Successfully returned Expense by ID
@@ -74,12 +70,7 @@ operations:
       summary: Delete expense by ID
       operationId: delete-expense-by-id
       parameters:
-        - name: id
-          description: ID of the expense to delete
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
       responses:
         204:
           description: Expense deleted successfully
@@ -97,12 +88,7 @@ operations:
       summary: Update expense by ID
       operationId: update-expense-by-id
       parameters:
-        - name: id
-          description: ID of the expense to update
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
       requestBody:
         content:
           application/json:

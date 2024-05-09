@@ -3,6 +3,7 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
 import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
+import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseCategoryMapper;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
@@ -33,8 +34,13 @@ public class UpdateExpenseCategoryCommand implements Command<UpdateExpenseCatego
     }
 
     private UpdateExpenseCategoryContext buildContext(UpdateExpenseCategoryRequest request){
+        var expenseCategoryId = request.getExpenseCategoryDto().getId();
 
-        var result = expenseCategoryRepositoryOperations.getById(request.getExpenseCategoryId());
+        if(isNull(expenseCategoryId)){
+            throw new ValidationException("ExpenseCategory ID is missing");
+        }
+
+        var result = expenseCategoryRepositoryOperations.getById(expenseCategoryId);
 
         if(result.isFail()){
             throw new EntityNotFoundException(result.getError().orElse("Error while Updating ExpenseCategory"));
@@ -42,13 +48,12 @@ public class UpdateExpenseCategoryCommand implements Command<UpdateExpenseCatego
 
         return new UpdateExpenseCategoryContext(
                 result.getSuccessValue(),
-                expenseCategoryMapper.convertToDomain(request.getExpenseCategoryDto(),
-                        request.getExpenseCategoryId()));
+                expenseCategoryMapper.convertToDomain(request.getExpenseCategoryDto()));
     }
 
     @Override
     public boolean isRequestIncomplete(UpdateExpenseCategoryRequest request) {
-        return isNull(request) || isNull(request.getExpenseCategoryDto()) || isNull(request.getExpenseCategoryId());
+        return isNull(request) || isNull(request.getExpenseCategoryDto());
     }
 
     @Override
@@ -58,7 +63,6 @@ public class UpdateExpenseCategoryCommand implements Command<UpdateExpenseCatego
         }
 
         return Stream.of(
-                        isNull(request.getExpenseCategoryId()) ? "expenseCategoryId is missing" : null,
                         isNull(request.getExpenseCategoryDto()) ? "ExpenseCategoryDto is missing" : null
                 )
                 .filter(Objects::nonNull)
@@ -70,20 +74,16 @@ public class UpdateExpenseCategoryCommand implements Command<UpdateExpenseCatego
         return UPDATE_EXPENSE.getValue();
     }
 
-    public static UpdateExpenseCategoryCommand.UpdateExpenseCategoryRequest request(String expenseCategoryId, ExpenseCategoryDto expenseCategoryDto){
-        return new UpdateExpenseCategoryCommand.UpdateExpenseCategoryRequest(expenseCategoryId, expenseCategoryDto);
+    public static UpdateExpenseCategoryCommand.UpdateExpenseCategoryRequest request(ExpenseCategoryDto expenseCategoryDto){
+        return new UpdateExpenseCategoryCommand.UpdateExpenseCategoryRequest(expenseCategoryDto);
     }
 
     protected static class UpdateExpenseCategoryRequest extends AbstractRequest {
-
-        private final String expenseCategoryId;
         private final ExpenseCategoryDto expenseCategoryDto;
 
-        UpdateExpenseCategoryRequest(String expenseCategoryId, ExpenseCategoryDto expenseCategoryDto){
-            this.expenseCategoryId = expenseCategoryId;
+        UpdateExpenseCategoryRequest(ExpenseCategoryDto expenseCategoryDto){
             this.expenseCategoryDto = expenseCategoryDto;
         }
-        public String getExpenseCategoryId(){ return expenseCategoryId; }
         public ExpenseCategoryDto getExpenseCategoryDto(){ return expenseCategoryDto; }
 
     }
