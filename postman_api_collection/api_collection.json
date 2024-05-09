@@ -285,7 +285,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"categoryName\": \"Water Ufsdatiality\",\r\n    \"billingInterval\": \"quarterly\",\r\n    \"expenseType\": \"not-fixed\",\r\n    \"status\": \"active\"\r\n}",
+							"raw": "{\r\n    \"categoryName\": \"Water Ufsadatiality\",\r\n    \"billingInterval\": \"quarterly\",\r\n    \"expenseType\": \"not-fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -313,7 +313,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"categoryName\": \"Water Ufsdatiality\",\r\n    \"billingInterval\": \"quarterly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n}",
+							"raw": "{\r\n    \"categoryName\": \"Water Ufsdatiality\",\r\n    \"billingInterval\": \"quarterly\",\r\n    \"expenseType\": \"fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
