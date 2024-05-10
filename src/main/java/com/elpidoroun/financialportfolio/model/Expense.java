@@ -111,10 +111,10 @@ public class Expense {
     public OffsetDateTime getCreatedAt(){ return createdAt; }
 
     public static Builder builder(){ return new Builder(); }
-    public static Builder builder(Long id){ return new Builder(id); }
 
     public Builder clone(){
-        return new Builder(this.getId())
+        return new Builder()
+                .withId(this.getId())
                 .withExpenseName(this.getExpenseName())
                 .withMonthlyAllocatedAmount(this.getMonthlyAllocatedAmount())
                 .withYearlyAllocatedAmount(this.getYearlyAllocatedAmount())
@@ -148,7 +148,11 @@ public class Expense {
         private Status status;
 
         private Builder(){}
-        private Builder(Long id){ this.id = id; }
+
+        public Builder withId(Long id){
+            this.id = id;
+            return this;
+        }
 
         public Builder withExpenseName(String expenseName){
             this.expenseName = expenseName;

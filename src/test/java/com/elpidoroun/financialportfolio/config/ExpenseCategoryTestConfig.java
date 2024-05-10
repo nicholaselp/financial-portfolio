@@ -15,9 +15,11 @@ import com.elpidoroun.financialportfolio.service.ValidationService;
 import com.elpidoroun.financialportfolio.service.cache.ExpenseCategoryCacheService;
 import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expenseCategory.CreateExpenseCategoryService;
+import com.elpidoroun.financialportfolio.service.expenseCategory.DeleteExpenseCategoryService;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expenseCategory.GetExpenseCategoryService;
 import com.elpidoroun.financialportfolio.service.expenseCategory.UpdateExpenseCategoryService;
+import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryExistsValidation;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryNameValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryUniquenessValidator;
 import lombok.Getter;
@@ -38,12 +40,15 @@ public class ExpenseCategoryTestConfig {
     private final CreateExpenseCategoryService createExpenseCategoryService;
     private final UpdateExpenseCategoryService updateExpenseCategoryService;
     private final GetExpenseCategoryService getExpenseCategoryService;
+    private final DeleteExpenseCategoryService deleteExpenseCategoryService;
+
     private final CreateExpenseCategoryCommand createExpenseCategoryCommand;
     private final UpdateExpenseCategoryCommand updateExpenseCategoryCommand;
     private final GetAllExpenseCategoriesCommand getAllExpenseCategoriesCommand;
     private final GetExpenseCategoryByIdCommand getExpenseCategoryByIdCommand;
     private final DeleteExpenseCategoryCommand deleteExpenseCategoryCommand;
-    RedisTemplate<String, ExpenseCategory> expenseCategoryRedisTemplate;
+
+    private final RedisTemplate<String, ExpenseCategory> expenseCategoryRedisTemplate;
 
     private final ExpenseCategoryCacheService expenseCategoryCacheService;
 
@@ -54,16 +59,19 @@ public class ExpenseCategoryTestConfig {
         expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(expenseCategoryRepository, expenseCategoryCacheService);
         expenseRepositoryOperations = new ExpenseRepositoryOperations(expenseRepository);
         var validationService = new ValidationService<>(List.of(
-                new ExpenseCategoryNameValidator(), new ExpenseCategoryUniquenessValidator(expenseCategoryRepositoryOperations)));
+                new ExpenseCategoryNameValidator(), new ExpenseCategoryUniquenessValidator(expenseCategoryRepositoryOperations),
+                new ExpenseCategoryExistsValidation(expenseCategoryRepositoryOperations)));
 
         createExpenseCategoryService = new CreateExpenseCategoryService(expenseCategoryRepositoryOperations, validationService);
         updateExpenseCategoryService = new UpdateExpenseCategoryService(expenseCategoryRepositoryOperations, validationService);
         getExpenseCategoryService = new GetExpenseCategoryService(expenseCategoryRepositoryOperations);
+        deleteExpenseCategoryService = new DeleteExpenseCategoryService(expenseCategoryRepositoryOperations, expenseRepositoryOperations);
+
         createExpenseCategoryCommand = new CreateExpenseCategoryCommand(createExpenseCategoryService, new ExpenseCategoryMapper());
         updateExpenseCategoryCommand = new UpdateExpenseCategoryCommand(updateExpenseCategoryService, new ExpenseCategoryMapper(), expenseCategoryRepositoryOperations);
         getAllExpenseCategoriesCommand = new GetAllExpenseCategoriesCommand(getExpenseCategoryService, new ExpenseCategoryMapper());
         getExpenseCategoryByIdCommand = new GetExpenseCategoryByIdCommand(getExpenseCategoryService, new ExpenseCategoryMapper());
-        deleteExpenseCategoryCommand = new DeleteExpenseCategoryCommand(expenseCategoryRepositoryOperations, expenseRepositoryOperations);
+        deleteExpenseCategoryCommand = new DeleteExpenseCategoryCommand(deleteExpenseCategoryService);
     }
 
     private RedisTemplate<String, ExpenseCategory> initializeRedisTemplate() {

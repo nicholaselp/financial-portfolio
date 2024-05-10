@@ -1,12 +1,12 @@
 package com.elpidoroun.financialportfolio.repository;
 
 import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.model.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
-import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createDeletedExpense;
 import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,7 +29,7 @@ public class ExpenseRepositoryTest {
     public void success_create_expense_with_same_name_first_is_deleted(){
         var expenseCategory = expenseCategoryRepository.save(createExpenseCategory());
         var active = expenseRepository.save(createExpense("name", expenseCategory));
-        expenseRepository.save(createDeletedExpense(expenseCategory));
+        expenseRepository.save(createExpense("name", expenseCategory, Status.DELETED));
 
         assertThat(expenseRepository.findByExpenseName("name")).hasSize(1)
                 .containsExactlyInAnyOrder(active);
@@ -46,7 +46,12 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void failed_findById_already_deleted(){
-        var deleted = expenseRepository.save(createDeletedExpense(expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory())));
+        var deleted = expenseRepository.save(
+                createExpense(
+                        "name",
+                        expenseCategoryRepository.save(
+                                ExpenseCategoryTestFactory.createExpenseCategory()),
+                        Status.DELETED));
 
         assertThat(expenseRepository.findById(deleted.getId()))
                 .isNotPresent();
@@ -55,7 +60,7 @@ public class ExpenseRepositoryTest {
     @Test
     public void success_findAll_doesnt_show_deleted(){
         var expenseCategory = expenseCategoryRepository.save(createExpenseCategory());
-        var deleted = expenseRepository.save(createDeletedExpense(expenseCategory));
+        var deleted = expenseRepository.save(createExpense("name", expenseCategory, Status.DELETED));
         var active1 = expenseRepository.save(createExpense("name1", expenseCategory));
         var active2 = expenseRepository.save(createExpense("name2", expenseCategory));
 
@@ -71,7 +76,11 @@ public class ExpenseRepositoryTest {
 
     @Test
     public void failed_existsById_because_its_deleted(){
-        var deleted = expenseRepository.save(createDeletedExpense(expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory())));
+        var deleted = expenseRepository.save(
+                createExpense("deleted",
+                        expenseCategoryRepository
+                                .save(createExpenseCategory()),
+                        Status.DELETED));
         assertThat(expenseRepository.existsById(deleted.getId())).isFalse();
     }
 

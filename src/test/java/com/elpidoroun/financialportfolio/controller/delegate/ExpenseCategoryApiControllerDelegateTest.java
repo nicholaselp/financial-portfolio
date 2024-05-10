@@ -269,7 +269,7 @@ public class ExpenseCategoryApiControllerDelegateTest extends ExpenseCategorySpr
                     .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                     .andReturn();
 
-            assertErrorResponse(result, "Expense Category with ID: 1 not found. Nothing will be deleted", "Invalid Argument");
+            assertErrorResponse(result, "Expense Category with ID: 1 not found. Nothing will be deleted", "Validation error occurred");
         }
     }
 }

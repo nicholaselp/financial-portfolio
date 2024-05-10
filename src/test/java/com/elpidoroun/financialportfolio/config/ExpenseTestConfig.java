@@ -20,6 +20,7 @@ import com.elpidoroun.financialportfolio.service.expense.GetExpenseService;
 import com.elpidoroun.financialportfolio.service.expense.UpdateExpenseService;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.normalize.ExpenseCategoryNormalizer;
+import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseExistsValidation;
 import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseUniquenessValidator;
 import lombok.Getter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -58,7 +59,7 @@ public class ExpenseTestConfig {
 
         expenseRepositoryOperations = new ExpenseRepositoryOperations(expenseRepository);
         expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(expenseCategoryRepository, expenseCategoryCacheService);
-        var validations = new ValidationService<>(List.of(new ExpenseUniquenessValidator(expenseRepositoryOperations)));
+        var validations = new ValidationService<>(List.of(new ExpenseUniquenessValidator(expenseRepositoryOperations), new ExpenseExistsValidation(expenseRepositoryOperations)));
         var normalizer = new ExpenseCategoryNormalizer(expenseCategoryCacheService);
         createExpenseService = new CreateExpenseService(expenseRepositoryOperations, validations, normalizer);
         updateExpenseService = new UpdateExpenseService(expenseRepositoryOperations, validations, normalizer);

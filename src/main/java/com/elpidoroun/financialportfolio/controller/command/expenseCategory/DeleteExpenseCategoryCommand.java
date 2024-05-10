@@ -2,12 +2,7 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
-import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
-import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
-import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
-import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
-import com.elpidoroun.financialportfolio.utilities.Nothing;
-import com.elpidoroun.financialportfolio.utilities.Result;
+import com.elpidoroun.financialportfolio.service.expenseCategory.DeleteExpenseCategoryService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
@@ -23,18 +18,11 @@ import static java.util.Objects.isNull;
 @Component
 public class DeleteExpenseCategoryCommand implements Command<DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest, Void> {
 
-    @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
-    @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
+    @NonNull private final DeleteExpenseCategoryService deleteExpenseCategoryService;
 
     @Override
     public Void execute(DeleteExpenseCategoryRequest request) {
-        if(expenseRepositoryOperations.expenseExistWithCategoryId(request.getExpenseCategoryId())){
-            throw new EntityNotFoundException("Cannot delete Expense Category. Expenses found that use expense category with ID: " + request.getExpenseCategoryId());
-        }
-        Result<Nothing, String> result = expenseCategoryRepositoryOperations.deleteById(request.getExpenseCategoryId());
-        if(result.isFail()){
-            throw new IllegalArgumentException(result.getError().orElse("Error occured while deleting Expense with ID: " + request.getExpenseCategoryId()));
-        }
+        deleteExpenseCategoryService.execute(request.getExpenseCategoryId());
         return null;
     }
 

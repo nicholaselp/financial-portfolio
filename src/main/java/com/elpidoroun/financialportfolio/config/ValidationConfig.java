@@ -6,7 +6,9 @@ import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperat
 import com.elpidoroun.financialportfolio.service.ValidationService;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.validation.EntityValidator;
+import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseExistsValidation;
 import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseUniquenessValidator;
+import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryExistsValidation;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryNameValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryUniquenessValidator;
 import lombok.AllArgsConstructor;
@@ -29,6 +31,7 @@ public class ValidationConfig {
         List<EntityValidator<Expense>> expenseValidators = new ArrayList<>();
 
         expenseValidators.add(new ExpenseUniquenessValidator(expenseRepositoryOperations));
+        expenseValidators.add(new ExpenseExistsValidation(expenseRepositoryOperations));
 
         return new ValidationService<>(expenseValidators);
     }
@@ -39,6 +42,7 @@ public class ValidationConfig {
 
         expenseCategoryValidators.add(new ExpenseCategoryNameValidator());
         expenseCategoryValidators.add(new ExpenseCategoryUniquenessValidator(expenseCategoryRepositoryOperations));
+        expenseCategoryValidators.add(new ExpenseCategoryExistsValidation(expenseCategoryRepositoryOperations));
 
         return new ValidationService<>(expenseCategoryValidators);
     }

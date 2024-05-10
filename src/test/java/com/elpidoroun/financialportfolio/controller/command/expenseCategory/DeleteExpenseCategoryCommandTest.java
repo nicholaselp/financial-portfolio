@@ -1,16 +1,12 @@
 package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
-import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
-import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
 
@@ -27,27 +23,6 @@ public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
         command.execute(request);
 
         assertThat(expenseCategoryRepository.findAll()).hasSize(0);
-    }
-
-    @Test
-    public void failed_to_delete_active_expenses_using_category(){
-        var expenseCategory = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
-        expenseRepository.save(ExpenseTestFactory.createExpense(expenseCategory));
-
-        assertThatThrownBy(() -> command.execute(
-                            new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(
-                                    expenseCategory.getId())))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Cannot delete Expense Category. Expenses found that use expense category with ID: " + expenseCategory.getId());
-    }
-
-    @Test
-    public void failed_to_delete_nothing_to_delete(){
-        var request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(1L);
-
-        assertThatThrownBy(() -> command.execute(request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Expense Category with ID: 1 not found. Nothing will be deleted");
     }
 
     @Test

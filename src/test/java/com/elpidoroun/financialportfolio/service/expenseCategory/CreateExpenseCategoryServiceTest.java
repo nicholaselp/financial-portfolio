@@ -31,6 +31,6 @@ public class CreateExpenseCategoryServiceTest extends MainTestConfig {
 
         assertThatThrownBy(() -> service.execute(expenseCategory))
                 .isInstanceOf(ValidationException.class)
-                .hasMessageContaining("Expense Category with name: categoryName already exists");
+                .hasMessageContaining("Expense Category with name: " + expenseCategory.getCategoryName() + " already exists");
     }
 }

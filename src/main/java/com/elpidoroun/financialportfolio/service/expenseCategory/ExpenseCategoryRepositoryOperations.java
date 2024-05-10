@@ -1,7 +1,6 @@
 package com.elpidoroun.financialportfolio.service.expenseCategory;
 
 import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
-import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.service.cache.ExpenseCategoryCacheService;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
 @AllArgsConstructor
 @Service
 public class ExpenseCategoryRepositoryOperations {
@@ -27,6 +25,7 @@ public class ExpenseCategoryRepositoryOperations {
     @NonNull private final ExpenseCategoryRepository expenseCategoryRepository;
     @NonNull private final ExpenseCategoryCacheService expenseCategoryCacheService;
 
+    @Transactional
     public ExpenseCategory save(ExpenseCategory expenseCategory) {
         try {
             var stored = expenseCategoryRepository.save(expenseCategory);
@@ -48,8 +47,16 @@ public class ExpenseCategoryRepositoryOperations {
         return expenseCategoryRepository.findAll();
     }
 
+    public Optional<ExpenseCategory> findByName(String expenseCategory) {
+        return expenseCategoryRepository.findByCategoryName(expenseCategory)
+                .stream().findFirst();
+    }
+
+    public Optional<ExpenseCategory> findById(Long id){
+        return expenseCategoryRepository.findById(id);
+    }
+    @Transactional
     public ExpenseCategory update(ExpenseCategory expenseCategory){
-        if(expenseCategoryRepository.existsById(expenseCategory.getId())){
             try {
                 var stored = expenseCategoryRepository.save(expenseCategory);
                 expenseCategoryCacheService.addToCache(stored.getId().toString(), expenseCategory);
@@ -58,16 +65,10 @@ public class ExpenseCategoryRepositoryOperations {
                 logger.error(exception.getMessage());
                 throw new DatabaseOperationException("Exception occurred while updating expenseCategory");
             }
-        } else {
-            throw new EntityNotFoundException("Expense Category with ID: " + expenseCategory.getId() + " not found");
-        }
     }
 
+    @Transactional
     public Result<Nothing, String> deleteById(Long id){
-        if(!expenseCategoryRepository.existsById(id)){
-            return Result.fail("Expense Category with ID: " + id + " not found. Nothing will be deleted");
-        }
-
         try {
             expenseCategoryRepository.deleteById(id);
             expenseCategoryCacheService.deleteFromCache(id.toString());
@@ -77,8 +78,7 @@ public class ExpenseCategoryRepositoryOperations {
         }
     }
 
-    public Optional<ExpenseCategory> findByName(String expenseCategory) {
-        return expenseCategoryRepository.findByCategoryName(expenseCategory)
-                .stream().findFirst();
+    public boolean existsById(Long id){
+        return expenseCategoryRepository.existsById(id);
     }
 }

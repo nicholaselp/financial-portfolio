@@ -5,7 +5,6 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
 import com.elpidoroun.financialportfolio.model.Expense;
-import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import org.junit.jupiter.api.Nested;
@@ -23,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
 import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
 import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpenseDto;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +69,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
         public void success() throws Exception {
             var request = createExpenseDto("expense",
                     expenseCategoryMapper.convertToDto(
-                            expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory())));
+                            expenseCategoryRepositoryOperations.save(createExpenseCategory())));
 
             MvcResult result = mockMvc().perform(post("/v1/expense")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +89,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
 
         @Test
         public void fail() throws Exception {
-            var expenseCategoryDto = expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory());
+            var expenseCategoryDto = expenseCategoryRepositoryOperations.save(createExpenseCategory());
             var expenseDto = expenseMapper.convertToDto(
                     expenseRepositoryOperations.save(createExpense("expenseName", expenseCategoryDto)));
 
@@ -109,7 +109,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
     class UpdateExpenseTest {
         @Test
         public void success() throws Exception {
-            var expenseCategory = expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory());
+            var expenseCategory = expenseCategoryRepositoryOperations.save(createExpenseCategory());
             var original = expenseRepositoryOperations.save(createExpense(expenseCategory));
             var request = expenseMapper.convertToDto(original);
             request.setExpenseName("updateExpenseName");
@@ -154,7 +154,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
     class GetExpenseByIdTest {
         @Test
         public void success() throws Exception {
-            var storedExpenseId = expenseRepositoryOperations.save(createExpense(expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory()))).getId();
+            var storedExpenseId = expenseRepositoryOperations.save(createExpense(expenseCategoryRepositoryOperations.save(createExpenseCategory()))).getId();
 
             MvcResult result = mockMvc().perform(get("/v1/expense/" + storedExpenseId)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -185,7 +185,7 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
     class GetAllExpenses {
         @Test
         public void success() throws Exception {
-            var storedExpenseCategory = expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory());
+            var storedExpenseCategory = expenseCategoryRepositoryOperations.save(createExpenseCategory());
 
             expenseRepositoryOperations.save(createExpense("name1", storedExpenseCategory));
             expenseRepositoryOperations.save(createExpense("name2", storedExpenseCategory));
@@ -226,24 +226,29 @@ public class ExpenseApiControllerDelegateTest extends ExpenseSpringTestHelper {
     class DeleteExpenseById {
         @Test
         public void success() throws Exception {
-            var storedExpenseId = expenseRepositoryOperations.save(createExpense(expenseCategoryRepositoryOperations.save(ExpenseCategoryTestFactory.createExpenseCategory()))).getId();
+            var storedExpenseId = expenseRepositoryOperations
+                    .save(createExpense(expenseCategoryRepositoryOperations
+                            .save(createExpenseCategory())))
+                    .getId();
 
-            MvcResult result = mockMvc().perform(delete("/v1/expense/" + storedExpenseId)
+            assertThat(expenseRepositoryOperations.findById(storedExpenseId).getSuccessValue()).isNotNull();
+
+            mockMvc().perform(delete("/v1/expense/" + storedExpenseId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bearer " + generateAdminToken()))
-//                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.status().isOk())
                     .andReturn();
 
-            var domainEntity = expenseRepositoryOperations.findById(storedExpenseId);
+            var result = expenseRepositoryOperations.findById(storedExpenseId);
 
-            assertThat(domainEntity.isSuccess()).isTrue();
-            assertThat(domainEntity.getSuccessValue()).isNotNull();
+            assertThat(result.isFail()).isTrue();
+            assertThat(result.getError()).isPresent().hasValue("Expense with ID: 1 not found");
         }
 
         @Test
         public void fail() throws Exception {
 
-            MvcResult result = mockMvc().perform(delete("/v1/expense/1")
+            MvcResult result = mockMvc().perform(delete("/v1/expense/" + 1L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bearer " + generateAdminToken()))
                     .andExpect(MockMvcResultMatchers.status().is4xxClientError())

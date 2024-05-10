@@ -2,8 +2,8 @@ package com.elpidoroun.financialportfolio.config;
 
 public class MainTestConfig {
 
-    ExpenseCategoryTestConfig expenseCategoryTestConfig = new ExpenseCategoryTestConfig();
-    ExpenseTestConfig expenseTestConfig = new ExpenseTestConfig();
+    public ExpenseCategoryTestConfig expenseCategoryTestConfig = new ExpenseCategoryTestConfig();
+    public ExpenseTestConfig expenseTestConfig = new ExpenseTestConfig();
 
     public MainTestConfig(){ }
 

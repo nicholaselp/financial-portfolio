@@ -92,15 +92,8 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
     }
 
     @Test
-    public void fail_to_update_expense_not_found(){
-        assertThatThrownBy(() -> operations.update(ExpenseTestFactory.createExpenseWithId()))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("Expense with ID: 1 not found");
-    }
-
-    @Test
     public void success_deleteById(){
-        var expense = repo.save(ExpenseTestFactory.createExpenseWithId());
+        var expense = repo.save(ExpenseTestFactory.createExpense());
 
         operations.deleteById(expense.getId());
         assertThat(repo.findAll()).isEmpty();
@@ -117,15 +110,6 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
         assertThatThrownBy(() -> operations.deleteById(1L))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Exception occurred while deleting an Expense");
-    }
-
-    @Test
-    public void failed_deleteById_not_found(){
-        var result = operations.deleteById(1L);
-
-        assertThat(result.isFail()).isTrue();
-        assertThat(result.getError()).isPresent().hasValue("Expense with ID: 1 not found. Nothing will be deleted");
-
     }
 
     @Test

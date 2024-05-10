@@ -40,7 +40,8 @@ public class ExpenseMapper {
     }
 
     public Expense convertToDomain(ExpenseResponseDto expenseResponseDto){
-        return Expense.builder(expenseResponseDto.getMeta().getId())
+        return Expense.builder()
+                .withId(expenseResponseDto.getMeta().getId())
                 .withCreatedAt(expenseResponseDto.getMeta().getCreatedAt())
                 .withExpenseName(expenseResponseDto.getExpense().getExpenseName())
                 .withMonthlyAllocatedAmount(expenseResponseDto.getExpense().getMonthlyAllocatedAmount())
@@ -63,7 +64,8 @@ public class ExpenseMapper {
     }
 
     public Expense convertToDomainWithId(ExpenseDto expenseDto, Long id){
-        return Expense.builder(id)
+        return Expense.builder()
+                .withId(id)
                 .withExpenseName(expenseDto.getExpenseName())
                 .withMonthlyAllocatedAmount(expenseDto.getMonthlyAllocatedAmount())
                 .withYearlyAllocatedAmount(expenseDto.getYearlyAllocatedAmount())

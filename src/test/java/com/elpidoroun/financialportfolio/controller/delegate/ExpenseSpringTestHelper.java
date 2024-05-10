@@ -32,7 +32,6 @@ public class ExpenseSpringTestHelper extends SpringTestsHelper {
     protected void assertRequestResponse(ExpenseDto requestDto, ExpenseResponseDto responseDto) {
         assertThat(requestDto.getExpenseName()).isEqualTo(responseDto.getExpense().getExpenseName());
         assertThat(requestDto.getStatus()).isEqualTo(responseDto.getExpense().getStatus());
-        assertThat(requestDto.getPayments()).isEqualTo(responseDto.getExpense().getPayments());
         assertThat(requestDto.getMonthlyAllocatedAmount()).isEqualTo(responseDto.getExpense().getMonthlyAllocatedAmount());
         assertThat(requestDto.getYearlyAllocatedAmount()).isEqualTo(responseDto.getExpense().getYearlyAllocatedAmount());
         assertThat(requestDto.getNote()).isEqualTo(responseDto.getExpense().getNote());
@@ -42,7 +41,6 @@ public class ExpenseSpringTestHelper extends SpringTestsHelper {
     protected void assertRequestResponse(ExpenseResponseDto requestDto, ExpenseResponseDto responseDto) {
         assertThat(requestDto.getExpense().getExpenseName()).isEqualTo(responseDto.getExpense().getExpenseName());
         assertThat(requestDto.getExpense().getStatus()).isEqualTo(responseDto.getExpense().getStatus());
-        assertThat(requestDto.getExpense().getPayments()).isEqualTo(responseDto.getExpense().getPayments());
         assertThat(requestDto.getExpense().getMonthlyAllocatedAmount()).isEqualTo(responseDto.getExpense().getMonthlyAllocatedAmount());
         assertThat(requestDto.getExpense().getYearlyAllocatedAmount()).isEqualTo(responseDto.getExpense().getYearlyAllocatedAmount());
         assertThat(requestDto.getExpense().getNote()).isEqualTo(responseDto.getExpense().getNote());

@@ -103,27 +103,11 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
     }
 
     @Test
-    public void fail_to_update_expense_not_found(){
-        var expenseCategory = createExpenseCategory();
-        assertThatThrownBy(() -> operations.update(expenseCategory))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("Expense Category with ID: " +  expenseCategory.getId() + " not found");
-    }
-
-    @Test
     public void success_deleteById(){
         var expenseCategory = repository.save(createExpenseCategory());
 
         operations.deleteById(expenseCategory.getId());
         assertThat(repository.findAll()).isEmpty();
-    }
-
-    @Test
-    public void failed_deleteById_not_found(){
-        var result = operations.deleteById(1L);
-
-        assertThat(result.isFail()).isTrue();
-        assertThat(result.getError()).isPresent().hasValue("Expense Category with ID: 1 not found. Nothing will be deleted");
     }
 
     @Test

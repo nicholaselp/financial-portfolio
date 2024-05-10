@@ -26,7 +26,7 @@ public class ExpenseCategoryTest {
         var category = ExpenseCategoryTestFactory.createExpenseCategory();
 
         assertThat(category.getId()).isNotNull();
-        assertThat(category.getCategoryName()).isEqualTo("categoryName");
+        assertThat(category.getCategoryName()).isEqualTo("name");
         assertThat(category.getBillingInterval()).isEqualTo(BillingInterval.BI_MONTHLY);
         assertThat(category.getExpenseType()).isEqualTo(ExpenseType.FIXED);
     }
@@ -42,7 +42,7 @@ public class ExpenseCategoryTest {
     @Test
     public void equals_and_hashcode_method(){
         var expense1 = ExpenseCategoryTestFactory.createExpenseCategory("expense1");
-        var expense2 = ExpenseCategoryTestFactory.createExpenseCategory("expense1");
+        var expense2 = expense1.clone().build();
         var expense3 = ExpenseCategoryTestFactory.createExpenseCategory("expense3");
 
         assertThat(expense1).isEqualTo(expense2);

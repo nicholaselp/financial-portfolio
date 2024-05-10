@@ -4,8 +4,6 @@ import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
 import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
-import com.elpidoroun.financialportfolio.utilities.Nothing;
-import com.elpidoroun.financialportfolio.utilities.Result;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
@@ -25,11 +23,12 @@ public class DeleteExpenseCommand implements Command<DeleteExpenseCommand.Delete
 
     @Override
     public Void execute(DeleteExpenseRequest request) {
-        Result<Nothing, String> result = expenseRepositoryOperations.deleteById(request.getExpenseId());
-
-        if(result.isFail()){
-            throw new EntityNotFoundException(result.getError().orElse("Error occurred while deleting Expense with ID: " + request.getExpenseId()));
+        if(!expenseRepositoryOperations.existsById(request.getExpenseId())){
+            throw new EntityNotFoundException("Expense with ID: " + request.getExpenseId() + " not found. Nothing will be deleted");
         }
+
+        expenseRepositoryOperations.deleteById(request.getExpenseId());
+
         return null;
     }
 

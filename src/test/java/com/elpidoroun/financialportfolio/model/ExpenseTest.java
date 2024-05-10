@@ -23,7 +23,8 @@ public class ExpenseTest {
 
     @Test
     public void expense_creation_with_id() {
-        var expense = Expense.builder(1L)
+        var expense = Expense.builder()
+                .withId(1L)
                 .withExpenseName("Groceries")
                 .withExpenseCategory(createExpenseCategory("expenseCategory"))
                 .withYearlyAllocatedAmount(new BigDecimal("120.00"))
@@ -41,7 +42,8 @@ public class ExpenseTest {
 
     @Test
     public void expense_creation_monthly_and_yearly_are_missing(){
-        assertThatThrownBy(() -> Expense.builder(1L)
+        assertThatThrownBy(() -> Expense.builder()
+                .withId(1L)
                 .withExpenseName("Groceries")
                 .withStatus(Status.ACTIVE)
                 .withExpenseCategory(createExpenseCategory("expenseCategory"))
@@ -52,7 +54,8 @@ public class ExpenseTest {
 
     @Test
     public void expense_creation_monthly_and_yearly_are_incorrect(){
-        assertThatThrownBy(() -> Expense.builder(1L)
+        assertThatThrownBy(() -> Expense.builder()
+                .withId(1L)
                 .withExpenseName("Groceries")
                 .withStatus(Status.ACTIVE)
                 .withExpenseCategory(createExpenseCategory("expenseCategory"))

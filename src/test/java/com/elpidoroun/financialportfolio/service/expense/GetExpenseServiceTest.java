@@ -3,6 +3,7 @@ package com.elpidoroun.financialportfolio.service.expense;
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.model.Status;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ public class GetExpenseServiceTest extends MainTestConfig {
     public void success_getAllExpenses(){
         repo.save(ExpenseTestFactory.createExpense());
         repo.save(ExpenseTestFactory.createExpense());
-        repo.save(ExpenseTestFactory.createDeletedExpense());
+        repo.save(ExpenseTestFactory.createExpense(Status.DELETED));
 
         assertThat(service.getAllExpenses()).isNotEmpty().hasSize(2);
     }

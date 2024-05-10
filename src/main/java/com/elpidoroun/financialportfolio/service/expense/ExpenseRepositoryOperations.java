@@ -4,9 +4,7 @@ import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
 import com.elpidoroun.financialportfolio.exceptions.EntityNotFoundException;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
-import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
 @AllArgsConstructor
 @Service
 public class ExpenseRepositoryOperations {
@@ -54,15 +51,10 @@ public class ExpenseRepositoryOperations {
         }
     }
 
-    public Result<Nothing, String> deleteById(Long id){
-        if(!expenseRepository.existsById(id)){
-            return Result.fail("Expense with ID: " + id + " not found. Nothing will be deleted");
-        }
-
+    public void deleteById(Long id){
         try {
             expenseRepository.deleteById(id);
-            return Result.success();
-        } catch (Exception exception){
+        } catch (Exception exception) {
             logger.error(exception.getMessage());
             throw new DatabaseOperationException("Exception occurred while deleting an Expense");
         }
@@ -75,5 +67,9 @@ public class ExpenseRepositoryOperations {
     public boolean expenseExistWithCategoryId(Long categoryId){
         return !expenseRepository.findByExpenseCategoryId(categoryId)
                 .isEmpty();
+    }
+
+    public boolean existsById(Long id){
+        return expenseRepository.existsById(id);
     }
 }
