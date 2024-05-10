@@ -22,8 +22,6 @@ public class ExpenseMapperTest {
         assertThat(expense.getNote()).isEqualTo(Optional.ofNullable(expenseResponseDto.getExpense().getNote()));
         assertThat(expense.getYearlyAllocatedAmount()).isEqualTo(expenseResponseDto.getExpense().getYearlyAllocatedAmount());
         assertThat(expense.getMonthlyAllocatedAmount()).isEqualTo(expenseResponseDto.getExpense().getMonthlyAllocatedAmount());
-        assertThat(expense.getPayments()).isEqualTo(null); //TODO change when Payments is developed
-
     }
 
     @Test

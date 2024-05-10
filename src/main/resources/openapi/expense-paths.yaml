@@ -2,7 +2,7 @@ operations:
   expense-operations:
     post:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Create an expense
       operationId: create-expense
       requestBody:
@@ -19,11 +19,15 @@ operations:
                 $ref: 'expense-schema.yaml#/components/schemas/ExpenseResponse'
         400:
           $ref: 'common.yaml#/errors/invalid-input'
+        401:
+          $ref: 'common.yaml#/errors/unauthorized'
+        403:
+          $ref: 'common.yaml#/errors/forbidden'
         500:
           $ref: 'common.yaml#/errors/internal-error'
     get:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Get all expenses
       operationId: get-expenses
       responses:
@@ -38,15 +42,11 @@ operations:
   expense-operations-by-id:
     get:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Get expense by ID
       operationId: get-expense-by-id
       parameters:
-        - name: id
-          description: id of expense
-          in: path
-          schema:
-            type: string
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
       responses:
         200:
           description: Successfully returned Expense by ID
@@ -56,41 +56,39 @@ operations:
                 $ref: 'expense-schema.yaml#/components/schemas/ExpenseResponse'
         400:
           $ref: 'common.yaml#/errors/invalid-input'
+        401:
+          $ref: 'common.yaml#/errors/unauthorized'
+        403:
+          $ref: 'common.yaml#/errors/forbidden'
         404:
           $ref: 'common.yaml#/errors/not-found'
         500:
           $ref: 'common.yaml#/errors/internal-error'
     delete:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Delete expense by ID
       operationId: delete-expense-by-id
       parameters:
-        - name: id
-          description: ID of the expense to delete
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
       responses:
         204:
           description: Expense deleted successfully
         400:
           $ref: 'common.yaml#/errors/invalid-input'
+        401:
+          $ref: 'common.yaml#/errors/unauthorized'
+        403:
+          $ref: 'common.yaml#/errors/forbidden'
         500:
           $ref: 'common.yaml#/errors/internal-error'
     put:
       tags:
-        - financial-portfolio
+        - expenses
       summary: Update expense by ID
       operationId: update-expense-by-id
       parameters:
-        - name: id
-          description: ID of the expense to update
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
       requestBody:
         content:
           application/json:
@@ -105,6 +103,10 @@ operations:
                 $ref: 'expense-schema.yaml#/components/schemas/ExpenseResponse'
         400:
           $ref: 'common.yaml#/errors/invalid-input'
+        401:
+          $ref: 'common.yaml#/errors/unauthorized'
+        403:
+          $ref: 'common.yaml#/errors/forbidden'
         404:
           $ref: 'common.yaml#/errors/not-found'
         500:

@@ -2,11 +2,7 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.controller.command.AbstractRequest;
 import com.elpidoroun.financialportfolio.controller.command.Command;
-import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
-import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
-import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
-import com.elpidoroun.financialportfolio.utilities.Nothing;
-import com.elpidoroun.financialportfolio.utilities.Result;
+import com.elpidoroun.financialportfolio.service.expenseCategory.DeleteExpenseCategoryService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
@@ -16,25 +12,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.DELETE_EXPENSE_CATREGORY_BY_ID;
-import static com.elpidoroun.financialportfolio.utilities.StringUtils.requireNonBlank;
 import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Component
 public class DeleteExpenseCategoryCommand implements Command<DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest, Void> {
 
-    @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
-    @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
+    @NonNull private final DeleteExpenseCategoryService deleteExpenseCategoryService;
 
     @Override
     public Void execute(DeleteExpenseCategoryRequest request) {
-        if(expenseRepositoryOperations.expenseExistWithCategoryId(request.getExpenseCategoryId())){
-            throw new IllegalArgumentException("Cannot delete Expense Category. Expenses found that use expense category with ID: " + request.getExpenseCategoryId());
-        }
-        Result<Nothing, String> result = expenseCategoryRepositoryOperations.deleteById(request.getExpenseCategoryId());
-        if(result.isFail()){
-            throw new IllegalArgumentException(result.getError().orElse("Error occured while deleting Expense with ID: " + request.getExpenseCategoryId()));
-        }
+        deleteExpenseCategoryService.execute(request.getExpenseCategoryId());
         return null;
     }
 
@@ -57,17 +45,17 @@ public class DeleteExpenseCategoryCommand implements Command<DeleteExpenseCatego
     @Override
     public String getOperation() { return DELETE_EXPENSE_CATREGORY_BY_ID.getValue(); }
 
-    public static DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request(String expenseCategoryId){
+    public static DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request(Long expenseCategoryId){
         return new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(expenseCategoryId);
     }
 
     protected static class DeleteExpenseCategoryRequest extends AbstractRequest {
-        private final String expenseCategoryId;
+        private final Long expenseCategoryId;
 
-        DeleteExpenseCategoryRequest(String expenseCategoryId){
+        DeleteExpenseCategoryRequest(Long expenseCategoryId){
             this.expenseCategoryId = expenseCategoryId;
         }
 
-        public String getExpenseCategoryId(){ return expenseCategoryId; }
+        public Long getExpenseCategoryId(){ return expenseCategoryId; }
     }
 }

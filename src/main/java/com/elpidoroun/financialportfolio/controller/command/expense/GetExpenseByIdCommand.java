@@ -46,14 +46,14 @@ public class GetExpenseByIdCommand implements Command<GetExpenseByIdCommand.GetE
     @Override
     public String getOperation() { return GET_EXPENSE_BY_ID.getValue(); }
 
-    public static GetExpenseByIdCommand.GetExpenseByIdRequest request(String expenseId){ return new GetExpenseByIdCommand.GetExpenseByIdRequest(expenseId); }
+    public static GetExpenseByIdCommand.GetExpenseByIdRequest request(Long expenseId){ return new GetExpenseByIdCommand.GetExpenseByIdRequest(expenseId); }
 
     protected static class GetExpenseByIdRequest extends AbstractRequest {
-        private final String expenseId;
-        protected GetExpenseByIdRequest(String expenseId){
+        private final Long expenseId;
+        protected GetExpenseByIdRequest(Long expenseId){
             this.expenseId = expenseId;
         }
 
-        public String getExpenseId(){ return expenseId; }
+        public Long getExpenseId(){ return expenseId; }
     }
 }

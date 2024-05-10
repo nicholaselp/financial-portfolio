@@ -17,7 +17,7 @@ public class ExpenseCategoryNameValidator implements EntityValidator<ExpenseCate
     @Override
     public Result<Nothing, String> validate(@Nullable ExpenseCategory original, @NonNull ExpenseCategory entity) throws ValidationException {
 
-        if(nonNull(original) && !entity.getExpenseCategoryName().equals(original.getExpenseCategoryName())){
+        if(nonNull(original) && !entity.getCategoryName().equals(original.getCategoryName())){
             return Result.fail("Cannot update Expense Category Name");
         }
 

@@ -9,14 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.GET_EXPENSE_CATEGORY_BY_ID;
-import static com.elpidoroun.financialportfolio.utilities.StringUtils.nullIfBlank;
 import static java.util.Objects.isNull;
 
 @AllArgsConstructor
@@ -49,17 +46,17 @@ public class GetExpenseCategoryByIdCommand implements Command<GetExpenseCategory
     @Override
     public String getOperation() { return GET_EXPENSE_CATEGORY_BY_ID.getValue(); }
 
-    public static GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request(String expenseId){
+    public static GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest request(Long expenseId){
         return new GetExpenseCategoryByIdCommand.GetExpenseCategoryByIdRequest(expenseId);
     }
 
 
     protected static class GetExpenseCategoryByIdRequest extends AbstractRequest {
-        private final String expenseCategoryId;
-        protected GetExpenseCategoryByIdRequest(String expenseCategoryId){
-            this.expenseCategoryId = nullIfBlank(expenseCategoryId);
+        private final Long expenseCategoryId;
+        protected GetExpenseCategoryByIdRequest(Long expenseCategoryId){
+            this.expenseCategoryId = expenseCategoryId;
         }
 
-        public String getExpenseCategoryId(){ return expenseCategoryId; }
+        public Long getExpenseCategoryId(){ return expenseCategoryId; }
     }
 }

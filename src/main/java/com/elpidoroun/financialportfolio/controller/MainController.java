@@ -77,6 +77,9 @@ public class MainController {
     }
 
     public record ErrorResponse(String message, String errorType) {
+
+        public String getMessage(){ return message; }
+        public String getErrorType(){ return errorType; }
             public ErrorResponse(String message, String errorType) {
                 this.message = requireNonBlank(message, "Message is missing");
                 this.errorType = requireNonBlank(errorType, "ErrorType is missing");

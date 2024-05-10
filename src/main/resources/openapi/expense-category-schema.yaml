@@ -4,16 +4,13 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          $ref: 'common.yaml#/components/schemas/Id'
         categoryName:
           type: string
         billingInterval:
           $ref: '#/components/schemas/BillingInterval'
         expenseType:
           $ref: '#/components/schemas/ExpenseType'
-        status:
-          $ref: 'common.yaml#/components/schemas/Status'
     BillingInterval:
       type: string
       enum:

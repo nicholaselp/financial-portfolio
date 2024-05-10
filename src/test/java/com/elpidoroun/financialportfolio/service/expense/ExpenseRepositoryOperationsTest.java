@@ -41,7 +41,7 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
     @Test
     public void success_getById(){
         var expense = repo.save(ExpenseTestFactory.createExpense());
-        var result = operations.getById(expense.getId().toString());
+        var result = operations.findById(expense.getId());
 
         assertThat(result.isSuccess()).isTrue();
         assertThat(result.getSuccessValue()).isEqualTo(expense);
@@ -49,7 +49,7 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
 
     @Test
     public void fail_getById_not_found(){
-        var result = operations.getById("1");
+        var result = operations.findById(1L);
         assertThat(result.isFail()).isTrue();
         assertThat(result.getError()).isPresent().hasValue("Expense with ID: 1 not found");
     }
@@ -92,17 +92,10 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
     }
 
     @Test
-    public void fail_to_update_expense_not_found(){
-        assertThatThrownBy(() -> operations.update(ExpenseTestFactory.createExpenseWithId()))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("Expense with ID: 1 not found");
-    }
-
-    @Test
     public void success_deleteById(){
-        var expense = repo.save(ExpenseTestFactory.createExpenseWithId());
+        var expense = repo.save(ExpenseTestFactory.createExpense());
 
-        operations.deleteById(expense.getId().toString());
+        operations.deleteById(expense.getId());
         assertThat(repo.findAll()).isEmpty();
     }
 
@@ -114,18 +107,9 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
         doThrow(new RuntimeException("Forced Exception")).when(repo).deleteById(any());
         when(repo.existsById(any())).thenReturn(true);
 
-        assertThatThrownBy(() -> operations.deleteById("1"))
+        assertThatThrownBy(() -> operations.deleteById(1L))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Exception occurred while deleting an Expense");
-    }
-
-    @Test
-    public void failed_deleteById_not_found(){
-        var result = operations.deleteById("1");
-
-        assertThat(result.isFail()).isTrue();
-        assertThat(result.getError()).isPresent().hasValue("Expense with ID: 1 not found. Nothing will be deleted");
-
     }
 
     @Test
@@ -147,7 +131,7 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
 
         repo.save(expense);
 
-        assertThat(operations.expenseExistWithCategoryId(expense.getExpenseCategory().getId().toString()))
+        assertThat(operations.expenseExistWithCategoryId(expense.getExpenseCategory().getId()))
                 .isTrue();
     }
 }

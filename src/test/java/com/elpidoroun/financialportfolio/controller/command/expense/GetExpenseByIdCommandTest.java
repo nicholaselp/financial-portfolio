@@ -16,7 +16,7 @@ public class GetExpenseByIdCommandTest extends MainTestConfig {
     public void success_get_expense_by_id() {
         var expense = repo.save(ExpenseTestFactory.createExpense());
 
-        var dto = getExpenseByIdCommand.execute(new GetExpenseByIdCommand.GetExpenseByIdRequest(expense.getId().toString()));
+        var dto = getExpenseByIdCommand.execute(new GetExpenseByIdCommand.GetExpenseByIdRequest(expense.getId()));
 
         assertThat(dto).isNotNull();
         assertThat(dto.getExpense().getExpenseName()).isEqualTo(expense.getExpenseName());

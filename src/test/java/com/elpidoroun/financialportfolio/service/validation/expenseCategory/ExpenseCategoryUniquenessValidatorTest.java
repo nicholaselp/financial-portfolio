@@ -27,7 +27,7 @@ public class ExpenseCategoryUniquenessValidatorTest extends MainTestConfig {
         var result = validator.validate(expenseCategory);
 
         assertThat(result.isFail()).isTrue();
-        assertThat(result.getError()).isPresent().hasValue("Expense Category with name: categoryName already exists");
+        assertThat(result.getError()).isPresent().hasValue("Expense Category with name: " + expenseCategory.getCategoryName() + " already exists");
 
     }
 }

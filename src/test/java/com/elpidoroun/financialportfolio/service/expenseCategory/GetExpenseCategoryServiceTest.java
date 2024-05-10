@@ -17,12 +17,12 @@ public class GetExpenseCategoryServiceTest extends MainTestConfig {
     public void success_getExpenseCategory(){
         var expenseCategory = repo.save(ExpenseCategoryTestFactory.createExpenseCategory());
 
-        assertThat(service.getById(expenseCategory.getId().toString())).isEqualTo(expenseCategory);
+        assertThat(service.getById(expenseCategory.getId())).isEqualTo(expenseCategory);
     }
 
     @Test
     public void failed_no_expenseCategory_found(){
-        assertThatThrownBy(() -> service.getById("1"))
+        assertThatThrownBy(() -> service.getById(1L))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Expense Category with ID: 1 not found");
     }
@@ -31,7 +31,6 @@ public class GetExpenseCategoryServiceTest extends MainTestConfig {
     public void success_getAllExpenseCategories(){
         repo.save(ExpenseCategoryTestFactory.createExpenseCategory());
         repo.save(ExpenseCategoryTestFactory.createExpenseCategory());
-        repo.save(ExpenseCategoryTestFactory.createDeletedExpenseCategory());
 
         assertThat(service.getAllExpenseCategories()).isNotEmpty().hasSize(2);
 

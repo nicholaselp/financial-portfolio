@@ -21,16 +21,16 @@ public class CreateExpenseCategoryServiceTest extends MainTestConfig {
 
         var result = service.execute(expenseCategory);
 
-        assertThat(result.getExpenseCategoryName()).isEqualTo(expenseCategory.getExpenseCategoryName());
+        assertThat(result.getCategoryName()).isEqualTo(expenseCategory.getCategoryName());
     }
 
     @Test
     public void failed_uniqueness_violation(){
-        var expenseCategory = ExpenseCategoryTestFactory.createExpenseCategoryWithId();
+        var expenseCategory = ExpenseCategoryTestFactory.createExpenseCategory();
         repo.save(expenseCategory);
 
         assertThatThrownBy(() -> service.execute(expenseCategory))
                 .isInstanceOf(ValidationException.class)
-                .hasMessageContaining("Expense Category with name: categoryName already exists");
+                .hasMessageContaining("Expense Category with name: " + expenseCategory.getCategoryName() + " already exists");
     }
 }

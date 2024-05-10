@@ -4,11 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication(scanBasePackages = {
 		"com.elpidoroun.financialportfolio",
 		"com.elpidoroun.financialportfolio.generated"
 })
+@EnableCaching
 public class FinancialPortfolioApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(FinancialPortfolioApplication.class);
