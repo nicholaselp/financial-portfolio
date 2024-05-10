@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.UPDATE_EXPENSE;
 import static java.util.Objects.isNull;
-import static org.apache.logging.log4j.util.Strings.isBlank;
 
 @AllArgsConstructor
 @Component
@@ -36,7 +35,7 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
     }
 
     private UpdateExpenseContext buildContext(UpdateExpenseRequest request){
-        var result = expenseRepositoryOperations.getById(request.getExpenseId());
+        var result = expenseRepositoryOperations.findById(request.getExpenseId());
 
         if(result.isFail()){
             throw new EntityNotFoundException(result.getError().orElse("Error while Updating Expense"));
@@ -44,13 +43,13 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
 
         return new UpdateExpenseContext(
                 result.getSuccessValue(),
-                expenseMapper.convertToDomain(request.getExpenseDto(),
+                expenseMapper.convertToDomainWithId(request.getExpenseDto(),
                         request.getExpenseId()));
     }
 
     @Override
     public boolean isRequestIncomplete(UpdateExpenseRequest request) {
-        return isNull(request) || isNull(request.getExpenseDto()) || isNull(request.getExpenseId());
+        return isNull(request) || isNull(request.getExpenseDto()) || isNull(request.getExpenseId()) || isNull(request.getExpenseDto().getExpenseName());
     }
 
     @Override
@@ -60,7 +59,7 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
         }
 
         return Stream.of(
-                isBlank(request.getExpenseId()) ? "ExpenseId is missing" : null,
+                isNull(request.getExpenseId()) ? "ExpenseId is missing" : null,
                        isNull(request.getExpenseDto()) ? "ExpenseDto is missing" : null
                 )
                 .filter(Objects::nonNull)
@@ -70,20 +69,20 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
     @Override
     public String getOperation() { return UPDATE_EXPENSE.getValue(); }
 
-    public static UpdateExpenseCommand.UpdateExpenseRequest request(String expenseId, ExpenseDto expenseDto){
+    public static UpdateExpenseCommand.UpdateExpenseRequest request(Long expenseId, ExpenseDto expenseDto){
         return new UpdateExpenseCommand.UpdateExpenseRequest(expenseId, expenseDto);
     }
 
     protected static class UpdateExpenseRequest extends AbstractRequest {
 
-        private final String expenseId;
+        private final Long expenseId;
         private final ExpenseDto expenseDto;
 
-        protected UpdateExpenseRequest(String expenseId, ExpenseDto expenseDto){
+        protected UpdateExpenseRequest(Long expenseId, ExpenseDto expenseDto){
             this.expenseId = expenseId;
             this.expenseDto = expenseDto;
         }
-        public String getExpenseId(){ return expenseId; }
+        public Long getExpenseId(){ return expenseId; }
         public ExpenseDto getExpenseDto(){ return expenseDto; }
 
     }

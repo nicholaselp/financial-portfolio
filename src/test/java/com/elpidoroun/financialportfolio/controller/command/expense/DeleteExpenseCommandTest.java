@@ -17,7 +17,7 @@ public class DeleteExpenseCommandTest extends MainTestConfig {
         var expense = repo.save(ExpenseTestFactory.createExpense());
         assertThat(repo.findAll()).isNotEmpty().hasSize(1);
 
-        command.execute(new DeleteExpenseCommand.DeleteExpenseRequest(expense.getId().toString()));
+        command.execute(new DeleteExpenseCommand.DeleteExpenseRequest(expense.getId()));
         assertThat(repo.findAll()).isEmpty();
         String expenseId = "expense-123";
     }
@@ -30,13 +30,13 @@ public class DeleteExpenseCommandTest extends MainTestConfig {
 
     @Test
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
-        DeleteExpenseCommand.DeleteExpenseRequest request = new DeleteExpenseCommand.DeleteExpenseRequest("id-to-delete");
+        DeleteExpenseCommand.DeleteExpenseRequest request = new DeleteExpenseCommand.DeleteExpenseRequest(11L);
         assertThat(command.isRequestIncomplete(request)).isFalse();
     }
 
     @Test
     public void missing_params_returns_empty(){
-        DeleteExpenseCommand.DeleteExpenseRequest request = new DeleteExpenseCommand.DeleteExpenseRequest("id-to-delete");
+        DeleteExpenseCommand.DeleteExpenseRequest request = new DeleteExpenseCommand.DeleteExpenseRequest(11L);
         assertThat(command.missingParams(request)).isEqualTo("");
     }
 

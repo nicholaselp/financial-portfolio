@@ -1,15 +1,12 @@
 package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
-import com.elpidoroun.financialportfolio.exceptions.IllegalArgumentException;
 import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
 
@@ -21,32 +18,11 @@ public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
     public void success_delete_expense() {
         var expenseCategory = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
         assertThat(expenseCategoryRepository.findAll()).hasSize(1);
-        var request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(expenseCategory.getId().toString());
+        var request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(expenseCategory.getId());
 
         command.execute(request);
 
         assertThat(expenseCategoryRepository.findAll()).hasSize(0);
-    }
-
-    @Test
-    public void failed_to_delete_active_expenses_using_category(){
-        var expenseCategory = expenseCategoryRepository.save(ExpenseCategoryTestFactory.createExpenseCategory());
-        expenseRepository.save(ExpenseTestFactory.createExpense(expenseCategory));
-
-        assertThatThrownBy(() -> command.execute(
-                            new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(
-                                    expenseCategory.getId().toString())))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Cannot delete Expense Category. Expenses found that use expense category with ID: " + expenseCategory.getId());
-    }
-
-    @Test
-    public void failed_to_delete_nothing_to_delete(){
-        var request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest("1");
-
-        assertThatThrownBy(() -> command.execute(request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Expense Category with ID: 1 not found. Nothing will be deleted");
     }
 
     @Test
@@ -57,13 +33,13 @@ public class DeleteExpenseCategoryCommandTest extends MainTestConfig {
 
     @Test
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
-        DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest("id-to-delete");
+        DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(1L);
         assertThat(command.isRequestIncomplete(request)).isFalse();
     }
 
     @Test
     public void missing_params_returns_empty(){
-        DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest("id-to-delete");
+        DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest request = new DeleteExpenseCategoryCommand.DeleteExpenseCategoryRequest(1L);
         assertThat(command.missingParams(request)).isEqualTo("");
     }
 

@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private User(){}
+    protected User(){}
 
     private User(Long id, String fullName, String email, String password, Role role){
         this.id = id;

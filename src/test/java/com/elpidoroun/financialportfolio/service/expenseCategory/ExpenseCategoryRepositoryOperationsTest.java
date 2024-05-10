@@ -5,8 +5,10 @@ import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.model.ExpenseType;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
+import com.elpidoroun.financialportfolio.service.cache.ExpenseCategoryCacheService;
 import org.junit.jupiter.api.Test;
 
+import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +37,7 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
     @Test
     public void failed_save_exception_thrown(){
         ExpenseCategoryRepository repo = mock(ExpenseCategoryRepository.class);
-        ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(repo);
+        ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(repo, mock(ExpenseCategoryCacheService.class));
 
         when(repo.save(any())).thenThrow(new RuntimeException("Forced Exception.."));
 
@@ -48,7 +50,7 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
     public void success_getById(){
         var expenseCategory = repository.save(ExpenseCategoryTestFactory.createExpenseCategory());
 
-        var result = operations.getById(expenseCategory.getId().toString());
+        var result = operations.getById(expenseCategory.getId());
 
         assertThat(result.isSuccess()).isTrue();
         assertThat(result.getSuccessValue()).isEqualTo(expenseCategory);
@@ -56,7 +58,7 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
 
     @Test
     public void fail_getById_not_found(){
-        var result = operations.getById("1");
+        var result = operations.getById(1L);
         assertThat(result.isFail()).isTrue();
         assertThat(result.getError()).isPresent().hasValue("Expense Category with ID: 1 not found");
     }
@@ -90,7 +92,7 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
     @Test
     public void fail_to_update_db_error(){
         ExpenseCategoryRepository repo = mock(ExpenseCategoryRepository.class);
-        ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(repo);
+        ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(repo, mock(ExpenseCategoryCacheService.class));
 
         when(repo.save(any())).thenThrow(new RuntimeException("Forced Exception.."));
         when(repo.existsById(any())).thenReturn(true);
@@ -101,36 +103,21 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
     }
 
     @Test
-    public void fail_to_update_expense_not_found(){
-        assertThatThrownBy(() -> operations.update(ExpenseCategoryTestFactory.createExpenseCategoryWithId()))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("Expense Category with ID: 1 not found");
-    }
-
-    @Test
     public void success_deleteById(){
-        var expenseCategory = repository.save(ExpenseCategoryTestFactory.createExpenseCategoryWithId());
+        var expenseCategory = repository.save(createExpenseCategory());
 
-        operations.deleteById(expenseCategory.getId().toString());
+        operations.deleteById(expenseCategory.getId());
         assertThat(repository.findAll()).isEmpty();
-    }
-
-    @Test
-    public void failed_deleteById_not_found(){
-        var result = operations.deleteById("1");
-
-        assertThat(result.isFail()).isTrue();
-        assertThat(result.getError()).isPresent().hasValue("Expense Category with ID: 1 not found. Nothing will be deleted");
     }
 
     @Test
     public void failed_deleteById_db_error(){
         ExpenseCategoryRepository repo = mock(ExpenseCategoryRepository.class);
-        ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(repo);
+        ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(repo, mock(ExpenseCategoryCacheService.class));
 
         doThrow(new RuntimeException("Forced Exception")).when(repo).deleteById(any());
         when(repo.existsById(any())).thenReturn(true);
-        assertThatThrownBy(() -> expenseCategoryRepositoryOperations.deleteById("1"))
+        assertThatThrownBy(() -> expenseCategoryRepositoryOperations.deleteById(1L))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Exception occurred while deleting an Expense Category");
     }
@@ -156,6 +143,5 @@ public class ExpenseCategoryRepositoryOperationsTest extends MainTestConfig {
         assertThat(category1.getBillingInterval()).isEqualTo(category2.getBillingInterval());
         assertThat(category1.getExpenseType()).isEqualTo(category2.getExpenseType());
         assertThat(category1.getCategoryName()).isEqualTo(category2.getCategoryName());
-        assertThat(category1.getStatus()).isEqualTo(category2.getStatus());
     }
 }

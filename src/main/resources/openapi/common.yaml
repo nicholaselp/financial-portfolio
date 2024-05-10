@@ -1,11 +1,19 @@
 components:
+  parameters:
+    query-param-id:
+      name: id
+      description: id of expense
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
   schemas:
     Metadata:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          $ref: '#/components/schemas/Id'
         createdAt:
           type: string
           format: date-time
@@ -14,6 +22,9 @@ components:
       enum:
         - active
         - deleted
+    Id:
+      type: integer
+      format: int64
 errors:
   invalid-input:
     description: Invalid input

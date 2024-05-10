@@ -13,22 +13,24 @@ import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepositoryStu
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepositoryStub;
 import com.elpidoroun.financialportfolio.service.ValidationService;
+import com.elpidoroun.financialportfolio.service.cache.ExpenseCategoryCacheService;
 import com.elpidoroun.financialportfolio.service.expense.CreateExpenseService;
 import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expense.GetExpenseService;
 import com.elpidoroun.financialportfolio.service.expense.UpdateExpenseService;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.normalize.ExpenseCategoryNormalizer;
+import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseExistsValidation;
+import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseStatusValidation;
 import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseUniquenessValidator;
 import lombok.Getter;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @Getter
 public class ExpenseTestConfig {
@@ -48,13 +50,19 @@ public class ExpenseTestConfig {
     ExpenseMapper expenseMapper;
     ExpenseCategoryMapper expenseCategoryMapper;
     RedisTemplate<String, ExpenseCategory> expenseCategoryRedisTemplate;
+    ExpenseCategoryCacheService expenseCategoryCacheService;
+
 
     public ExpenseTestConfig(){
+        expenseCategoryRedisTemplate = initializeRedisTemplate();
+
+        expenseCategoryCacheService = new ExpenseCategoryCacheService(expenseCategoryRedisTemplate);
+
         expenseRepositoryOperations = new ExpenseRepositoryOperations(expenseRepository);
-        expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(expenseCategoryRepository);
-        var validations = new ValidationService<>(List.of(new ExpenseUniquenessValidator(expenseRepositoryOperations)));
-        expenseCategoryRedisTemplate = mock(RedisTemplate.class);
-        var normalizer = new ExpenseCategoryNormalizer(expenseCategoryRedisTemplate);
+        expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(expenseCategoryRepository, expenseCategoryCacheService);
+        var validations = new ValidationService<>(List.of(new ExpenseUniquenessValidator(expenseRepositoryOperations),
+                new ExpenseExistsValidation(expenseRepositoryOperations), new ExpenseStatusValidation()));
+        var normalizer = new ExpenseCategoryNormalizer(expenseCategoryCacheService);
         createExpenseService = new CreateExpenseService(expenseRepositoryOperations, validations, normalizer);
         updateExpenseService = new UpdateExpenseService(expenseRepositoryOperations, validations, normalizer);
         getExpenseService = new GetExpenseService(expenseRepositoryOperations);
@@ -67,18 +75,23 @@ public class ExpenseTestConfig {
         deleteExpenseCommand = new DeleteExpenseCommand(expenseRepositoryOperations);
     }
 
-    public void mockNormalizerResponse(ExpenseCategory expenseCategory){
-        ValueOperations<String, ExpenseCategory> valueOperationsMock = mock(ValueOperations.class);
-        when(expenseCategoryRedisTemplate.opsForValue()).thenReturn(valueOperationsMock);
-
-        when(expenseCategoryRedisTemplate.opsForValue().get(any())).thenReturn(expenseCategory);
+    private RedisTemplate<String, ExpenseCategory> initializeRedisTemplate() {
+        RedisTemplate<String, ExpenseCategory> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(createConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.afterPropertiesSet(); // Ensures template is fully initialized
+        return redisTemplate;
     }
 
-    public void mockNormalizerReturnNull(){
-        ValueOperations<String, ExpenseCategory> valueOperationsMock = mock(ValueOperations.class);
-        when(expenseCategoryRedisTemplate.opsForValue()).thenReturn(valueOperationsMock);
+    private RedisConnectionFactory createConnectionFactory() {
+        String host = "localhost";
+        int port = 6379;
 
-        when(expenseCategoryRedisTemplate.opsForValue().get(any())).thenReturn(null);
+        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(host, port);
+        connectionFactory.afterPropertiesSet();
+
+        return connectionFactory;
     }
-
 }

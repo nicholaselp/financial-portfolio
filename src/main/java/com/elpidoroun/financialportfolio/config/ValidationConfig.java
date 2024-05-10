@@ -6,17 +6,16 @@ import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperat
 import com.elpidoroun.financialportfolio.service.ValidationService;
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.validation.EntityValidator;
+import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseExistsValidation;
+import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseStatusValidation;
 import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseUniquenessValidator;
+import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryExistsValidation;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryNameValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryUniquenessValidator;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,8 @@ public class ValidationConfig {
         List<EntityValidator<Expense>> expenseValidators = new ArrayList<>();
 
         expenseValidators.add(new ExpenseUniquenessValidator(expenseRepositoryOperations));
+        expenseValidators.add(new ExpenseExistsValidation(expenseRepositoryOperations));
+        expenseValidators.add(new ExpenseStatusValidation());
 
         return new ValidationService<>(expenseValidators);
     }
@@ -43,16 +44,8 @@ public class ValidationConfig {
 
         expenseCategoryValidators.add(new ExpenseCategoryNameValidator());
         expenseCategoryValidators.add(new ExpenseCategoryUniquenessValidator(expenseCategoryRepositoryOperations));
+        expenseCategoryValidators.add(new ExpenseCategoryExistsValidation(expenseCategoryRepositoryOperations));
 
         return new ValidationService<>(expenseCategoryValidators);
-    }
-
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
-        return template;
     }
 }

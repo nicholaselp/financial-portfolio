@@ -14,8 +14,8 @@ public class GetExpenseService {
 
     @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
 
-    public Expense execute(String id){
-        var result = expenseRepositoryOperations.getById(id);
+    public Expense execute(Long id){
+        var result = expenseRepositoryOperations.findById(id);
 
         if(result.isFail()){
             throw new EntityNotFoundException(result.getError().orElse("Error while Updating Expense"));

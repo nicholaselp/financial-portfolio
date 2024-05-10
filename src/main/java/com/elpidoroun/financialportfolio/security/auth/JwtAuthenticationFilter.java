@@ -1,4 +1,4 @@
-package com.elpidoroun.financialportfolio.security.config;
+package com.elpidoroun.financialportfolio.security.auth;
 
 import com.elpidoroun.financialportfolio.exceptions.UnauthorizedException;
 import jakarta.servlet.FilterChain;
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer")) {
             throw new UnauthorizedException("Authorization token is missing");
         }
 

@@ -1,7 +1,7 @@
 package com.elpidoroun.financialportfolio.service.cache;
 
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
-import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
+import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -19,19 +19,24 @@ public class RedisCachingService {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisCachingService.class);
 
-    @NonNull private final ExpenseCategoryRepository expenseCategoryRepository;
+    @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
     @NonNull private RedisTemplate<String, ExpenseCategory> expenseCategoryRedis;
 
     @PostConstruct
     public void cacheExpenseCategoriesFromDatabase(){
-        var expenseCategoryList = expenseCategoryRepository.findAll();
+        flushCache();
+        var expenseCategoryList = expenseCategoryRepositoryOperations.findAll();
 
+        logger.info("==========================================================");
         expenseCategoryList.forEach(expenseCategory -> {
-            String key = EXPENSE_CATEGORY_CACHE+"::" + expenseCategory.getId();
-            expenseCategoryRedis.opsForValue().set(key, expenseCategory);
-                });
+            logger.info("ExpenseCategory with ID: " + expenseCategory.getId() + " name: " + expenseCategory.getCategoryName());
+            expenseCategoryRedis.opsForHash().put(EXPENSE_CATEGORY_CACHE, expenseCategory.getId().toString(), expenseCategory);
+        });
+        logger.info("ExpenseCategory cache size: " + expenseCategoryRedis.opsForHash().size(EXPENSE_CATEGORY_CACHE));
         logger.info("==========================================================");
-        logger.info("Cached ExpenseCategory items: " + expenseCategoryList.size());
-        logger.info("==========================================================");
+    }
+
+    private void flushCache(){
+        expenseCategoryRedis.getConnectionFactory().getConnection().flushAll();
     }
 }

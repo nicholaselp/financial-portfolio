@@ -33,8 +33,14 @@ public class ExpenseCategoryApiControllerDelegate extends MainController impleme
     }
 
     @Override
+    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_UPDATE.value)")
+    public ResponseEntity<ExpenseCategoryDto> updateExpenseCategory(ExpenseCategoryDto expenseCategoryDto){
+        return (ResponseEntity<ExpenseCategoryDto>) execute(updateExpenseCategoryCommand, UpdateExpenseCategoryCommand.request(expenseCategoryDto));
+    }
+
+    @Override
     @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_READ.value)")
-    public ResponseEntity<ExpenseCategoryDto> getExpenseCategoryById(String id){
+    public ResponseEntity<ExpenseCategoryDto> getExpenseCategoryById(Long id){
         return (ResponseEntity<ExpenseCategoryDto>) execute(getExpenseCategoryByIdCommand, GetExpenseCategoryByIdCommand.request(id));
     }
 
@@ -45,14 +51,8 @@ public class ExpenseCategoryApiControllerDelegate extends MainController impleme
     }
 
     @Override
-    @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_UPDATE.value)")
-    public ResponseEntity<ExpenseCategoryDto> updateExpenseCategoryById(String expenseId, ExpenseCategoryDto expenseCategoryDto){
-        return (ResponseEntity<ExpenseCategoryDto>) execute(updateExpenseCategoryCommand, UpdateExpenseCategoryCommand.request(expenseId, expenseCategoryDto));
-    }
-
-    @Override
     @PreAuthorize("hasAuthority(T(com.elpidoroun.financialportfolio.security.user.Permissions).EXPENSE_CATEGORY_DELETE.value)")
-    public ResponseEntity<Void> deleteExpenseCategoryById(String id){
+    public ResponseEntity<Void> deleteExpenseCategoryById(Long id){
         return (ResponseEntity<Void>) execute(deleteExpenseCategoryCommand, DeleteExpenseCategoryCommand.request(id));
     }
 }
