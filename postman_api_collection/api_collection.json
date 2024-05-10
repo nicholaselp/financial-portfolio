@@ -285,7 +285,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"categoryName\": \"Water Ufsaddfatiality\",\r\n    \"billingInterval\": \"quarterly\",\r\n    \"expenseType\": \"not-fixed\"\r\n}",
+							"raw": "{\r\n    \"categoryName\": \"Water Ufsaddkflfatfgiality\",\r\n    \"billingInterval\": \"quarterly\",\r\n    \"expenseType\": \"not-fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -313,14 +313,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"categoryName\": \"Water Utility\",\r\n        \"billingInterval\": \"quarterly\",\r\n        \"expenseType\": \"fixed\"\r\n    }",
+							"raw": "{\r\n    \"id\": 6,\r\n    \"categoryName\": \"Water Ufsaddkflfatfgiality\",\r\n    \"billingInterval\": \"yearly\",\r\n    \"expenseType\": \"not-fixed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{url}}/v1/expense-category/3"
+						"url": "{{url}}/v1/expense-category"
 					},
 					"response": []
 				},
@@ -377,7 +377,7 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expense-category/4"
+						"url": "{{url}}/v1/expense-category/5"
 					},
 					"response": []
 				}
