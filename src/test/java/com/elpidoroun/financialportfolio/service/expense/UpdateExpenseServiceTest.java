@@ -4,6 +4,7 @@ import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.controller.command.expense.UpdateExpenseContext;
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
+import com.elpidoroun.financialportfolio.model.Status;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,6 +42,21 @@ public class UpdateExpenseServiceTest extends MainTestConfig {
         assertThatThrownBy(() -> service.execute(new UpdateExpenseContext(createExpense(), entity)))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Expense with ID: " +  entity.getId() + " not found.");
+    }
+
+    @Test
+    public void failed_cannot_update_status(){
+        var expenseCategory = createExpenseCategory();
+        redisTemplate.opsForHash().put(EXPENSE_CATEGORY_CACHE, expenseCategory.getId().toString(), expenseCategory);
+        repo.save(createExpense("stored", expenseCategory));
+        var original = repo.save(createExpense("original", expenseCategory));
+        var toUpdate = original.clone()
+                .withStatus(Status.DELETED)
+                .build();
+
+        assertThatThrownBy(() -> service.execute(new UpdateExpenseContext(original, toUpdate)))
+                .isInstanceOf(ValidationException.class)
+                .hasMessage("Expense Status cannot be updated to DELETED");
     }
 
     @Test
