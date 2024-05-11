@@ -147,6 +147,34 @@
 					"response": []
 				},
 				{
+					"name": "Import Expenses",
+					"id": "9cb7eb44-d399-4f7c-a16f-5903d97b8671",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"expenseName\": \"First Exsdfapense aaasdada\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 10,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/v1/expense"
+					},
+					"response": []
+				},
+				{
 					"name": "Upload Expenses",
 					"id": "9fe8bde3-4890-44ad-911d-6afd352a8a03",
 					"protocolProfileBehavior": {
@@ -228,6 +256,18 @@
 							}
 						],
 						"url": "{{url}}/v1/expense/11"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "cf6a3a04-76a9-4b06-b4da-b2befd293f83",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
