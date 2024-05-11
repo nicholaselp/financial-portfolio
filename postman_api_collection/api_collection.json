@@ -45,7 +45,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/auth/authenticate"
+						"url": "{{url}}/v1/auth/authenticate"
 					},
 					"response": []
 				},
@@ -86,7 +86,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/auth/authenticate"
+						"url": "{{url}}/v1/auth/authenticate"
 					},
 					"response": []
 				},
@@ -108,7 +108,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/auth/register"
+						"url": "{{url}}/v1/auth/register"
 					},
 					"response": []
 				}
