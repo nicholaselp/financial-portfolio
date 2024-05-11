@@ -17,8 +17,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -34,7 +32,6 @@ public class AuthenticationService {
         try {
             userRepository.save(user);
         } catch (Exception e){
-            logger.error(e.getMessage());
             return ResponseEntity.status(BAD_REQUEST)
                     .body(AuthenticationResponse.builder()
                             .error("Exception occured while registering a new user. Please see logs for more information.")

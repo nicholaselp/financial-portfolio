@@ -1,5 +1,8 @@
 package com.elpidoroun.financialportfolio.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public class IllegalArgumentException extends RuntimeException{
 
     private final String errorType;
