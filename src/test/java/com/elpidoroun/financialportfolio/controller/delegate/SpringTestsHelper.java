@@ -1,6 +1,6 @@
 package com.elpidoroun.financialportfolio.controller.delegate;
 
-import com.elpidoroun.financialportfolio.controller.MainController;
+import com.elpidoroun.financialportfolio.exceptions.CustomExceptionHandler;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.security.user.Permissions;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,7 +62,7 @@ public abstract class SpringTestsHelper {
     }
 
     public void assertErrorResponse(MvcResult result, String message, String errorType) throws Exception {
-        var errorResponse =  objectMapper.readValue(result.getResponse().getContentAsString(), MainController.ErrorResponse.class);
+        var errorResponse =  objectMapper.readValue(result.getResponse().getContentAsString(), CustomExceptionHandler.ErrorResponse.class);
 
         assertThat(errorResponse.getMessage()).isEqualTo(message);
         assertThat(errorResponse.getErrorType()).isEqualTo(errorType);
