@@ -9,6 +9,7 @@ public enum Operations implements EnumStringValue {
     GET_EXPENSES("get-expenses"),
     UPDATE_EXPENSE("update-expense"),
     DELETE_EXPENSE_BY_ID("delete-expense-by-id"),
+    IMPORT_EXPENSES("import-expenses"),
 
     CREATE_EXPENSE_CATEGORY("create-expense-category"),
     GET_EXPENSE_CATEGORY_BY_ID("get-expense-category-by-id"),

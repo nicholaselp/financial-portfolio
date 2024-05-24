@@ -1,13 +1,16 @@
-package com.elpidoroun.financialportfolio.model;
+package com.elpidoroun.financialportfolio.factory;
 
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.StatusDto;
+import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.model.ExpenseCategory;
+import com.elpidoroun.financialportfolio.model.Status;
 
 import java.math.BigDecimal;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategoryDto;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategory;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategoryDto;
 import static com.elpidoroun.financialportfolio.repository.ExpenseRepositoryStub.generateUniqueId;
 
 public class ExpenseTestFactory {

@@ -26,9 +26,14 @@ public class CreateExpenseCommand implements Command<CreateExpenseCommand.Create
 
     @Override
     public ExpenseResponseDto execute(CreateExpenseRequest request) {
-        return expenseMapper.convertToResponseDto(
-                createExpenseService.execute(
-                    expenseMapper.convertToDomain(request.getExpenseDto())));
+        var result = createExpenseService.execute(
+                expenseMapper.convertToDomain(request.getExpenseDto()));
+
+        if(result.isFail()){
+            throw result.getError().orElseThrow();
+        }
+
+        return expenseMapper.convertToResponseDto(result.getSuccessValue());
     }
 
     @Override

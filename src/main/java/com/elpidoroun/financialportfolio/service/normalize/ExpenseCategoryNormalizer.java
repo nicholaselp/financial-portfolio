@@ -1,11 +1,14 @@
 package com.elpidoroun.financialportfolio.service.normalize;
 
 import com.elpidoroun.financialportfolio.model.Expense;
+import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.service.cache.ExpenseCategoryCacheService;
 import com.elpidoroun.financialportfolio.utilities.Result;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -25,5 +28,11 @@ public class ExpenseCategoryNormalizer {
                 .<Result<Expense, String>>map(expenseCategory ->
                         Result.success(expense.clone().withExpenseCategory(expenseCategory).build()))
                 .orElseGet(() -> Result.fail("Expense Category with ID: " + expenseCategoryId + " not found during normalization"));
+    }
+
+    public Optional<ExpenseCategory> getExpenseCategoryByName(String expenseCategoryName){
+        return expenseCategoryCacheService.getAllEntities()
+                .values().stream().filter(expenseCategory -> expenseCategory.getCategoryName().equalsIgnoreCase(expenseCategoryName))
+                .findFirst();
     }
 }

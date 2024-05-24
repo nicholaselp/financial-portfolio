@@ -3,15 +3,15 @@ package com.elpidoroun.financialportfolio.service.expense;
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import static com.elpidoroun.financialportfolio.config.RedisCacheConfig.EXPENSE_CATEGORY_CACHE;
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategory;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
 public class CreateExpenseServiceTest extends MainTestConfig {
 
@@ -22,13 +22,17 @@ public class CreateExpenseServiceTest extends MainTestConfig {
     @Test
     public void success_create_expense(){
         var expenseCategory = createExpenseCategory();
-        redisTemplate.opsForHash().put(EXPENSE_CATEGORY_CACHE, expenseCategory.getId().toString(), expenseCategory);
+
+        when(redisTemplate.opsForHash().get(EXPENSE_CATEGORY_CACHE,
+                expenseCategory.getId().toString()))
+                .thenReturn(expenseCategory);
 
         var expense = ExpenseTestFactory.createExpense(expenseCategory);
 
         var result = service.execute(expense);
 
-        assertThat(result.getExpenseName()).isEqualTo(expense.getExpenseName());
+        assertThat(result.isSuccess()).isTrue();
+        assertThat(result.getSuccessValue().getExpenseName()).isEqualTo(expense.getExpenseName());
     }
 
     @Test
@@ -38,9 +42,13 @@ public class CreateExpenseServiceTest extends MainTestConfig {
         var expense = ExpenseTestFactory.createExpense(expenseCategory);
         repo.save(expense);
 
-        assertThatThrownBy(() -> service.execute(expense))
-                .isInstanceOf(ValidationException.class)
-                .hasMessageContaining("Expense with name: expenseName already exists");
+        var result = service.execute(expense);
+
+        assertThat(result.isFail()).isTrue();
+        assertThat(result.getError()).hasValueSatisfying(error -> {
+            assertThat(error).isInstanceOf(ValidationException.class);
+            assertThat(error).hasMessage("Expense with name: " + expense.getExpenseName() + " already exists");
+        });
     }
 
     @Test
@@ -48,8 +56,12 @@ public class CreateExpenseServiceTest extends MainTestConfig {
         var expenseCategory = createExpenseCategory();
         var expense = ExpenseTestFactory.createExpense("name", expenseCategory);
 
-        assertThatThrownBy(() -> service.execute(expense))
-                .isInstanceOf(ValidationException.class)
-                .hasMessage("Expense Category with ID: " + expenseCategory.getId() + " not found during normalization");
+        var result = service.execute(expense);
+
+        assertThat(result.isFail()).isTrue();
+        assertThat(result.getError()).hasValueSatisfying(error -> {
+            assertThat(error).isInstanceOf(ValidationException.class);
+            assertThat(error).hasMessage("Expense Category with ID: " + expenseCategory.getId() + " not found during normalization");
+        });
     }
 }

@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 import static com.elpidoroun.financialportfolio.controller.command.Operations.CREATE_EXPENSE_CATEGORY;
 import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @AllArgsConstructor
 @Component
@@ -32,16 +33,22 @@ public class CreateExpenseCategoryCommand implements Command<CreateExpenseCatego
 
     @Override
     public boolean isRequestIncomplete(CreateExpenseCategoryRequest request) {
-        return isNull(request) || isNull(request.getExpenseCategoryDto());
+        return isNull(request) || isNull(request.getExpenseCategoryDto())
+                || isNull(request.getExpenseCategoryDto().getExpenseType())
+                || isBlank(request.getExpenseCategoryDto().getCategoryName())
+                || isNull(request.getExpenseCategoryDto().getBillingInterval());
     }
 
     @Override
     public String missingParams(CreateExpenseCategoryRequest request) {
-        if(isNull(request)){
+        if(isNull(request) || isNull(request.getExpenseCategoryDto())){
             return "Request is empty";
         }
 
-        return Stream.of(isNull(request.getExpenseCategoryDto())? "CreateExpenseCategoryDto is missing" : null)
+        return Stream.of(
+                        isNull(request.getExpenseCategoryDto().getExpenseType()) ? "expenseType is missing" : null,
+                        isBlank(request.getExpenseCategoryDto().getCategoryName()) ? "ExpenseCategory name is missing" : null,
+                        isNull(request.getExpenseCategoryDto().getBillingInterval()) ? "BillingInterval is missing" : null)
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining(",'"));
     }

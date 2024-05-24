@@ -10,6 +10,7 @@ import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseExist
 import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseStatusValidation;
 import com.elpidoroun.financialportfolio.service.validation.expense.ExpenseUniquenessValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryExistsValidation;
+import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryMandatoryFieldsValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryNameValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryUniquenessValidator;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,7 @@ public class ValidationConfig {
         expenseCategoryValidators.add(new ExpenseCategoryNameValidator());
         expenseCategoryValidators.add(new ExpenseCategoryUniquenessValidator(expenseCategoryRepositoryOperations));
         expenseCategoryValidators.add(new ExpenseCategoryExistsValidation(expenseCategoryRepositoryOperations));
+        expenseCategoryValidators.add(new ExpenseCategoryMandatoryFieldsValidator());
 
         return new ValidationService<>(expenseCategoryValidators);
     }

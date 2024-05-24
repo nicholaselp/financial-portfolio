@@ -18,11 +18,11 @@ public class ExpenseRepositoryOperations {
 
     @NonNull private final ExpenseRepository expenseRepository;
 
-    public Expense save(Expense expense){
+    public Result<Expense, ? extends RuntimeException> save(Expense expense){
         try{
-            return expenseRepository.save(expense);
+            return Result.success(expenseRepository.save(expense));
         } catch (Exception exception){
-            throw new DatabaseOperationException("Exception occurred while saving expense");
+            return Result.fail(new DatabaseOperationException("Exception occurred while saving expense"));
         }
     }
     public Result<Expense, String> findById(Long id){

@@ -6,7 +6,6 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 
@@ -22,7 +21,6 @@ public class ExpenseTypeConverter implements AttributeConverter<ExpenseType, Str
     public ExpenseType convertToEntityAttribute(String dbExpenseType) {
         if(nonNull(dbExpenseType)){
             return Arrays.stream(ExpenseType.values())
-                    .filter(Objects::nonNull)
                     .filter(expenseType -> expenseType.getValue().equals(dbExpenseType))
                     .findFirst().orElseThrow(() -> new DatabaseOperationException("No ExpenseType found for value: " + dbExpenseType));
         }

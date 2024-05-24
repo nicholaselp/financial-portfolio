@@ -17,7 +17,6 @@ import static com.elpidoroun.financialportfolio.security.user.Permissions.EXPENS
 import static com.elpidoroun.financialportfolio.security.user.Permissions.EXPENSE_READ;
 import static com.elpidoroun.financialportfolio.security.user.Permissions.EXPENSE_UPDATE;
 
-
 @RequiredArgsConstructor
 public enum Role {
     USER(Set.of(EXPENSE_CREATE,

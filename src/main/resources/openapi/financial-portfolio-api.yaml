@@ -13,3 +13,6 @@ paths:
     $ref: 'expense-category-paths.yaml#/operations/expense-category-operations'
   /v1/expense-category/{id}:
     $ref: 'expense-category-paths.yaml#/operations/expense-category-operations-by-id'
+
+  /v1/expense/import/bulk:
+    $ref: 'expense-paths.yaml#/operations/import-expense-operations'

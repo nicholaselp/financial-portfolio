@@ -111,7 +111,6 @@ public class CustomExceptionHandler {
                 .body(new ErrorResponse(exception.getMessage(), ACCESS_DENIED));
     }
 
-
     private String extractErrorMessage(HttpMessageNotReadableException exception) {
         String message = exception.getMessage();
 

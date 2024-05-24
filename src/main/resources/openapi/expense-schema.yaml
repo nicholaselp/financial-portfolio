@@ -27,6 +27,12 @@ components:
           $ref: 'common.yaml#/components/schemas/Metadata'
         expense:
           $ref: '#/components/schemas/Expense'
+    ImportExpensesResponse:
+      type: object
+      properties:
+        importRequestId:
+          type: integer
+          format: int64
     Payment:
       type: object
       properties:

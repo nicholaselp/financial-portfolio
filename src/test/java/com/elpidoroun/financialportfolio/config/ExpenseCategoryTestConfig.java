@@ -19,20 +19,17 @@ import com.elpidoroun.financialportfolio.service.expenseCategory.DeleteExpenseCa
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import com.elpidoroun.financialportfolio.service.expenseCategory.GetExpenseCategoryService;
 import com.elpidoroun.financialportfolio.service.expenseCategory.UpdateExpenseCategoryService;
+import com.elpidoroun.financialportfolio.service.normalize.ExpenseCategoryNormalizer;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryExistsValidation;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryNameValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryUniquenessValidator;
 import lombok.Getter;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.List;
 
 @Getter
-public class ExpenseCategoryTestConfig {
+public class ExpenseCategoryTestConfig extends CommonTestConfig{
     private final ExpenseCategoryRepository expenseCategoryRepository = new ExpenseCategoryRepositoryStub();
     private final ExpenseRepository expenseRepository = new ExpenseRepositoryStub();
     private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
@@ -48,12 +45,12 @@ public class ExpenseCategoryTestConfig {
     private final GetExpenseCategoryByIdCommand getExpenseCategoryByIdCommand;
     private final DeleteExpenseCategoryCommand deleteExpenseCategoryCommand;
 
-    private final RedisTemplate<String, ExpenseCategory> expenseCategoryRedisTemplate;
+    private final RedisTemplate<String, ExpenseCategory> expenseCategoryRedisTemplate = createMockRedisTemplate();
 
     private final ExpenseCategoryCacheService expenseCategoryCacheService;
+    private final ExpenseCategoryNormalizer expenseCategoryNormalizer;
 
     protected ExpenseCategoryTestConfig(){
-        expenseCategoryRedisTemplate = initializeRedisTemplate();
         expenseCategoryCacheService = new ExpenseCategoryCacheService(expenseCategoryRedisTemplate);
 
         expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(expenseCategoryRepository, expenseCategoryCacheService);
@@ -72,25 +69,6 @@ public class ExpenseCategoryTestConfig {
         getAllExpenseCategoriesCommand = new GetAllExpenseCategoriesCommand(getExpenseCategoryService, new ExpenseCategoryMapper());
         getExpenseCategoryByIdCommand = new GetExpenseCategoryByIdCommand(getExpenseCategoryService, new ExpenseCategoryMapper());
         deleteExpenseCategoryCommand = new DeleteExpenseCategoryCommand(deleteExpenseCategoryService);
-    }
-
-    private RedisTemplate<String, ExpenseCategory> initializeRedisTemplate() {
-        RedisTemplate<String, ExpenseCategory> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(createConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        redisTemplate.afterPropertiesSet(); // Ensures template is fully initialized
-        return redisTemplate;
-    }
-
-    private RedisConnectionFactory createConnectionFactory() {
-        String host = "localhost";
-        int port = 6379;
-
-        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(host, port);
-        connectionFactory.afterPropertiesSet();
-
-        return connectionFactory;
+        expenseCategoryNormalizer = new ExpenseCategoryNormalizer(expenseCategoryCacheService);
     }
 }

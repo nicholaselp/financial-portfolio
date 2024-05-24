@@ -1,20 +1,20 @@
 # Financial Portfolio Service
 
 ## Table of Contents
-1. [Project Specifications](#project-specifications) 
-   2. [Java 17](#java-17)
-   3. [Spring Boot 3.2.0](#spring-boot-3.2.0)
-   4. [Maven wrapper build tool](#maven-wrapper-build-tool)
-   5. [OpenAPI](#openapi)
-   6. [Database](#database)
-   7. [Docker](#docker)
-   8. [Spring Security](#spring-security)
+1. [Project Specifications](#project-specifications)
+    1. [Java 17](#java-17)
+    2. [Spring Boot 3.2.0](#spring-boot-320)
+    3. [Maven wrapper build tool](#maven-wrapper-build-tool)
+    4. [OpenAPI](#openapi)
+    5. [Database](#database)
+    6. [Docker](#docker)
+    7. [Spring Security](#spring-security)
 2. [Building the Project](#building-the-project)
 3. [Debugging the Application](#debugging-the-application)
 4. [Project Setup](#project-setup)
-   1. [Pre-requisites](#pre-requisites)
-   2. [Recommended Tools](#recommended-tools)
-   3. [Postman](#postman)
+    1. [Pre-requisites](#pre-requisites)
+    2. [Recommended Tools](#recommended-tools)
+        1. [Postman](#postman)
 5. [How to Run the Application](#how-to-run-the-application)
 
 
@@ -28,16 +28,36 @@
 - To view the generation task, refer to [pom.xml](pom.xml) - under execution with id: generate
 - API mustache is used as a template to generate code for the API interface
 
+
+## Project Setup
+
+### Pre-requisites
+Before running the application or running tests, make sure you have the following tools installed
+- [Docker](https://www.docker.com/)
+  - Docker is used to create testContainers for the tests to run
+- The application uses kafka and on startup will attempt to connect to kafka and zookeper
+  - download kafka from this website -> https://kafka.apache.org/quickstart
+  - Once the zip is extracted run the below commands to start kafka and zookeper
+    - bin/zookeeper-server-start.sh config/zookeeper.properties ---> to start zookeeper
+    - bin/kafka-server-start.sh config/server.properties ----> Start kafka broker service
+  - alternatively download kadeck and point the path to apache kafka to your kafka folder and click run to start the kafka server
+
+
 ### Database:
 - Hibernate/PostGresql/Liquibase
 
-### Cache:
+### Redis Cache:
 - Redis is used for caching mechanism
 - During application startup expenseCategories are read from the database and stored in a redisTemplate
   - See file [RedisCachingService.java](src/main/java/com/elpidoroun/financialportfolio/service/cache/RedisCachingService.java)
 - Cache is used by normalizer to check/validate the expenseCategory from cache instead of going straight to the database each time
   - see file [ExpenseCategoryNormalizer.java](src/main/java/com/elpidoroun/financialportfolio/service/normalize/ExpenseCategoryNormalizer.java)
 - On create/update/delete of ExpenseCategory through the repository [ExpenseCategoryRepository.java](src/main/java/com/elpidoroun/financialportfolio/repository/ExpenseCategoryRepository.java) the cache is updated through the annotations to make sure cached data are up to date
+
+### Kafka:
+- Kafka is used on upload expense flow
+- Flow is described [here](import-flow.md)
+
 ### Docker
 - Application uses docker-compose file to start 2 containers for postgres and pgadmin
 
@@ -56,12 +76,6 @@
 ## Debugging the Application
 - If you know the endpoint you want to debug, you can find it at in one of the ApiDelegate interfaces generated after building the application. You can find them here (target/generated/src/main/java/com.financialportfolio.generated.api)
 - And then see where the API definition is overridden
-
-## Project Setup
-
-### Pre-requisites
-Before running the application, make sure you have the following tools installed
-- [Docker](https://www.docker.com/)
 
 ### Recommended Tools
 #### Postman
