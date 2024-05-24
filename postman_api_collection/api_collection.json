@@ -147,35 +147,6 @@
 					"response": []
 				},
 				{
-					"name": "Import Expenses",
-					"id": "9cb7eb44-d399-4f7c-a16f-5903d97b8671",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{jwt_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/nicho/OneDrive/workspace/financial-portfolio/upload_csv_templates/upload_csv.csv"
-								}
-							]
-						},
-						"url": "{{url}}/v1/expense/import/bulk"
-					},
-					"response": []
-				},
-				{
 					"name": "Upload Expenses",
 					"id": "9fe8bde3-4890-44ad-911d-6afd352a8a03",
 					"protocolProfileBehavior": {
@@ -257,18 +228,6 @@
 							}
 						],
 						"url": "{{url}}/v1/expense/4"
-					},
-					"response": []
-				},
-				{
-					"name": "New Request",
-					"id": "cf6a3a04-76a9-4b06-b4da-b2befd293f83",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": []
 					},
 					"response": []
 				}
@@ -396,6 +355,60 @@
 				}
 			],
 			"id": "08d0615a-aebb-47e0-bd33-b2b794e4f46e"
+		},
+		{
+			"name": "import-expenses",
+			"item": [
+				{
+					"name": "Import Expenses",
+					"id": "9cb7eb44-d399-4f7c-a16f-5903d97b8671",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/nicho/OneDrive/workspace/financial-portfolio/upload_csv_templates/upload_csv.csv"
+								}
+							]
+						},
+						"url": "{{url}}/v1/expense/import/bulk"
+					},
+					"response": []
+				},
+				{
+					"name": "Get ImportRequest",
+					"id": "883d3b0e-1250-4f34-9faa-3a7a3e17d35c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expense/1"
+					},
+					"response": []
+				}
+			],
+			"id": "598a7462-60cd-45c3-9f31-66da8b902e86"
 		}
 	]
 }
