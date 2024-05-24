@@ -11,31 +11,30 @@ import javax.validation.ValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.Objects.nonNull;
+import static java.util.Objects.isNull;
 
 public class ExpenseCategoryMandatoryFieldsValidator implements EntityValidator<ExpenseCategory> {
     @Override
     public Result<Nothing, String> validate(@Nullable ExpenseCategory original, @NonNull ExpenseCategory entity) throws ValidationException {
         List<String> errors = new ArrayList<>();
 
-        if(nonNull(entity.getCategoryName())){
+        if(isNull(entity.getCategoryName())){
             errors.add("ExpenseCategory name is missing");
         }
 
-        if(nonNull(entity.getExpenseType())){
+        if(isNull(entity.getExpenseType())){
             errors.add("ExpenseCategory type is missing");
         }
 
 
-        if(nonNull(entity.getBillingInterval())){
+        if(isNull(entity.getBillingInterval())){
             errors.add("ExpenseCategory billingInterval is missing");
         }
 
         return errors.isEmpty()
                 ? Result.success()
-                : Result.fail(errors.stream().collect(Collectors.joining(",")));
+                : Result.fail(String.join(",", errors));
     }
 
     @Override

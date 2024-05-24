@@ -21,6 +21,7 @@ import com.elpidoroun.financialportfolio.service.expenseCategory.GetExpenseCateg
 import com.elpidoroun.financialportfolio.service.expenseCategory.UpdateExpenseCategoryService;
 import com.elpidoroun.financialportfolio.service.normalize.ExpenseCategoryNormalizer;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryExistsValidation;
+import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryMandatoryFieldsValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryNameValidator;
 import com.elpidoroun.financialportfolio.service.validation.expenseCategory.ExpenseCategoryUniquenessValidator;
 import lombok.Getter;
@@ -55,7 +56,7 @@ public class ExpenseCategoryTestConfig extends CommonTestConfig{
 
         expenseCategoryRepositoryOperations = new ExpenseCategoryRepositoryOperations(expenseCategoryRepository, expenseCategoryCacheService);
         expenseRepositoryOperations = new ExpenseRepositoryOperations(expenseRepository);
-        var validationService = new ValidationService<>(List.of(
+        var validationService = new ValidationService<>(List.of(new ExpenseCategoryMandatoryFieldsValidator(),
                 new ExpenseCategoryNameValidator(), new ExpenseCategoryUniquenessValidator(expenseCategoryRepositoryOperations),
                 new ExpenseCategoryExistsValidation(expenseCategoryRepositoryOperations)));
 
