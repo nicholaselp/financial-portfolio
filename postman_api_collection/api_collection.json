@@ -135,7 +135,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"expenseName\": \"First Exsdfapense aaasdada\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 10,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
+							"raw": "{\r\n  \"expenseName\": \"First Exsdfapense asaaasdada\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n        \"id\": 1,\r\n        \"categoryName\": \"Loan\",\r\n        \"billingInterval\": \"monthly\",\r\n        \"expenseType\": \"fixed\"\r\n    },\r\n  \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -256,7 +256,7 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expense/11"
+						"url": "{{url}}/v1/expense/4"
 					},
 					"response": []
 				},
@@ -390,7 +390,7 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expense-category/2"
+						"url": "{{url}}/v1/expense-category/1"
 					},
 					"response": []
 				}
