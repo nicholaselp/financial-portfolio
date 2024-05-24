@@ -165,9 +165,9 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "",
+									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/nicho/OneDrive/Desktop/upload_csv.csv"
+									"src": "/C:/Users/nicho/OneDrive/workspace/financial-portfolio/upload_csv_templates/upload_csv.csv"
 								}
 							]
 						},
