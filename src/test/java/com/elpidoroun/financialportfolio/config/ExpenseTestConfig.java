@@ -92,9 +92,8 @@ public class ExpenseTestConfig extends CommonTestConfig{
 
         importRequestMapper = new ImportRequestMapper();
         importRequestLineMapper = new ImportRequestLineMapper(importRequestMapper);
-        importExpenseService = new ImportExpenseService(createExpenseService, importRequestRepository,
-                importRequestLineRepository, impReqLineEventProducer, importRequestLineMapper);
-        importExpenseCommand = new ImportExpensesCommand(importExpenseService);
+        importExpenseService = new ImportExpenseService(importRequestLineRepository, impReqLineEventProducer, importRequestLineMapper);
+        importExpenseCommand = new ImportExpensesCommand(importExpenseService, importRequestRepository);
     }
 
 

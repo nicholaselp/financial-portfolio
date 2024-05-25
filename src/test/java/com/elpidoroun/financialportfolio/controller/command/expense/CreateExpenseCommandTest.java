@@ -29,26 +29,26 @@ class CreateExpenseCommandTest extends MainTestConfig {
 
         ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto(expenseCategory.getId());
 
-        ExpenseResponseDto result = createExpenseCommand.execute(new CreateExpenseCommand.CreateExpenseRequest(expenseDto));
+        ExpenseResponseDto result = createExpenseCommand.execute(new CreateExpenseCommand.Request(expenseDto));
 
         assertThat(result.getExpense()).isNotNull().isEqualTo(expenseDto);
     }
 
     @Test
     public void isRequestIncomplete_ShouldReturnTrue_WhenRequestIsNull() {
-        CreateExpenseCommand.CreateExpenseRequest request = new CreateExpenseCommand.CreateExpenseRequest(null);
+        CreateExpenseCommand.Request request = new CreateExpenseCommand.Request(null);
         assertThat(createExpenseCommand.isRequestIncomplete(request)).isTrue();
     }
 
     @Test
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
-        CreateExpenseCommand.CreateExpenseRequest request = new CreateExpenseCommand.CreateExpenseRequest(new ExpenseDto());
+        CreateExpenseCommand.Request request = new CreateExpenseCommand.Request(new ExpenseDto());
         assertThat(createExpenseCommand.isRequestIncomplete(request)).isFalse();
     }
 
     @Test
     public void missing_params_returns_empty(){
-        CreateExpenseCommand.CreateExpenseRequest request = new CreateExpenseCommand.CreateExpenseRequest(ExpenseTestFactory.createExpenseDto());
+        CreateExpenseCommand.Request request = new CreateExpenseCommand.Request(ExpenseTestFactory.createExpenseDto());
         assertThat(createExpenseCommand.missingParams(request)).isEqualTo("");
     }
 
@@ -61,7 +61,7 @@ class CreateExpenseCommandTest extends MainTestConfig {
     @Test
     public void missing_params_expense_dto_is_missing(){
         assertThat(createExpenseCommand
-                    .missingParams(new CreateExpenseCommand.CreateExpenseRequest(null)))
+                    .missingParams(new CreateExpenseCommand.Request(null)))
                 .isEqualTo("CreateExpenseDto is missing");
     }
     @Test

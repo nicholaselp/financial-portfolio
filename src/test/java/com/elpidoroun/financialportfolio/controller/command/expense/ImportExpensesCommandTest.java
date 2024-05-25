@@ -20,7 +20,7 @@ public class ImportExpensesCommandTest extends MainTestConfig {
 
     @Test
     public void success_import(){
-        var request = new ImportExpensesCommand.ImportExpensesRequest(getMultiPartFileFromPath("success_upload.csv"));
+        var request = new ImportExpensesCommand.Request(getMultiPartFileFromPath("success_upload.csv"));
 
         var result = command.execute(request);
 
@@ -29,7 +29,7 @@ public class ImportExpensesCommandTest extends MainTestConfig {
 
     @Test
     public void fail_import(){
-        assertThatThrownBy(() -> command.execute(new ImportExpensesCommand.ImportExpensesRequest(null)))
+        assertThatThrownBy(() -> command.execute(new ImportExpensesCommand.Request(null)))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("because \"uploadFile\" is null");
     }
@@ -39,7 +39,7 @@ public class ImportExpensesCommandTest extends MainTestConfig {
         String content = "content";
 
         assertThat(command.isRequestIncomplete(
-                new ImportExpensesCommand.ImportExpensesRequest(
+                new ImportExpensesCommand.Request(
                         new MockMultipartFile("dummy.txt",
                                 "text/plain",
                                 "content",
@@ -49,14 +49,14 @@ public class ImportExpensesCommandTest extends MainTestConfig {
 
     @Test
     public void isRequestComplete_false(){
-        assertThat(command.isRequestIncomplete(new ImportExpensesCommand.ImportExpensesRequest(null))).isTrue();
+        assertThat(command.isRequestIncomplete(new ImportExpensesCommand.Request(null))).isTrue();
     }
 
     @Test
     public void missing_params_success(){
         String content = "content";
         assertThat(command.missingParams(
-                new ImportExpensesCommand.ImportExpensesRequest(
+                new ImportExpensesCommand.Request(
                         new MockMultipartFile("dummy.txt",
                                 "text/plain",
                                 "content",
@@ -66,7 +66,7 @@ public class ImportExpensesCommandTest extends MainTestConfig {
 
     @Test
     public void missing_param_upload_file_missing(){
-        assertThat(command.missingParams(new ImportExpensesCommand.ImportExpensesRequest(null)))
+        assertThat(command.missingParams(new ImportExpensesCommand.Request(null)))
                 .isNotNull()
                 .contains("UploadFile is missing");
 

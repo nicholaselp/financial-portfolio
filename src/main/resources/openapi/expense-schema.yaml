@@ -33,6 +33,22 @@ components:
         importRequestId:
           type: integer
           format: int64
+    ImportRequest:
+      type: object
+      properties:
+        id:
+          $ref: 'common.yaml#/components/schemas/Id'
+        totalNumberOfRows:
+          type: integer
+          format: int64
+        numberOfSuccessImports:
+          type: integer
+          format: int64
+        numberOfFailedImports:
+          type: integer
+          format: int64
+        status:
+          $ref: '#/components/schemas/ImportRequestStatus'
     Payment:
       type: object
       properties:
@@ -51,3 +67,10 @@ components:
       enum:
         - euro
         - usd
+    ImportRequestStatus:
+      type: string
+      enum:
+        - success
+        - partial-success
+        - failed
+        - pending

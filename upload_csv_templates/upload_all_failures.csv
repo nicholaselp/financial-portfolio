@@ -1,0 +1,9 @@
+﻿ExpenseName,MonthlyAllocatedAmount,YearlyAllocatedAmount,Note,ExpenseCategory
+import_expense_1,100,1200,note,failure
+import_expense_2,100,12400,note,loan
+import_expense_3,1020,1200,note,loan
+,100,1200,note,loan
+import_expense_5,100,1200,note,failure
+import_expense_6,100,12010,note,loan
+import_expense_8,100,1200,note,failure
+import_expense_7,100,12001,note,loan

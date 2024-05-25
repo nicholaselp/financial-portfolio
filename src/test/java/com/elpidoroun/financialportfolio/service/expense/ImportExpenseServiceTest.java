@@ -1,17 +1,14 @@
 package com.elpidoroun.financialportfolio.service.expense;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
+import com.elpidoroun.financialportfolio.model.ImportRequest;
 import com.elpidoroun.financialportfolio.model.ImportRequestStatus;
 import com.elpidoroun.financialportfolio.repository.ImportRequestLineRepository;
 import com.elpidoroun.financialportfolio.repository.ImportRequestRepository;
 import com.elpidoroun.financialportfolio.service.kafka.ImpReqLineEventProducer;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,17 +23,30 @@ public class ImportExpenseServiceTest extends MainTestConfig {
     ImpReqLineEventProducer impReqLineEventProducer = getExpenseTestConfig().getImpReqLineEventProducer();
 
     @Test
-    public void success_process_csv() throws IOException {
-        var result = importExpenseService.execute(getCsvAsMultipartFile("/import/success_upload.csv"));
+    public void success_process_csv() {
+        var csvRows = List.of(
+                "import_expense_1,100,1200,note,loan",
+                "import_expense_1,100,1200,note,loan",
+                "import_expense_3,100,1200,note,loan",
+                "import_expense_4,100,1200,note,loan",
+                "import_expense_4,100,1200,note,loan",
+                "import_expense_6,1000,1200,note,loan",
+                "import_expense_7,100,1200,note,unknown",
+                "import_expense_8,1000,1200,note,loan"
+        );
 
-        var saved = importRequestRepository.findById(result);
+        var importRequest = importRequestRepository.save(ImportRequest.createInitialImportRequest((long) csvRows.size()));
+
+        importExpenseService.execute(csvRows, importRequest);
+
+        var saved = importRequestRepository.findById(importRequest.getId());
         var impReqLineList = importRequestLineRepository.findAll();
 
-        assertThat(saved).isPresent().hasValueSatisfying(importRequest -> {
-            assertThat(importRequest.getId()).isNotNull();
-            assertThat(importRequest.getTotalNumberOfSuccessRows()).isEqualTo(0);
-            assertThat(importRequest.getNumberOfFailedRows()).isEqualTo(0);
-            assertThat(importRequest.getTotalNumberOfRows()).isEqualTo(impReqLineList.size());
+        assertThat(saved).isPresent().hasValueSatisfying(impReq -> {
+            assertThat(impReq.getId()).isNotNull();
+            assertThat(impReq.getTotalNumberOfSuccessRows()).isEqualTo(0);
+            assertThat(impReq.getNumberOfFailedRows()).isEqualTo(0);
+            assertThat(impReq.getTotalNumberOfRows()).isEqualTo(impReqLineList.size());
         });
 
         impReqLineList.forEach(impReqLine -> {
@@ -48,18 +58,5 @@ public class ImportExpenseServiceTest extends MainTestConfig {
         });
 
         verify(impReqLineEventProducer, times(impReqLineList.size())).sendEvent(any());
-
-        assertThat(result).isEqualTo(saved.get().getId());
-    }
-    @Test
-    public void success_process_csv_with_empty_rows() throws IOException {
-        var result = importExpenseService.execute(getCsvAsMultipartFile("/import/success_upload_with_empty_rows.csv"));
-        verify(impReqLineEventProducer, times(8)).sendEvent(any());
-    }
-
-    private static MultipartFile getCsvAsMultipartFile(String resourcePath) throws IOException {
-        ClassPathResource resource = new ClassPathResource(resourcePath);
-        byte[] content = FileCopyUtils.copyToByteArray(resource.getInputStream());
-        return new MockMultipartFile(resource.getFilename(), resource.getFilename(), "text/csv", content);
     }
 }

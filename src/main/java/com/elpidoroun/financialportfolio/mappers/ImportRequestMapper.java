@@ -1,6 +1,6 @@
 package com.elpidoroun.financialportfolio.mappers;
 
-import com.elpidoroun.financialportfolio.dto.ImportRequestDto;
+import com.elpidoroun.financialportfolio.generated.dto.ImportRequestDto;
 import com.elpidoroun.financialportfolio.model.ImportRequest;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +11,8 @@ public class ImportRequestMapper {
         return ImportRequest.builder()
                 .withId(importRequestDto.getId())
                 .withTotalNumberOfRows(importRequestDto.getTotalNumberOfRows())
-                .withTotalNumberOfSuccessRows(importRequestDto.getTotalNumberOfSuccessRows())
-                .withTotalNumberOfFailedRows(importRequestDto.getTotalNumberOfFailedRows())
+                .withTotalNumberOfSuccessRows(importRequestDto.getNumberOfSuccessImports())
+                .withTotalNumberOfFailedRows(importRequestDto.getNumberOfFailedImports())
                 .build();
     }
 
@@ -20,8 +20,8 @@ public class ImportRequestMapper {
         ImportRequestDto dto = new ImportRequestDto();
         dto.setId(importRequest.getId());
         dto.setTotalNumberOfRows(importRequest.getTotalNumberOfRows());
-        dto.setTotalNumberOfSuccessRows(importRequest.getTotalNumberOfSuccessRows());
-        dto.setTotalNumberOfFailedRows(importRequest.getNumberOfFailedRows());
+        dto.setNumberOfSuccessImports(importRequest.getTotalNumberOfSuccessRows());
+        dto.setNumberOfFailedImports(importRequest.getNumberOfFailedRows());
         return dto;
     }
 }

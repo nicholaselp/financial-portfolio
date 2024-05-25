@@ -8,7 +8,8 @@ public enum ImportRequestStatus implements EnumStringValue {
 
     PENDING("pending"),
     SUCCESS("success"),
-    FAILED("failed");
+    FAILED("failed"),
+    PARTIAL_SUCCESS("partial-success");
 
     private final String importRequestStatus;
 

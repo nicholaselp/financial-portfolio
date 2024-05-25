@@ -19,13 +19,13 @@ import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Component
-public class CreateExpenseCommand implements Command<CreateExpenseCommand.CreateExpenseRequest, ExpenseResponseDto> {
+public class CreateExpenseCommand implements Command<CreateExpenseCommand.Request, ExpenseResponseDto> {
 
     @NonNull private final CreateExpenseService createExpenseService;
     @NonNull private final ExpenseMapper expenseMapper;
 
     @Override
-    public ExpenseResponseDto execute(CreateExpenseRequest request) {
+    public ExpenseResponseDto execute(Request request) {
         var result = createExpenseService.execute(
                 expenseMapper.convertToDomain(request.getExpenseDto()));
 
@@ -37,12 +37,12 @@ public class CreateExpenseCommand implements Command<CreateExpenseCommand.Create
     }
 
     @Override
-    public boolean isRequestIncomplete(CreateExpenseRequest request) {
+    public boolean isRequestIncomplete(Request request) {
         return isNull(request) || isNull(request.getExpenseDto());
     }
 
     @Override
-    public String missingParams(CreateExpenseRequest request) {
+    public String missingParams(Request request) {
         if(isNull(request)){
             return "Request is empty";
         }
@@ -55,11 +55,11 @@ public class CreateExpenseCommand implements Command<CreateExpenseCommand.Create
     @Override
     public String getOperation() { return CREATE_EXPENSE.getValue(); }
 
-    public static CreateExpenseRequest request(ExpenseDto expenseDto){ return new CreateExpenseRequest(expenseDto); }
-    protected static class CreateExpenseRequest extends AbstractRequest {
+    public static Request request(ExpenseDto expenseDto){ return new Request(expenseDto); }
+    protected static class Request extends AbstractRequest {
 
         private final ExpenseDto expenseDto;
-        protected CreateExpenseRequest(ExpenseDto expenseDto){
+        protected Request(ExpenseDto expenseDto){
             this.expenseDto = expenseDto;
         }
         public ExpenseDto getExpenseDto(){ return expenseDto; }

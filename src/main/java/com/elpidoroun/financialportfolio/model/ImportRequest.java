@@ -1,5 +1,6 @@
 package com.elpidoroun.financialportfolio.model;
 
+import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -58,6 +59,21 @@ public class ImportRequest {
     public Long getTotalNumberOfRows(){ return totalNumberOfRows; }
     public Long getTotalNumberOfSuccessRows(){ return totalNumberOfSuccessRows; }
     public Long getNumberOfFailedRows(){ return numberOfFailedRows; }
+
+    public ImportRequestStatus calculateStatus(){
+        var sumOfProcessedRows = totalNumberOfSuccessRows + numberOfFailedRows;
+        if(totalNumberOfRows != sumOfProcessedRows){
+            throw new ValidationException("ImportRequest has not finished processing");
+        }
+
+        if(numberOfFailedRows.equals(totalNumberOfRows)){
+            return ImportRequestStatus.FAILED;
+        } else if(totalNumberOfSuccessRows.equals(totalNumberOfRows)){
+            return ImportRequestStatus.SUCCESS;
+        } else {
+            return ImportRequestStatus.PARTIAL_SUCCESS;
+        }
+    }
 
     public static ImportRequest createInitialImportRequest(Long totalNumberOfRows){
         return new ImportRequest(totalNumberOfRows);

@@ -28,7 +28,7 @@ public class GetAllExpensesCommandTest extends MainTestConfig {
 
     @Test
     public void success_non_returned(){
-        assertThat(command.execute(new GetAllExpensesCommand.GetAllExpensesRequest())).isEmpty();
+        assertThat(command.execute(new GetAllExpensesCommand.Request())).isEmpty();
     }
 
 }
