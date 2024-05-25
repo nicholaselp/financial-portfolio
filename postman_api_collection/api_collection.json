@@ -380,11 +380,11 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/nicho/OneDrive/workspace/financial-portfolio/upload_csv_templates/upload_csv.csv"
+									"src": "/C:/Users/nicho/OneDrive/workspace/financial-portfolio/upload_csv_templates/upload_200_records.csv"
 								}
 							]
 						},
-						"url": "{{url}}/v1/expense/import/bulk"
+						"url": "{{url}}/v1/expense/import"
 					},
 					"response": []
 				},
@@ -403,7 +403,7 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expense/1"
+						"url": "{{url}}/v1/expense/import/25"
 					},
 					"response": []
 				}
