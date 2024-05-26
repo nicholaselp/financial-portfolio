@@ -45,7 +45,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/auth/authenticate"
+						"url": "{{url}}/v1/auth/authenticate"
 					},
 					"response": []
 				},
@@ -86,7 +86,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/auth/authenticate"
+						"url": "{{url}}/v1/auth/authenticate"
 					},
 					"response": []
 				},
@@ -108,7 +108,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:8080/financial-portfolio/v1/auth/register"
+						"url": "{{url}}/v1/auth/register"
 					},
 					"response": []
 				}
@@ -135,7 +135,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"expenseName\": \"First Exsdfapense aaasdada\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n    \"id\": 4,\r\n    \"categoryName\": \"string\",\r\n    \"billingInterval\": \"monthly\",\r\n    \"expenseType\": \"fixed\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"status\": \"active\"\r\n}",
+							"raw": "{\r\n  \"expenseName\": \"First Exsdfapense asaaasdada\",\r\n  \"monthlyAllocatedAmount\": 50,\r\n  \"yearlyAllocatedAmount\": 600,\r\n  \"note\": \"string\",\r\n  \"expenseCategory\": {\r\n        \"id\": 1,\r\n        \"categoryName\": \"Loan\",\r\n        \"billingInterval\": \"monthly\",\r\n        \"expenseType\": \"fixed\"\r\n    },\r\n  \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -227,7 +227,7 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expense/1"
+						"url": "{{url}}/v1/expense/4"
 					},
 					"response": []
 				}
@@ -349,12 +349,66 @@
 								"type": "text"
 							}
 						],
-						"url": "{{url}}/v1/expense-category/2"
+						"url": "{{url}}/v1/expense-category/1"
 					},
 					"response": []
 				}
 			],
 			"id": "08d0615a-aebb-47e0-bd33-b2b794e4f46e"
+		},
+		{
+			"name": "import-expenses",
+			"item": [
+				{
+					"name": "Import Expenses",
+					"id": "9cb7eb44-d399-4f7c-a16f-5903d97b8671",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/nicho/OneDrive/workspace/financial-portfolio/upload_csv_templates/upload_all_success.csv"
+								}
+							]
+						},
+						"url": "{{url}}/v1/expense/import"
+					},
+					"response": []
+				},
+				{
+					"name": "Get ImportRequest",
+					"id": "883d3b0e-1250-4f34-9faa-3a7a3e17d35c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/v1/expense/import/25"
+					},
+					"response": []
+				}
+			],
+			"id": "598a7462-60cd-45c3-9f31-66da8b902e86"
 		}
 	]
 }
