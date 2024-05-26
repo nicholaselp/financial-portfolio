@@ -5,14 +5,15 @@ import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.mappers.ExpenseMapper;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import static com.elpidoroun.financialportfolio.config.RedisCacheConfig.EXPENSE_CATEGORY_CACHE;
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategory;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 public class UpdateExpenseCommandTest extends MainTestConfig {
 
@@ -24,13 +25,16 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
     @Test
     public void success_update_expense() {
         var expenseCategory = createExpenseCategory();
-        redisTemplate.opsForHash().put(EXPENSE_CATEGORY_CACHE, expenseCategory.getId().toString(), expenseCategory);
+
+        when(redisTemplate.opsForHash().get(EXPENSE_CATEGORY_CACHE,
+                expenseCategory.getId().toString()))
+                .thenReturn(expenseCategory);
 
         var originalEntity = repo.save(ExpenseTestFactory.createExpense(expenseCategory));
         var dtoToUpdate = expenseMapper.convertToDto(originalEntity);
         dtoToUpdate.setNote("new note");
 
-        ExpenseResponseDto result = command.execute(new UpdateExpenseCommand.UpdateExpenseRequest(originalEntity.getId(), dtoToUpdate));
+        ExpenseResponseDto result = command.execute(new UpdateExpenseCommand.Request(originalEntity.getId(), dtoToUpdate));
 
         assertThat(result).isNotNull();
         assertThat(result.getExpense().getNote()).isEqualTo("new note");
@@ -38,20 +42,20 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
 
     @Test
     public void isRequestIncomplete_ShouldReturnTrue_WhenRequestIsNull() {
-        assertThat(command.isRequestIncomplete(new UpdateExpenseCommand.UpdateExpenseRequest(null,null))).isTrue();
+        assertThat(command.isRequestIncomplete(new UpdateExpenseCommand.Request(null,null))).isTrue();
     }
 
     @Test
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
         assertThat(command.isRequestIncomplete(
-                new UpdateExpenseCommand.UpdateExpenseRequest(
+                new UpdateExpenseCommand.Request(
                         1L, new ExpenseDto().expenseName("name"))))
                 .isFalse();
     }
 
     @Test
     public void missing_params_returns_empty(){
-        UpdateExpenseCommand.UpdateExpenseRequest request = new UpdateExpenseCommand.UpdateExpenseRequest(1L, ExpenseTestFactory.createExpenseDto());
+        UpdateExpenseCommand.Request request = new UpdateExpenseCommand.Request(1L, ExpenseTestFactory.createExpenseDto());
         assertThat(command.missingParams(request)).isEqualTo("");
     }
 
@@ -64,7 +68,7 @@ public class UpdateExpenseCommandTest extends MainTestConfig {
     @Test
     public void missing_params_expense_dto_is_missing(){
         assertThat(command
-                .missingParams(new UpdateExpenseCommand.UpdateExpenseRequest(1L, null)))
+                .missingParams(new UpdateExpenseCommand.Request(1L, null)))
                 .isEqualTo("ExpenseDto is missing");
     }
     @Test

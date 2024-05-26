@@ -1,7 +1,7 @@
 package com.elpidoroun.financialportfolio.controller.command.expense;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +28,7 @@ public class GetAllExpensesCommandTest extends MainTestConfig {
 
     @Test
     public void success_non_returned(){
-        assertThat(command.execute(new GetAllExpensesCommand.GetAllExpensesRequest())).isEmpty();
+        assertThat(command.execute(new GetAllExpensesCommand.Request())).isEmpty();
     }
 
 }

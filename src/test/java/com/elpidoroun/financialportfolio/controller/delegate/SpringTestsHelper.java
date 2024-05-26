@@ -3,21 +3,32 @@ package com.elpidoroun.financialportfolio.controller.delegate;
 import com.elpidoroun.financialportfolio.exceptions.CustomExceptionHandler;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
 import com.elpidoroun.financialportfolio.security.user.Permissions;
+import com.elpidoroun.financialportfolio.service.cache.RedisCacheService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import java.security.Key;
 import java.util.ArrayList;
@@ -34,6 +45,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureMockMvc
 @Transactional
 @Rollback
+@Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class SpringTestsHelper {
 
     @Autowired private MockMvc mockMvc;
@@ -41,16 +54,30 @@ public abstract class SpringTestsHelper {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    @Autowired
-    private RedisTemplate<String, ExpenseCategory> redisTemplate;
+    @MockBean
+    protected RedisTemplate<String, ExpenseCategory> redisTemplate;
+
+    @MockBean
+    private HashOperations<String, String, ExpenseCategory> hashOperations;
+
+    @MockBean
+    private RedisCacheService redisCacheService;
+
+    @Container
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+
+    @DynamicPropertySource
+    public static void initKafkaProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+    }
+
+    @BeforeEach
+    public void setUp() {
+        Mockito.<HashOperations<String, String, ExpenseCategory>>when(redisTemplate.opsForHash()).thenReturn(hashOperations);
+    }
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
-
-    @AfterEach
-    public void cleanup(){
-        redisTemplate.getConnectionFactory().getConnection().flushAll();
-    }
 
     public <T> T extractResponse(MvcResult result, Class<T> clazz) throws Exception {
         return objectMapper.readValue(result.getResponse().getContentAsString(), clazz);

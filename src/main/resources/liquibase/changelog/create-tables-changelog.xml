@@ -60,7 +60,28 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
+        <createTable tableName="import_request">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="total_number_of_rows" type="BIGINT"/>
+            <column name="number_of_success_rows" type="BIGINT"/>
+            <column name="number_of_failed_rows" type="BIGINT"/>
+        </createTable>
+        <createTable tableName="import_request_line">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="data" type="VARCHAR(255)"/>
+            <column name="error" type="VARCHAR(255)"/>
+            <column name="import_request_id" type="SERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expense_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
 <!--        <createTable tableName="payments" schemaName="public">-->
 <!--            <column name="id" type="SERIAL">-->
 <!--                <constraints primaryKey="true" nullable="false"/>-->
@@ -88,6 +109,10 @@
         <addForeignKeyConstraint baseTableName="expense" baseColumnNames="expense_category_id"
                                  constraintName="fk_expense_expense_category_id"
                                  referencedTableName="expense_category" referencedColumnNames="id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="import_request_line" baseColumnNames="import_request_id"
+                                 constraintName="fk_import_request_line_import_request_id"
+                                 referencedTableName="import_request" referencedColumnNames="id"
                                  onDelete="RESTRICT" onUpdate="CASCADE"/>
         <addUniqueConstraint constraintName="unique_expense_category_name" tableName="expense_category"
                              columnNames="category_name"/>

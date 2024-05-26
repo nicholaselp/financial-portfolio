@@ -1,6 +1,7 @@
 package com.elpidoroun.financialportfolio.model;
 
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
+import com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

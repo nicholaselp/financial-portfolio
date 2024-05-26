@@ -1,8 +1,11 @@
-package com.elpidoroun.financialportfolio.model;
+package com.elpidoroun.financialportfolio.factory;
 
 import com.elpidoroun.financialportfolio.generated.dto.BillingIntervalDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseTypeDto;
+import com.elpidoroun.financialportfolio.model.BillingInterval;
+import com.elpidoroun.financialportfolio.model.ExpenseCategory;
+import com.elpidoroun.financialportfolio.model.ExpenseType;
 
 import static com.elpidoroun.financialportfolio.repository.ExpenseRepositoryStub.generateUniqueId;
 

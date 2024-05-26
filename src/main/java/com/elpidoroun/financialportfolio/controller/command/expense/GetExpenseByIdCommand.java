@@ -17,23 +17,23 @@ import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Component
-public class GetExpenseByIdCommand implements Command<GetExpenseByIdCommand.GetExpenseByIdRequest, ExpenseResponseDto> {
+public class GetExpenseByIdCommand implements Command<GetExpenseByIdCommand.Request, ExpenseResponseDto> {
 
     private final GetExpenseService getExpenseService;
     private final ExpenseMapper expenseMapper;
 
     @Override
-    public ExpenseResponseDto execute(GetExpenseByIdRequest request) {
+    public ExpenseResponseDto execute(Request request) {
         return expenseMapper.convertToResponseDto(getExpenseService.execute(request.getExpenseId()));
     }
 
     @Override
-    public boolean isRequestIncomplete(GetExpenseByIdRequest request) {
+    public boolean isRequestIncomplete(Request request) {
         return (isNull(request) || isNull(request.getExpenseId()));
     }
 
     @Override
-    public String missingParams(GetExpenseByIdRequest request) {
+    public String missingParams(Request request) {
         if(isNull(request)){
             return "Request is empty";
         }
@@ -46,11 +46,11 @@ public class GetExpenseByIdCommand implements Command<GetExpenseByIdCommand.GetE
     @Override
     public String getOperation() { return GET_EXPENSE_BY_ID.getValue(); }
 
-    public static GetExpenseByIdCommand.GetExpenseByIdRequest request(Long expenseId){ return new GetExpenseByIdCommand.GetExpenseByIdRequest(expenseId); }
+    public static Request request(Long expenseId){ return new Request(expenseId); }
 
-    protected static class GetExpenseByIdRequest extends AbstractRequest {
+    protected static class Request extends AbstractRequest {
         private final Long expenseId;
-        protected GetExpenseByIdRequest(Long expenseId){
+        protected Request(Long expenseId){
             this.expenseId = expenseId;
         }
 

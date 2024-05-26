@@ -4,13 +4,14 @@ import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseDto;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
-import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import static com.elpidoroun.financialportfolio.config.RedisCacheConfig.EXPENSE_CATEGORY_CACHE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 
 class CreateExpenseCommandTest extends MainTestConfig {
@@ -21,30 +22,33 @@ class CreateExpenseCommandTest extends MainTestConfig {
     @Test
     public void success_create_expense() {
         ExpenseCategory expenseCategory = ExpenseCategoryTestFactory.createExpenseCategory();
-        redisTemplate.opsForHash().put(EXPENSE_CATEGORY_CACHE, expenseCategory.getId().toString(), expenseCategory);
+
+        when(redisTemplate.opsForHash().get(EXPENSE_CATEGORY_CACHE,
+                expenseCategory.getId().toString()))
+                .thenReturn(expenseCategory);
 
         ExpenseDto expenseDto = ExpenseTestFactory.createExpenseDto(expenseCategory.getId());
 
-        ExpenseResponseDto result = createExpenseCommand.execute(new CreateExpenseCommand.CreateExpenseRequest(expenseDto));
+        ExpenseResponseDto result = createExpenseCommand.execute(new CreateExpenseCommand.Request(expenseDto));
 
         assertThat(result.getExpense()).isNotNull().isEqualTo(expenseDto);
     }
 
     @Test
     public void isRequestIncomplete_ShouldReturnTrue_WhenRequestIsNull() {
-        CreateExpenseCommand.CreateExpenseRequest request = new CreateExpenseCommand.CreateExpenseRequest(null);
+        CreateExpenseCommand.Request request = new CreateExpenseCommand.Request(null);
         assertThat(createExpenseCommand.isRequestIncomplete(request)).isTrue();
     }
 
     @Test
     public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
-        CreateExpenseCommand.CreateExpenseRequest request = new CreateExpenseCommand.CreateExpenseRequest(new ExpenseDto());
+        CreateExpenseCommand.Request request = new CreateExpenseCommand.Request(new ExpenseDto());
         assertThat(createExpenseCommand.isRequestIncomplete(request)).isFalse();
     }
 
     @Test
     public void missing_params_returns_empty(){
-        CreateExpenseCommand.CreateExpenseRequest request = new CreateExpenseCommand.CreateExpenseRequest(ExpenseTestFactory.createExpenseDto());
+        CreateExpenseCommand.Request request = new CreateExpenseCommand.Request(ExpenseTestFactory.createExpenseDto());
         assertThat(createExpenseCommand.missingParams(request)).isEqualTo("");
     }
 
@@ -57,7 +61,7 @@ class CreateExpenseCommandTest extends MainTestConfig {
     @Test
     public void missing_params_expense_dto_is_missing(){
         assertThat(createExpenseCommand
-                    .missingParams(new CreateExpenseCommand.CreateExpenseRequest(null)))
+                    .missingParams(new CreateExpenseCommand.Request(null)))
                 .isEqualTo("CreateExpenseDto is missing");
     }
     @Test

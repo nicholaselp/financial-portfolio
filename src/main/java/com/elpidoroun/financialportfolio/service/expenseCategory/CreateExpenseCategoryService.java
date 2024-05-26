@@ -32,7 +32,7 @@ public class CreateExpenseCategoryService {
         if(validate.isFail()){
             throw new ValidationException(validate.getError()
                     .flatMap(list -> list.isEmpty() ? empty() : Optional.of(String.join(";", list)))
-                    .orElse("Exception occured during validation of expense category"));
+                    .orElse("Exception occurred during validation of expense category"));
         }
 
         return expenseCategoryRepositoryOperations.save(expenseCategory);

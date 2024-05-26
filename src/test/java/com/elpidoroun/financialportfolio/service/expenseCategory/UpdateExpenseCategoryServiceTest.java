@@ -3,7 +3,7 @@ package com.elpidoroun.financialportfolio.service.expenseCategory;
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.controller.command.expenseCategory.UpdateExpenseCategoryContext;
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
-import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.model.ExpenseType;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import org.junit.jupiter.api.Test;

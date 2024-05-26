@@ -66,7 +66,7 @@ public class Expense {
         this.note = note;
         this.createdAt = isNull(createdAt) ? OffsetDateTime.now() : createdAt;
         this.expenseCategory = requireNonNull(expenseCategory, "ExpenseCategory is missing");
-        this.status = requireNonNull(status, "Status is missing");
+        this.status = isNull(status) ? Status.ACTIVE : status;
     }
 
     private void validateAmounts(BigDecimal monthlyAllocatedAmount, BigDecimal yearlyAllocatedAmount) {

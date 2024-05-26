@@ -15,9 +15,9 @@ import static com.elpidoroun.financialportfolio.config.RedisCacheConfig.EXPENSE_
 
 @Service
 @AllArgsConstructor
-public class RedisCachingService {
+public class RedisCacheService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RedisCachingService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RedisCacheService.class);
 
     @NonNull private final ExpenseCategoryRepositoryOperations expenseCategoryRepositoryOperations;
     @NonNull private RedisTemplate<String, ExpenseCategory> expenseCategoryRedis;
