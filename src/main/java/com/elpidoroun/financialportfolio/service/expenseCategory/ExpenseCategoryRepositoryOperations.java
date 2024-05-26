@@ -20,8 +20,6 @@ import java.util.Optional;
 @Service
 public class ExpenseCategoryRepositoryOperations {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExpenseCategoryRepositoryOperations.class);
-
     @NonNull private final ExpenseCategoryRepository expenseCategoryRepository;
     @NonNull private final ExpenseCategoryCacheService expenseCategoryCacheService;
 
@@ -33,7 +31,6 @@ public class ExpenseCategoryRepositoryOperations {
             return stored;
 
         } catch (Exception exception){
-            logger.error(exception.getMessage());
             throw new DatabaseOperationException("Exception occurred while saving expenseCategory");
         }
     }
@@ -62,7 +59,6 @@ public class ExpenseCategoryRepositoryOperations {
                 expenseCategoryCacheService.addToCache(stored.getId().toString(), expenseCategory);
                 return stored;
             } catch (Exception exception) {
-                logger.error(exception.getMessage());
                 throw new DatabaseOperationException("Exception occurred while updating expenseCategory");
             }
     }

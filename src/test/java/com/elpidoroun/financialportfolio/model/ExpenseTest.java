@@ -1,11 +1,12 @@
 package com.elpidoroun.financialportfolio.model;
 
 import com.elpidoroun.financialportfolio.exceptions.ValidationException;
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategory;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 

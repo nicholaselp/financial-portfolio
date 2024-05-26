@@ -2,13 +2,13 @@ package com.elpidoroun.financialportfolio.service.expenseCategory;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.model.ExpenseCategory;
-import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.model.ExpenseType;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import com.elpidoroun.financialportfolio.service.cache.ExpenseCategoryCacheService;
 import org.junit.jupiter.api.Test;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;

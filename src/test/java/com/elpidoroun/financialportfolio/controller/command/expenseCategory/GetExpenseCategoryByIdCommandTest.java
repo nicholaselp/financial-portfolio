@@ -1,7 +1,7 @@
 package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
-import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import org.junit.jupiter.api.Test;
 

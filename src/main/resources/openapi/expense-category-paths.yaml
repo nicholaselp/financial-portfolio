@@ -109,3 +109,33 @@ operations:
           $ref: 'common.yaml#/errors/forbidden'
         500:
           $ref: 'common.yaml#/errors/internal-error'
+  import-request-operations:
+    post:
+      tags:
+        - import-expenses
+      summary: Import Expenses via csv
+      operationId: import-expenses
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Successfully create a new expense
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-schema.yaml#/components/schemas/ImportExpensesResponse'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        401:
+          $ref: 'common.yaml#/errors/unauthorized'
+        403:
+          $ref: 'common.yaml#/errors/forbidden'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'

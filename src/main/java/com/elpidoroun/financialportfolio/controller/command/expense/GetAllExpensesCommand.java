@@ -16,30 +16,30 @@ import static com.elpidoroun.financialportfolio.controller.command.Operations.GE
 
 @AllArgsConstructor
 @Component
-public class GetAllExpensesCommand  implements Command<GetAllExpensesCommand.GetAllExpensesRequest, List<ExpenseResponseDto>> {
+public class GetAllExpensesCommand  implements Command<GetAllExpensesCommand.Request, List<ExpenseResponseDto>> {
 
     @NonNull private final GetExpenseService getExpenseService;
     @NonNull private final ExpenseMapper expenseMapper;
     @Override
-    public List<ExpenseResponseDto> execute(GetAllExpensesCommand.GetAllExpensesRequest request) {
+    public List<ExpenseResponseDto> execute(Request request) {
         return getExpenseService.getAllExpenses()
                 .stream().map(expenseMapper::convertToResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public boolean isRequestIncomplete(GetAllExpensesCommand.GetAllExpensesRequest request) { return false; }
+    public boolean isRequestIncomplete(Request request) { return false; }
 
     @Override
-    public String missingParams(GetAllExpensesCommand.GetAllExpensesRequest request) { return null; }
+    public String missingParams(Request request) { return null; }
 
     @Override
     public String getOperation() { return GET_EXPENSES.getValue(); }
 
-    public static GetAllExpensesCommand.GetAllExpensesRequest request(){
-        return new GetAllExpensesCommand.GetAllExpensesRequest();
+    public static Request request(){
+        return new Request();
     }
 
-    protected static class GetAllExpensesRequest extends AbstractRequest {
+    protected static class Request extends AbstractRequest {
     }
 }

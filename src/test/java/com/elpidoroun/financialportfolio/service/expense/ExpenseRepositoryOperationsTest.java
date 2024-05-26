@@ -1,11 +1,12 @@
 package com.elpidoroun.financialportfolio.service.expense;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.exceptions.DatabaseOperationException;
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
+import static com.elpidoroun.financialportfolio.factory.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,10 +21,11 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
     
     @Test
     public void create_save() {
-        var expense = operations.save(createExpense());
+        var result = operations.save(createExpense());
 
+        assertThat(result.isSuccess()).isTrue();
         assertThat(repo.findAll()).hasSize(1)
-                .containsExactlyInAnyOrder(expense);
+                .containsExactlyInAnyOrder(result.getSuccessValue());
     }
 
     @Test
@@ -33,9 +35,13 @@ public class ExpenseRepositoryOperationsTest extends MainTestConfig {
 
         when(repo.save(any())).thenThrow(new RuntimeException("Forced Exception.."));
 
-        assertThatThrownBy(() -> operations.save(ExpenseTestFactory.createExpense()))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("Exception occurred while saving expense");
+        var result = operations.save(ExpenseTestFactory.createExpense());
+
+        assertThat(result.isFail()).isTrue();
+        assertThat(result.getError()).hasValueSatisfying(error -> {
+            assertThat(error).isInstanceOf(DatabaseOperationException.class);
+            assertThat(error).hasMessage("Exception occurred while saving expense");
+        });
     }
 
     @Test

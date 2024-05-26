@@ -1,13 +1,13 @@
 package com.elpidoroun.financialportfolio.repository;
 
-import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.model.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
-import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategory;
+import static com.elpidoroun.financialportfolio.factory.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest

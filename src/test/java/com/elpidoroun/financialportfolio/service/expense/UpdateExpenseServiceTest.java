@@ -10,10 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import static com.elpidoroun.financialportfolio.config.RedisCacheConfig.EXPENSE_CATEGORY_CACHE;
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
-import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategory;
+import static com.elpidoroun.financialportfolio.factory.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
 public class UpdateExpenseServiceTest extends MainTestConfig {
 
@@ -24,7 +25,11 @@ public class UpdateExpenseServiceTest extends MainTestConfig {
     @Test
     public void success_update(){
         var expenseCategory = createExpenseCategory();
-        redisTemplate.opsForHash().put(EXPENSE_CATEGORY_CACHE, expenseCategory.getId().toString(), expenseCategory);
+
+        when(redisTemplate.opsForHash().get(EXPENSE_CATEGORY_CACHE,
+                expenseCategory.getId().toString()))
+                .thenReturn(expenseCategory);
+
         var original = repo.save(createExpense(expenseCategory));
         var toUpdate = original.clone().withNote("a note").build();
 

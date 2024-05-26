@@ -4,6 +4,7 @@ import com.elpidoroun.financialportfolio.exceptions.ValidationException;
 import com.elpidoroun.financialportfolio.model.Expense;
 import com.elpidoroun.financialportfolio.service.ValidationService;
 import com.elpidoroun.financialportfolio.service.normalize.ExpenseCategoryNormalizer;
+import com.elpidoroun.financialportfolio.utilities.Result;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -24,23 +25,23 @@ public class CreateExpenseService {
     @NonNull private final ValidationService<Expense> validationService;
     @NonNull private final ExpenseCategoryNormalizer expenseCategoryNormalizer;
 
-    public Expense execute(Expense expense){
+    public Result<Expense, ? extends RuntimeException> execute(Expense expense){
         logger.info("Saving expense");
 
         var validationResult = validationService.validate(expense);
 
         if(validationResult.isFail()){
-            throw new ValidationException(validationResult.getError()
+            return Result.fail(new ValidationException(validationResult.getError()
                     .flatMap(list -> list.isEmpty() ? empty() : Optional.of(String.join(";", list)))
-                    .orElse("Exception occurred during validation of expense"));
+                    .orElse("Exception occurred during validation of expense")));
         }
 
         var normalizedExpense = expenseCategoryNormalizer.normalize(expense);
 
         if(normalizedExpense.isFail()){
-            throw new ValidationException(normalizedExpense.getError()
+            return Result.fail(new ValidationException(normalizedExpense.getError()
                     .flatMap(list -> list.isEmpty() ? empty() : Optional.of(String.join(";", list)))
-                    .orElse("Exception occurred during normalization of expense"));
+                    .orElse("Exception occurred during normalization of expense")));
         }
 
         return expenseRepositoryOperations.save(normalizedExpense.getSuccessValue());

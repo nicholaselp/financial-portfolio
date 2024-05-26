@@ -1,7 +1,7 @@
 package com.elpidoroun.financialportfolio.controller.command.expense;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ public class GetExpenseByIdCommandTest extends MainTestConfig {
     public void success_get_expense_by_id() {
         var expense = repo.save(ExpenseTestFactory.createExpense());
 
-        var dto = getExpenseByIdCommand.execute(new GetExpenseByIdCommand.GetExpenseByIdRequest(expense.getId()));
+        var dto = getExpenseByIdCommand.execute(new GetExpenseByIdCommand.Request(expense.getId()));
 
         assertThat(dto).isNotNull();
         assertThat(dto.getExpense().getExpenseName()).isEqualTo(expense.getExpenseName());
@@ -24,7 +24,7 @@ public class GetExpenseByIdCommandTest extends MainTestConfig {
 
     @Test
     public void missingParams_expenseIdIsNull_returnErrorMessage() {
-        GetExpenseByIdCommand.GetExpenseByIdRequest request = new GetExpenseByIdCommand.GetExpenseByIdRequest(null);
+        GetExpenseByIdCommand.Request request = new GetExpenseByIdCommand.Request(null);
 
         String result = getExpenseByIdCommand.missingParams(request);
 

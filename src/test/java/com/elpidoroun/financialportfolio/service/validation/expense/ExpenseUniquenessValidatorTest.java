@@ -1,7 +1,7 @@
 package com.elpidoroun.financialportfolio.service.validation.expense;
 
 import com.elpidoroun.financialportfolio.model.Expense;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import com.elpidoroun.financialportfolio.service.expense.ExpenseRepositoryOperations;
 import com.elpidoroun.financialportfolio.utilities.Nothing;
 import com.elpidoroun.financialportfolio.utilities.Result;

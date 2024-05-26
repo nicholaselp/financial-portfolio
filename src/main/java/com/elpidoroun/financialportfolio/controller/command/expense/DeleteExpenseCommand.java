@@ -17,12 +17,12 @@ import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Component
-public class DeleteExpenseCommand implements Command<DeleteExpenseCommand.DeleteExpenseRequest, Void> {
+public class DeleteExpenseCommand implements Command<DeleteExpenseCommand.Request, Void> {
 
     @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
 
     @Override
-    public Void execute(DeleteExpenseRequest request) {
+    public Void execute(Request request) {
         if(!expenseRepositoryOperations.existsById(request.getExpenseId())){
             throw new EntityNotFoundException("Expense with ID: " + request.getExpenseId() + " not found. Nothing will be deleted");
         }
@@ -33,12 +33,12 @@ public class DeleteExpenseCommand implements Command<DeleteExpenseCommand.Delete
     }
 
     @Override
-    public boolean isRequestIncomplete(DeleteExpenseRequest request) {
+    public boolean isRequestIncomplete(Request request) {
         return isNull(request) || isNull(request.getExpenseId());
     }
 
     @Override
-    public String missingParams(DeleteExpenseRequest request) {
+    public String missingParams(Request request) {
         if(isNull(request)){
             return "Request is empty";
         }
@@ -51,15 +51,15 @@ public class DeleteExpenseCommand implements Command<DeleteExpenseCommand.Delete
     @Override
     public String getOperation() { return DELETE_EXPENSE_BY_ID.getValue(); }
 
-    public static DeleteExpenseCommand.DeleteExpenseRequest request(Long expenseId){
-        return new DeleteExpenseCommand.DeleteExpenseRequest(expenseId);
+    public static Request request(Long expenseId){
+        return new Request(expenseId);
     }
 
-    protected static class DeleteExpenseRequest extends AbstractRequest {
+    protected static class Request extends AbstractRequest {
 
         private final Long expenseId;
 
-        protected DeleteExpenseRequest(Long expenseId){
+        protected Request(Long expenseId){
             this.expenseId = expenseId;
         }
         public Long getExpenseId(){ return expenseId; }

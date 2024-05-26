@@ -111,3 +111,58 @@ operations:
           $ref: 'common.yaml#/errors/not-found'
         500:
           $ref: 'common.yaml#/errors/internal-error'
+  import-expense-operations:
+    post:
+      tags:
+        - importExpenses
+      summary: Import Expenses via csv
+      operationId: import-expenses
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Successfully create a new expense
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-schema.yaml#/components/schemas/ImportExpensesResponse'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        401:
+          $ref: 'common.yaml#/errors/unauthorized'
+        403:
+          $ref: 'common.yaml#/errors/forbidden'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'
+  import-expense-by-id-operations:
+    get:
+      tags:
+        - importExpenses
+      summary: Get ImportRequest by ID
+      operationId: get-import-request-by-id
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/query-param-id'
+      responses:
+        200:
+          description: Successfully returned ImportRequest by ID
+          content:
+            application/json:
+              schema:
+                $ref: 'expense-schema.yaml#/components/schemas/ImportRequest'
+        400:
+          $ref: 'common.yaml#/errors/invalid-input'
+        401:
+          $ref: 'common.yaml#/errors/unauthorized'
+        403:
+          $ref: 'common.yaml#/errors/forbidden'
+        404:
+          $ref: 'common.yaml#/errors/not-found'
+        500:
+          $ref: 'common.yaml#/errors/internal-error'

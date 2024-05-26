@@ -1,5 +1,6 @@
 package com.elpidoroun.financialportfolio.mappers;
-import com.elpidoroun.financialportfolio.model.ExpenseTestFactory;
+
+import com.elpidoroun.financialportfolio.factory.ExpenseTestFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

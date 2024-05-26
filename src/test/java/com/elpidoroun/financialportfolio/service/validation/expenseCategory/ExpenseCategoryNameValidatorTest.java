@@ -1,6 +1,6 @@
 package com.elpidoroun.financialportfolio.service.validation.expenseCategory;
 
-import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

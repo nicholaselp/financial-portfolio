@@ -26,7 +26,6 @@ public class StatusConverter implements AttributeConverter<Status, String> {
                     .filter(status -> status.getValue().equals(dbStatus))
                     .findFirst().orElseThrow(() -> new DatabaseOperationException("No Status found for value: " + dbStatus));
         }
-
         return null;
     }
 }

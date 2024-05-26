@@ -2,7 +2,7 @@ package com.elpidoroun.financialportfolio.controller.command.expenseCategory;
 
 import com.elpidoroun.financialportfolio.config.MainTestConfig;
 import com.elpidoroun.financialportfolio.generated.dto.ExpenseCategoryDto;
-import com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory;
+import com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory;
 import com.elpidoroun.financialportfolio.repository.ExpenseCategoryRepository;
 import org.junit.jupiter.api.Test;
 
@@ -32,9 +32,9 @@ public class CreateExpenseCategoryCommandTest extends MainTestConfig {
     }
 
     @Test
-    public void isRequestIncomplete_ShouldReturnFalse_WhenRequestIsNotNull() {
+    public void isRequestIncomplete_ShouldReturnTrue_WhenRequestIsNotNull_but_fields_are_null() {
         CreateExpenseCategoryCommand.CreateExpenseCategoryRequest request = new CreateExpenseCategoryCommand.CreateExpenseCategoryRequest(new ExpenseCategoryDto());
-        assertThat(command.isRequestIncomplete(request)).isFalse();
+        assertThat(command.isRequestIncomplete(request)).isTrue();
     }
 
     @Test
@@ -53,7 +53,7 @@ public class CreateExpenseCategoryCommandTest extends MainTestConfig {
     public void missing_params_expense_dto_is_missing(){
         assertThat(command
                 .missingParams(new CreateExpenseCategoryCommand.CreateExpenseCategoryRequest(null)))
-                .isEqualTo("CreateExpenseCategoryDto is missing");
+                .isEqualTo("Request is empty");
     }
     @Test
     public void getOperation_ShouldReturnCreateExpenseOperation() {

@@ -6,8 +6,8 @@ import com.elpidoroun.financialportfolio.service.expenseCategory.DeleteExpenseCa
 import com.elpidoroun.financialportfolio.service.expenseCategory.ExpenseCategoryRepositoryOperations;
 import org.junit.jupiter.api.Test;
 
-import static com.elpidoroun.financialportfolio.model.ExpenseCategoryTestFactory.createExpenseCategory;
-import static com.elpidoroun.financialportfolio.model.ExpenseTestFactory.createExpense;
+import static com.elpidoroun.financialportfolio.factory.ExpenseCategoryTestFactory.createExpenseCategory;
+import static com.elpidoroun.financialportfolio.factory.ExpenseTestFactory.createExpense;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

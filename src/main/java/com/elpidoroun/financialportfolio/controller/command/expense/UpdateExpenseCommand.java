@@ -21,20 +21,20 @@ import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Component
-public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.UpdateExpenseRequest, ExpenseResponseDto> {
+public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Request, ExpenseResponseDto> {
 
     @NonNull private final UpdateExpenseService updateExpenseService;
     @NonNull private final ExpenseMapper expenseMapper;
     @NonNull private final ExpenseRepositoryOperations expenseRepositoryOperations;
 
     @Override
-    public ExpenseResponseDto execute(UpdateExpenseRequest request) {
+    public ExpenseResponseDto execute(Request request) {
         return expenseMapper.convertToResponseDto(
                 updateExpenseService.execute(buildContext(request)));
 
     }
 
-    private UpdateExpenseContext buildContext(UpdateExpenseRequest request){
+    private UpdateExpenseContext buildContext(Request request){
         var result = expenseRepositoryOperations.findById(request.getExpenseId());
 
         if(result.isFail()){
@@ -48,12 +48,12 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
     }
 
     @Override
-    public boolean isRequestIncomplete(UpdateExpenseRequest request) {
+    public boolean isRequestIncomplete(Request request) {
         return isNull(request) || isNull(request.getExpenseDto()) || isNull(request.getExpenseId()) || isNull(request.getExpenseDto().getExpenseName());
     }
 
     @Override
-    public String missingParams(UpdateExpenseRequest request) {
+    public String missingParams(Request request) {
         if(isNull(request)){
             return "Request is empty";
         }
@@ -69,16 +69,16 @@ public class UpdateExpenseCommand implements Command<UpdateExpenseCommand.Update
     @Override
     public String getOperation() { return UPDATE_EXPENSE.getValue(); }
 
-    public static UpdateExpenseCommand.UpdateExpenseRequest request(Long expenseId, ExpenseDto expenseDto){
-        return new UpdateExpenseCommand.UpdateExpenseRequest(expenseId, expenseDto);
+    public static Request request(Long expenseId, ExpenseDto expenseDto){
+        return new Request(expenseId, expenseDto);
     }
 
-    protected static class UpdateExpenseRequest extends AbstractRequest {
+    protected static class Request extends AbstractRequest {
 
         private final Long expenseId;
         private final ExpenseDto expenseDto;
 
-        protected UpdateExpenseRequest(Long expenseId, ExpenseDto expenseDto){
+        protected Request(Long expenseId, ExpenseDto expenseDto){
             this.expenseId = expenseId;
             this.expenseDto = expenseDto;
         }
