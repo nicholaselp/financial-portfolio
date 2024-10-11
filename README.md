@@ -32,7 +32,7 @@
 ### Maven wrapper build tool
 ### OpenAPI
 - This project uses OpenAPI to generate the API schema and DTOs.
-- To view the APIs, refer to [financial-portfolio-api.yaml](src/main/resources/openapi/financial-portfolio-api.yaml) to view all the endpoints
+- To view the APIs, refer to [financial-portfolio-api.yaml](expenses/src/main/resources/openapi/financial-portfolio-api.yaml) to view all the endpoints
 - To view the generation task, refer to [pom.xml](pom.xml) - under execution with id: generate
 - API mustache is used as a template to generate code for the API interface
 
@@ -54,12 +54,12 @@ Before running the application or running tests, make sure you have the followin
 - During application startup expenseCategories are read from the database and stored in a redisTemplate
   - See file [RedisCachingService.java](src/main/java/com/elpidoroun/financialportfolio/service/cache/RedisCachingService.java)
 - Cache is used by normalizer to check/validate the expenseCategory from cache instead of going straight to the database each time
-  - see file [ExpenseCategoryNormalizer.java](src/main/java/com/elpidoroun/financialportfolio/service/normalize/ExpenseCategoryNormalizer.java)
-- On create/update/delete of ExpenseCategory through the repository [ExpenseCategoryRepository.java](src/main/java/com/elpidoroun/financialportfolio/repository/ExpenseCategoryRepository.java) the cache is updated through the annotations to make sure cached data are up to date
+  - see file [ExpenseCategoryNormalizer.java](expenses/src/main/java/com/elpidoroun/service/normalize/ExpenseCategoryNormalizer.java)
+- On create/update/delete of ExpenseCategory through the repository [ExpenseCategoryRepository.java](expenses/src/main/java/com/elpidoroun/repository/ExpenseCategoryRepository.java) the cache is updated through the annotations to make sure cached data are up to date
 
 ### Kafka:
 - Kafka is used on upload expense flow
-- Flow is described [here](import-flow.md)
+- Flow is described [here](expenses/import-flow.md)
 
 ### Docker
 - Application uses docker-compose file to start containers for postgres, pgadmin, redis, zookeper and kafka
@@ -89,7 +89,8 @@ Use the collections provided in the project to call the APIs
 ### Recommended Tools
 #### Postman
 - For testing and interacting with the application's APIs, [Postman](https://www.postman.com/downloads/) is recommended.
-- In the repository, you can find a folder [postman_api_collection](./postman_api_collection) where you can import all the requests to run the APIs of this project
+- In the repository, you can find a folder [postman_api_collection](postman_api_collection) where you can import all the requests to run the APIs of this project
+
 
 #### Kadeck
 - Kadeck can be used to manage and monitor Apache kafka cluster

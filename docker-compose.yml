@@ -6,38 +6,33 @@ volumes:
   redis:
 
 services:
-  postgresql:
-    container_name: postgres_container
+  expenses_postgresql:
+    container_name: expenses_postgres_container
     image: postgres:latest
     environment:
-      POSTGRES_DB: financial-portfolio
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: expenses
       POSTGRES_USER: nicholaselp
+      POSTGRES_PASSWORD: password
     volumes:
       - postgres:/data/postgres
     ports:
-      - '5432'
+      - '5432:5432'
     restart: unless-stopped
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4:latest
+  investment_postgresql:
+    container_name: investments_postgres_container
+    image: postgres:latest
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@localhost.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 5050
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      POSTGRES_DB: investments
+      POSTGRES_USER: nicholaselp
+      POSTGRES_PASSWORD: password
     volumes:
-      - pgadmin:/var/lib/pgadmin
-      - ./src/main/resources/pgadmin/docker_pgadmin_servers.json:/pgadmin4/servers.json
+      - postgres:/data/postgres
     ports:
-      - '5050:5050'
-    entrypoint:
-      - "/bin/sh"
-      - "-c"
-      - "/bin/echo 'postgres:5432:*:nicholaselp:password' > /tmp/pgpassfile && chmod 600 /tmp/pgpassfile && /entrypoint.sh"
+      - '5433:5432'
+    restart: unless-stopped
+
   redis:
-    container_name: redis_container
+    container_name: expenses_redis_container
     image: redis:latest
     volumes:
       - redis:/data/redis
@@ -46,12 +41,12 @@ services:
     restart: unless-stopped
   zookeeper:
     image: wurstmeister/zookeeper
-    container_name: zookeeper
+    container_name: expenses_zookeeper_container
     ports:
       - "2181:2181"
   kafka:
     image: wurstmeister/kafka
-    container_name: kafka
+    container_name: expenses_kafka_container
     ports:
       - "9092:9092"
     environment:
