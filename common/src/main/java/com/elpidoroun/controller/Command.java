@@ -1,4 +1,4 @@
-package com.elpidoroun.controller.command;
+package com.elpidoroun.controller;
 
 public interface Command<RequestT extends AbstractRequest, ResponseT> {
         ResponseT execute(RequestT request);

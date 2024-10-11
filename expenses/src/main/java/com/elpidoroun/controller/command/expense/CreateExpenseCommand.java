@@ -1,7 +1,7 @@
 package com.elpidoroun.controller.command.expense;
 
-import com.elpidoroun.controller.command.Command;
-import com.elpidoroun.controller.command.AbstractRequest;
+import com.elpidoroun.controller.Command;
+import com.elpidoroun.controller.AbstractRequest;
 import com.elpidoroun.generated.dto.ExpenseResponseDto;
 import com.elpidoroun.mappers.ExpenseMapper;
 import com.elpidoroun.generated.dto.ExpenseDto;

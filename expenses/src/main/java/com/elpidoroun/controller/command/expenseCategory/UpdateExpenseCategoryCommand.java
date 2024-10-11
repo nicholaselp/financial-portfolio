@@ -1,7 +1,7 @@
 package com.elpidoroun.controller.command.expenseCategory;
 
-import com.elpidoroun.controller.command.AbstractRequest;
-import com.elpidoroun.controller.command.Command;
+import com.elpidoroun.controller.AbstractRequest;
+import com.elpidoroun.controller.Command;
 import com.elpidoroun.exception.EntityNotFoundException;
 import com.elpidoroun.exception.ValidationException;
 import com.elpidoroun.generated.dto.ExpenseCategoryDto;
